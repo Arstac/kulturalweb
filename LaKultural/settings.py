@@ -84,11 +84,11 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 # }
 
 # Set default values for the environment variables if they’re not already set
-os.environ.setdefault("PGDATABASE", "lakultural_dev")
-os.environ.setdefault("PGUSER", "arnau")
-os.environ.setdefault("PGPASSWORD", "password")
-os.environ.setdefault("PGHOST", "localhost")
-os.environ.setdefault("PGPORT", "5432")
+# os.environ.setdefault("PGDATABASE", "lakultural_dev")
+# os.environ.setdefault("PGUSER", "arnau")
+# os.environ.setdefault("PGPASSWORD", "password")
+# os.environ.setdefault("PGHOST", "localhost")
+# os.environ.setdefault("PGPORT", "5432")
 
 DATABASES = {
     'default': {
