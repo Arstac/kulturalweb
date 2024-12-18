@@ -8,13 +8,27 @@ class CategoriaMusical(models.Model):
     def __str__(self):
         return self.nombre
 
-class Cancion(models.Model):
-    categoria = models.ForeignKey(CategoriaMusical, related_name='canciones', on_delete=models.CASCADE)
-    titulo = models.CharField(max_length=100)
-    artista = models.ForeignKey(Artista, on_delete=models.CASCADE)
-    url = models.URLField()
-    archivo_audio = models.FileField(upload_to='musica/canciones')
-    fecha_lanzamiento = models.DateField(null=True, blank=True)  # Campo adicional para la fecha de lanzamiento
+class Album(models.Model):
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(blank=True, null=True)  # Opcional
+    artista_principal = models.ForeignKey(Artista, on_delete=models.CASCADE)  # Artista principal del álbum
+    artistas_colaboradores = models.ManyToManyField(Artista, related_name='albumes_colaborativos', blank=True)  # Colaboradores opcionales
+    fecha_lanzamiento = models.DateField()
+    portada = models.ImageField(upload_to='musica/portadas', blank=True, null=True)  # Imagen de portada
+    categoria = models.ForeignKey(CategoriaMusical, on_delete=models.SET_NULL, null=True, blank=True)  # Categoría del álbum
 
     def __str__(self):
-        return f"{self.titulo} - {self.artista.nombre}"
+        return self.titulo
+
+class Cancion(models.Model):
+    titulo = models.CharField(max_length=100)
+    categoria = models.ForeignKey(CategoriaMusical, related_name='canciones', on_delete=models.CASCADE)
+    artista = models.ForeignKey(Artista, on_delete=models.CASCADE)
+    album = models.ForeignKey(Album, related_name='canciones', on_delete=models.SET_NULL, null=True, blank=True)  # Opcional
+    url = models.URLField(blank=True, null=True)  # URL opcional
+    archivo_audio = models.FileField(upload_to='musica/canciones')
+    fecha_lanzamiento = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        album_info = f" ({self.album.titulo})" if self.album else ""
+        return f"{self.titulo} - {self.artista.nombre}{album_info}"
