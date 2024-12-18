@@ -15,13 +15,6 @@ SECRET_KEY = "django-insecure-pbym&s()se0#%+pw!c7n)ngsepx=re$^jg-(pte+l6v%c96r+)
 CSRF_TRUSTED_ORIGINS = ['https://kulturalweb-production.up.railway.app']
 
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-# SECURITY WARNING: update this when you have the production host
-ALLOWED_HOSTS = ['*']
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -94,23 +87,39 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 # os.environ.setdefault("PGHOST", "localhost")
 # os.environ.setdefault("PGPORT", "5432")
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ["PGDATABASE"],
-        'USER': os.environ["PGUSER"],
-        'PASSWORD': os.environ["PGPASSWORD"],
-        'HOST': os.environ["PGHOST"],
-        'PORT': os.environ["PGPORT"],
+# Modo de entorno: 'development' o 'production'
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+
+# SECURITY WARNING: update this when you have the production host
+ALLOWED_HOSTS = ['*']
+
+# Configuración de base de datos
+if ENVIRONMENT == 'production':
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = False
+    
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ["PGDATABASE"],
+            'USER': os.environ["PGUSER"],
+            'PASSWORD': os.environ["PGPASSWORD"],
+            'HOST': os.environ["PGHOST"],
+            'PORT': os.environ["PGPORT"],
+        }
     }
-}
-
-
+else:  # Configuración local para desarrollo
+    DEBUG = True
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
-
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
 AUTH_PASSWORD_VALIDATORS = [
