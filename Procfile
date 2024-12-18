@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn LaKultural.wsg
+web: python manage.py migrate && gunicorn LaKultural.wsgi
