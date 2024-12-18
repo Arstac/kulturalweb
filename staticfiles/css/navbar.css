@@ -1,0 +1,97 @@
+/* Estilos Generales del Navbar */
+.navbar {
+  transition: background-color 0.4s ease; /* Transición suave del color de fondo */
+  background-color: rgba(0, 0, 0, 0); /* Color de fondo inicial transparente */
+}
+
+.navbar-scrolling {
+  background-color: rgba(0, 0, 0, 0.3); /* Color de fondo al hacer scroll */
+}
+
+/* Ajustes específicos para el espaciado y márgenes */
+.nav-link {
+  color: white; /* Color del texto de los enlaces */
+  padding: 0.5rem 1rem; /* Espaciado interno para los enlaces */
+  font-family: 'Montserrat', sans-serif; /* Fuente de los enlaces */
+  margin-right: 1rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+
+/* Efectos de Hover para enlaces */
+.navbar-nav .nav-link:hover {
+  color: #bdf005; /* Color al pasar el mouse por encima */
+  transition: color 0.3s ease-in-out; /* Suavizado de la transición de color */
+}
+
+/* Ajustes para la cabecera y la separación inicial */
+.masthead {
+  margin-top: 80px; /* Espacio superior para evitar solapamientos */
+}
+
+/* Personalización del Offcanvas */
+.offcanvas {
+  background-color: rgba(33, 37, 41, 0.95); /* Fondo oscuro con transparencia */
+}
+
+/* Estilos para los iconos SVG dentro del navbar */
+.icon-menu {
+  height: 40px; /* Altura fija para los iconos */
+}
+
+/* Manejo de imágenes SVG en hover */
+.svg-image .hover {
+  display: none; /* Oculta la imagen de hover inicialmente */
+}
+
+.svg-image:hover .normal {
+  display: none; /* Oculta la imagen normal en hover */
+}
+
+.svg-image:hover .hover {
+  display: block; /* Muestra la imagen de hover al pasar el mouse */
+}
+
+
+.navbar-nav {
+  display: flex;
+  flex-grow: 1; /* Ocupar todo el espacio horizontal disponible */
+  justify-content: space-between; /* Distribuir el espacio entre los elementos de menú y los controles */
+}
+
+.menu-items {
+  display: flex;
+  flex-grow: 1 !important; /* Asegura que los elementos de menú utilicen todo el espacio disponible */
+}
+
+.control-items {
+  display: flex;
+  align-items: center; /* Alinea los controles verticalmente */
+}
+
+
+
+
+
+@media (max-width: 991px) {
+  .menu-items {
+    display: block;
+    
+  }
+  .nav-item{
+    margin-bottom: 2rem;
+  }
+
+  .navbar-nav {
+    justify-content: space-between;  /* Alinea un elemento al principio y otro al final */
+    height: 100%;  /* Ajusta la altura del contenedor al 100% del viewport */
+  }
+  .nav-link{
+    margin-right: 0rem;
+  }
+  
+}

@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django_jsonforms',
+    "whitenoise.runserver_nostatic",
     'biografia',
     'booking',
     'eventos',
@@ -83,10 +84,10 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 # }
 
 # Set default values for the environment variables if they’re not already set
-os.environ.setdefault("PGDATABASE", "railway")
-os.environ.setdefault("PGUSER", "postgres")
-os.environ.setdefault("PGPASSWORD", "XZlHatFNChLppXkLhDBKTahXFYhKpcxG")
-os.environ.setdefault("PGHOST", "postgres.railway.internal")
+os.environ.setdefault("PGDATABASE", "lakultural_dev")
+os.environ.setdefault("PGUSER", "arnau")
+os.environ.setdefault("PGPASSWORD", "password")
+os.environ.setdefault("PGHOST", "localhost")
 os.environ.setdefault("PGPORT", "5432")
 
 DATABASES = {
@@ -144,6 +145,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 #Per un entorn de produccio
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
