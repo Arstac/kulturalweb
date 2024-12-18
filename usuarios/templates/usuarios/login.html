@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="signup-section marge-sup">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow card-login-background">
+          <div class="card-body">
+            <h1 class="text-center mb-4">Iniciar sesión</h1>
+            <form method="POST">
+              {% csrf_token %}
+
+              <div class="form-group mb-4 text-start">
+                <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+                <input type="{{ form.username.field.widget.input_type }}" id="{{ form.username.id_for_label }}" class="form-control" placeholder="Nombre de usuario" required autofocus name="{{ form.username.html_name }}">
+                {% if form.username.help_text %}
+                  <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                {% endif %}
+              </div>
+
+              <div class="form-group mb-4 text-start">
+                <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                <input type="password" id="{{ form.password.id_for_label }}" class="form-control" placeholder="Contraseña" required name="{{ form.password.html_name }}">
+                {% if form.password.help_text %}
+                  <small class="form-text text-muted">{{ form.password.help_text }}</small>
+                {% endif %}
+              </div>
+              {% for error in form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-light w-100 btn-lg mt-2 mb-3">Iniciar sesión</button>
+              </div>
+              <p class="text-center">
+                <a href="{% url 'usuarios:signup' %}" class="text-muted">¿No tienes una cuenta? Crea una</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

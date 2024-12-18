@@ -1,0 +1,22 @@
+{% load static %}
+
+<h2 class="mb-4">Otros artículos de interés</h2>
+<div class="row flex-nowrap overflow-auto row-scrollable mb-5">
+  {% for producto in related_productos %}
+  <a href="{% url 'tienda:producto' producto.id %}">
+  <div class="col-6 col-md-3 col-lg-2">
+    <div class="card card-background card-shadow bg-dark text-white h-100 border-0"> <!-- Añadir un margen horizontal para espacio entre tarjetas -->
+      <img class="card-img-top" src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{{ producto.nombre }}</h5>
+        <p class="card-text"><small>{{ producto.descripcion }}</small></p>
+        <p class="card-text"><small>{{ producto.precio }}</small></p>
+        <div class="mt-auto">
+          <!-- Botones o enlaces aquí -->
+        </div>
+      </div>
+    </div>
+  </div>
+  </a>
+  {% endfor %}
+</div>

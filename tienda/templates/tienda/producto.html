@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Masthead-->
+<header class="masthead">
+    <div class="text-center">
+        <h1 class="section-heading text-uppercase">TIENDA</h1>
+    </div>
+</header>
+
+<div class="container text-start">
+  <div class="row mb-5">
+    <div class="col-lg-6 col-product">
+      <div class="event-card m-3 p-3 event-card-producto">
+        {% if producto.imagen %}
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid card-img-top rounded-3">
+        {% else %}
+        <p>No hay imagen disponible.</p>
+        {% endif %}
+      </div>
+      
+      <div class="d-flex flex-column justify-content-center">
+        <h2>{{producto.nombre}}</h2>
+        <p>{{producto.descripcion}}</p>
+        <p>{{producto.precio}} €</p>
+      </div>
+
+    </div>
+
+    <div class="col-lg-6 tarjeta-info-producto col-product">
+      <!-- Descripción -->
+      <div class="row">
+          <div class="col">
+            <h3 class="mb-3">DESCRIPCIÓN</h3>
+            <p>{{ producto.descripcion }}</p>
+          </div>
+      </div>
+  
+      <!-- Información Adicional -->
+      <div class="row mt-4">
+        <div class="col">
+          <a href="{% url 'carrito:agregar_producto' producto_id=producto.id %}" class="btn btn-light btn-compra text-uppercase mb-5 w-100">Añadir al carrito</a>
+          <h3>INFORMACIÓN ADICIONAL</h3>
+          <!-- Selección de modelo y talla. Deberá aparecer una lista con cada talla y otra con cada modelo y poder seleccionar la combinacion adecuada. Incluir un boton para abrir una pagina donde hay infomracion para seleccion talla adecuada -->
+          <label for="talla">Selecciona tu talla:</label>
+          <select name="talla" id="talla" class='label-product'>
+            <option value="s">S</option>
+            <option value="m">M</option>
+            <option value="l">L</option>
+            <option value="xl">XL</option>
+          </select>
+          <label for="talla">Selecciona tu modelo:</label>
+          <select name="modelo" id="modelo" class='label-product'>
+            <option value="modelo1">Modelo 1</option>
+            <option value="modelo2">Modelo 2</option>
+            <option value="modelo3">Modelo 3</option>
+            <option value="modelo4">Modelo 4</option>
+          </select>
+          <button id="abrirModal" class="btn btn-dark text-uppercase">Guía de tallas</button>
+        </div>
+      </div>
+
+      <!-- Política de devoluciones -->
+      <div class="row mt-4">
+        <div class="col">
+          <p>No se pueden realizar cambios ni devoluciones de entradas ya adquiridas. Únicamente se reembolsará el importe de las entradas en caso de incidencia técnica o de cancelación del evento por parte de la organización. Las cancelaciones no incluyen casos de fuerza mayor.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <!-- Inclueix events relacions i FAQS-->
+    {% include 'tienda/related_products.html' %}
+    {% include 'tienda/faqs.html' %}
+
+  </div>
+
+</div>
+<!-- Modal -->
+<div id="modalTallas" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Aquí va tu guía de tallas...</p>
+  </div>
+</div>
+
+{% endblock %}

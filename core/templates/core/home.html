@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="video-container">
+  <video autoplay loop muted class="w-100">
+    <source src="{% static 'assets/videos/video_kultu_pc.mp4' %}" type="video/mp4">
+    Tu navegador no soporta el elemento de video.
+  </video>
+</div>
+<!-- Usamos 'vh-100' para hacer que el contenedor tenga al menos el alto de la pantalla -->
+<!-- 'd-flex' hace que el contenedor use Flexbox -->
+<!-- 'justify-content-center' centra los elementos en el eje horizontal -->
+<!-- 'align-items-center' centra los elementos en el eje vertical -->
+<div class="container justify-content-center align-items-center">
+  <div id="floating-vinyls">
+    <img src="{% static 'assets/img/vinyl.png' %}" alt="Vinyl" class="floating-vinyl"/>
+    <img src="{% static 'assets/img/vinyl.png' %}" alt="Vinyl" class="floating-vinyl"/>
+    <img src="{% static 'assets/img/vinyl.png' %}" alt="Vinyl" class="floating-vinyl"/>
+  </div>
+  
+  <div class="mb-5 d-none d-md-block mt-4">
+    <main class="px-3 main-cover mx-auto my-auto">
+        <h1>la Kultural</h1>
+        <p class="lead">Since 2016.</p>
+        <p class="lead">
+          <a href="#" class="btn btn-lg btn-light fw-bold border-white bg-white">Learn more</a>
+        </p>
+    </main>
+  </div>
+
+  <div class="block-home p-2">
+  <h3 class="mb-5">CANCIONES</h3>
+  <div class="mb-5 list-group list-group-flush">
+    {% for cancion in canciones %}
+    <div class="row list-group-item align-items-center text-start" 
+         onmouseover="showPlayButton({{ cancion.id }})" 
+         onmouseout="hidePlayButton({{ cancion.id }})">
+      <div class="col-3 col-lg-1">
+        <img src="{% static 'assets/img/events/event1.png' %}" class="img-fluid rounded-2" alt="Event">
+      </div>
+      
+      <div class="col-7 col-lg-3">
+        <div class="fw-bold">{{ cancion.titulo }}</div>
+        <div>{{ cancion.artista.nombre }}</div>
+      </div>
+      
+      <div class="col-lg-2 d-none d-lg-block">{{ cancion.categoria}}</div>
+      <div class="col-lg-2 d-none d-lg-block">05:19</div>
+      
+      <div class="col-lg-3 d-none d-lg-flex justify-content-end">
+        <button class="btn play-btn" id="play-btn-{{ cancion.id }}" 
+                onclick="togglePlayPause({{ cancion.id }}, '{{ cancion.archivo_audio.url }}')">
+          <img src="{% static 'assets/img/icons/play.svg' %}" id="icon-{{ cancion.id }}" class="song-icon" alt="Play">
+        </button>
+      </div>
+      
+      <div class="col-2 d-block d-lg-none text-end">
+        <button class="btn">
+          <img src="{% static 'assets/img/icons/threedot_w.svg' %}" class="song-icon" alt="Menu">
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  </div>
+
+  <div class="block-home p-2">
+  <h3 class="mb-5">ARTISTAS</h3>
+  <div class="mb-5 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      <!-- Event Card -->
+      {% for artista in artistas %}
+      <div class="col">
+          <a href="{% url 'booking:artista' artista.id %}">
+          <div class="card card-movement bg-dark text-white h-100 border-0 card-background">
+              {% if artista.imagen %}
+              <img src="{{ artista.imagen.url }}" alt="{{ artista.nombre }}" class="card-img-top">
+              {% else %}
+              <p>No hay imagen disponible.</p>
+              {% endif %}
+              <div class="card-body">
+                  <h5 class="card-title">{{ artista.nombre }}</h5>
+                  <p class="card-text">{{ artista.contacto }}</p>
+              </div>
+          </div>
+          </a>
+      </div>
+      {% endfor%}
+  </div>
+  </div>
+
+  <div class="block-home p-2">
+  <h3 class="mb-5">EVENTOS</h3>
+  <div class="mb-5 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <!-- Event Card -->
+    {% for evento in eventos %}
+    <div class="col">
+        <a href="{% url 'eventos:evento' evento.id %}">
+        <div class="card card-background card-movement bg-dark text-white h-100 border-0">
+            {% if evento.imagen %}
+            <img src="{{ evento.imagen.url }}" alt="{{ evento.nombre }}" class="img-fluid card-img-top rounded-3">
+            {% else %}
+            <p>No hay imagen disponible.</p>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ evento.nombre}}</h5>
+                <p class="card-text">{{ evento.lugar}}</p>
+            </div>
+            <div class="card-footer">
+                <small>{{ evento.fecha|date}}</small>
+            </div>
+        </div>
+        </a>
+    </div>
+    {% endfor%}
+  </div>
+  </div>
+
+
+</div>
+
+
+
+{% endblock %}

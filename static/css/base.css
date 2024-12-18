@@ -1,0 +1,260 @@
+/*
+ * Globals
+ */
+
+ @font-face {
+  font-family: 'Eurostile';
+  src: url('/static/fonts/Eurostile-Bold-Oblique.woff') format('woff');
+  font-style: italic; /* Esto hará que el texto sea cursiva */
+  font-weight: bold; /* Esto hará que el texto sea negrita */
+
+  font-display: swap; /* Mejora el rendimiento de carga de la fuente */
+}
+
+
+html, body {
+  height: 100vh; /* Esto hace que el body tenga el 100% de la altura del viewport */
+  margin: 0; /* Elimina cualquier margen predeterminado */
+  padding: 0; /* Elimina cualquier padding predeterminado */
+  scrollbar-width: none; /* Para Firefox */
+  -ms-overflow-style: none; /* Para Internet Explorer 10+ */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Para Chrome, Safari y Opera */
+  }
+body {
+  font-family: 'Open Sans', sans-serif;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  background-image: url("/static/assets/img/logos/bg_k1.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+}
+
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Eurostile', sans-serif;
+  margin-bottom: 0.5em;
+
+}
+
+h1, .title {
+  color: #d1f748; /* Este es un color fucsia neón */
+  font-weight: 900;
+}
+
+/* elimina la decoracion de los enlaces */
+a, .btn {
+  text-decoration: none; /* Opcional: si no quieres subrayados en los enlaces */
+}
+
+.main-cover {
+  max-width: 60em;
+}
+
+/* ------------- */
+/* LINK SETTINGS */
+/* ------------- */
+
+.artista-song a {
+    color: rgb(190, 190, 190); /* Cambia el color de los enlaces */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+}
+
+/* Cambia el color de los enlaces al pasar el mouse */
+.artista-song a:hover {
+    color: rgb(255, 255, 255); /* Cambia 'grey' por el color que prefieras para el hover */
+}
+
+/* Cambia el color de los enlaces visitados */
+.artista-song a:visited {
+    color: rgb(190, 190, 190); /* Cambia el color para enlaces visitados */
+}
+
+/* ------------- */
+/* CARD SETTINGS */
+/* ------------- */
+/* Fa referència a les targetes on actualment s'utilitzen a events, musica, tenda i artistes.
+
+/*Li donc 30% de opacitat a les tarjetes dels artistes */
+.card-background {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-login-background {
+  background-color: rgba(120, 120, 120, 0.1) !important;
+}
+
+/* Serveix per a que la imatge estigui en blanc i negre i al passar el ratoli torni el color */
+.card-img-top {
+  filter: grayscale(100%); /* Convertir imagen a blanco y negro */
+  transition: filter 0.5s ease; /* Efecto de transición suave */
+}
+.card-img-top:hover {
+  filter: grayscale(0); /* Restaurar color al pasar el ratón por encima */
+}
+
+.card-movement:hover {
+  transform: scale(1.05); /* Efecto de zoom */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Sombra más pronunciada */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease; /* Transición suave para el zoom y la sombra */
+}
+
+.card-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Sombra más pronunciada */
+  transition: box-shadow 0.3s ease, filter 0.3s ease; /* Transición suave para la sombra */
+}
+
+/* A REVISAR: */
+
+/* ------------- */
+/*     VARIS     */
+/* ------------- */
+
+/* Ajuste de la propiedad btn-light de los botones */
+.btn-light,
+.btn-light:hover,
+.btn-light:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+}
+
+.tarjeta-info {
+  background-color: rgba(120, 120, 120, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.b-example-divider {
+  width: 100%;
+  height: 3rem;
+  background-color: rgba(0, 0, 0, .1);
+  border: solid rgba(0, 0, 0, .15);
+  border-width: 1px 0;
+  box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 100vh;
+}
+
+.bi {
+  vertical-align: -.125em;
+  fill: currentColor;
+}
+
+.bd-mode-toggle {
+  z-index: 1500;
+}
+
+.bd-mode-toggle .dropdown-menu .active .bi {
+  display: block !important;
+}
+
+/* ----------------- */
+/*  ESTILS DE MODAL  */
+/* ----------------- */
+.modal {
+  display: none; /* Ocultar el modal por defecto */
+  position: fixed; /* Posición fija */
+  z-index: 1; /* Por encima de todo */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Permitir desplazamiento */
+  background-color: rgba(0,0,0,0.4); /* Fondo oscuro */
+}
+.icon-menu{
+  height: 40px;
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ----------------- */
+/*  VINILS FLOTANTS  */
+/* ----------------- */
+#floating-vinyls {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Esto asegura que los vinilos no interfieran con los clics en la página */
+  z-index: 10; /* Asegúrate de que este valor sea menor que otros elementos que deben estar por encima de los vinilos */
+}
+
+.floating-vinyl {
+  position: absolute;
+  width: 100px; /* Ajusta el tamaño como prefieras */
+  opacity: 0.7; /* Ajusta la opacidad para que no sea demasiado dominante */
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+
+
+/* ------------- */
+/*     MEDIA     */
+/* ------------- */
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+/* Ajusta los estilos de responsividad según sea necesario */
+@media (max-width: 768px) {
+  .signup-section .col-md-8 {
+    width: 90%; /* Puede ajustar esto para cambiar el ancho en dispositivos más pequeños */
+  }
+}
+
+
+/* ---------------- */
+/*     BASE HOME    */
+/* ---------------- */
+
+.block-home {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

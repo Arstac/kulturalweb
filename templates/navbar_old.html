@@ -1,0 +1,60 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg fixed-top navbar-scroll px-3" aria-label="Offcanvas navbar large">
+  <div class="container-fluid">   
+    <a class="navbar-brand" href="{% url 'core:home' %}">
+      <img src="{% static 'assets/img/logos/k_lakultural_lletres_blanc.svg' %}" alt="lakultulogo" height="60px" width="100%">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
+      <div class="offcanvas-header">
+        <img src="{% static 'assets/img/logos/k_lakultural_lletres_blanc.svg' %}" alt="lakultulogo" height="30px" width="100%">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">        
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 text-start">
+          
+          <li class="nav-item ms-auto"> <!-- ms-auto empujará el elemento completamente a la derecha -->
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" id="searchInput" placeholder="Buscar" aria-label="Search">
+              <ul id="resultList"></ul>
+          </form>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'tienda:tienda' %}">Tienda</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'musica:musica' %}">Canciones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'eventos:eventos' %}">Eventos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'booking:booking' %}">Bookings</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'assets/img/icons/user.svg' %}" alt="userlogo" height="20px" width="20px">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              {% if user.is_authenticated %}
+                <!-- Muestra si el usuario está autenticado -->
+                <li><a class="dropdown-item" href="{% url 'carrito:carrito' %}">Carrito</a></li>
+                <li><a class="dropdown-item" href="{% url 'usuarios:ajustes' %}">Ajustes</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'usuarios:logout' %}">Cerrar Sesión</a></li>
+              {% else %}
+                <!-- Muestra si el usuario no está autenticado -->
+                <li><a class="dropdown-item" href="{% url 'usuarios:login' %}">Iniciar Sesión</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'usuarios:signup' %}">Registrarse</a></li>
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="signup-section marge-sup">
+    <div class="container">
+      <div class="row justify-content-center ">
+        <div class="col-md-8 ">
+          <div class="card shadow card-login-background">
+            <div class="card-body ">
+              <h1 class="text-center mb-4">Registrarse</h1>
+              <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-group mb-4 text-start">
+                  <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+                  <div class="login-signup-control">
+                    {{ form.username }}
+                  </div>
+                  {% if form.username.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.username.errors.as_text }}
+                  </div>
+                  {% endif %}
+                </div>
+
+                <div class="form-group mb-4 text-start">
+                  <label for="{{ form.email.id_for_label }}">Correo electrónico</label>
+                  <div class="login-signup-control">
+                    {{ form.email }}
+                  </div>
+                  {% if form.email.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.email.errors.as_text }}
+                  </div>
+                  {% endif %}
+                </div>
+
+                <div class="form-group text-start">
+                  <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                  <div class="login-signup-control">
+                    {{ form.password1 }}
+                  </div>
+                  {% if form.password1.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.password1.errors.as_text }}
+                  </div>
+                  {% endif %}
+                </div>
+
+                <small class="form-text text-muted mb-4 text-start">La contraseña debe contener al menos 8 caracteres.</small>
+
+                <div class="form-group mb-3 text-start">
+                  <label for="{{ form.password2.id_for_label }}">Contraseña (confirmación)</label>
+                  <div class="login-signup-control">
+                    {{ form.password2 }}
+                  </div>
+                  {% if form.password2.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.password2.errors.as_text }}
+                  </div>
+                  {% endif %}
+                </div>
+
+                <div class="text-center">
+                  <button type="submit" class="btn btn-light btn-lg mt-2 mb-3 w-100">Registrarse</button>
+                </div>
+
+                <p class="text-center">
+                  <a href="{% url 'usuarios:login' %}" class="text-muted">¿Ya tienes una cuenta? Iniciar sesión</a>
+                </p>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

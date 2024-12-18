@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Portfolio Grid-->
+<!-- Masthead-->
+<header class="masthead">
+    <div class="text-center">
+        <h1 class="section-heading text-uppercase">BOOKING</h1>
+    </div>
+</header>
+
+<div class="container py-4 text-start">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <!-- Event Card -->
+        {% for artista in artistas %}
+        <div class="col">
+            <a href="{% url 'booking:artista' artista.id %}">
+            <div class="card card-movement bg-dark text-white h-100 border-0 card-background">
+                {% if artista.imagen %}
+                <img src="{{ artista.imagen.url }}" alt="{{ artista.nombre }}" class="card-img-top">
+                {% else %}
+                <p>No hay imagen disponible.</p>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ artista.nombre }}</h5>
+                    <p class="card-text">{{ artista.contacto }}</p>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% endfor%}
+    </div>
+</div>
+
+{% endblock %}

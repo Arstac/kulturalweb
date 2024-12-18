@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Masthead-->
+<header class="masthead">
+    <div class="text-center">
+        <h1 class="section-heading text-uppercase">{{ artista.nombre }}</h1>
+    </div>
+</header>
+
+<div class="container py-5 text-start">
+    <div class="row mb-5">
+      <div class="col-lg-6 d-flex flex-column justify-content-center">
+        <h2>{{artista.nombre}}</h2>
+        <p>{{artista.contacto}}</p>
+        <a href="#" class="btn btn-light text-uppercase">Contactar</a>
+      </div>
+      <div class="col-lg-6">
+        <div class="event-card p-3">
+          {% if artista.imagen %}
+          <img src="{{ artista.imagen.url }}" alt="{{ artista.nombre }}" class="img-fluid">
+          {% else %}
+          <p>No hay imagen disponible.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+    <div class="col tarjeta-info mb-5">
+      <!-- Descripción -->
+      <div class="row">
+          <div class="col">
+          <h3 class="mb-3">DESCRIPCIÓN</h3>
+          <p>{{ artista.descripcion }}</p>
+          </div>
+      </div>
+    
+      <!-- Artistas -->
+      <div class="row mt-4">
+          <div class="col">
+          <h3>LOREM</h3>
+          <ul>
+              <li>Amygdala</li>
+          </ul>
+          </div>
+      </div>
+  
+      <!-- Información Adicional -->
+      <div class="row mt-4">
+        <div class="col">
+          <h3>INFORMACIÓN ADICIONAL</h3>
+          <p>No se pueden realizar cambios ni devoluciones de entradas ya adquiridas. Únicamente se reembolsará el importe de las entradas en caso de incidencia técnica o de cancelación del evento por parte de la organización. Las cancelaciones no incluyen casos de fuerza mayor.</p>
+        </div>
+      </div>
+    </div>
+  
+    <h3 class="mb-3">EVENTOS PRÓXIMOS</h3>
+    <!-- Inclueix events relacions i FAQS-->
+  {% include 'booking/artist_events.html' %}
+
+    <h3 class="mb-3">MÚSICA</h3>
+      <!-- Inclueix events relacions i FAQS-->
+    {% include 'booking/artist_music.html' %}
+
+     <!--{% include 'faqs.html' %}-->
+
+</div>
+{% endblock %}
+

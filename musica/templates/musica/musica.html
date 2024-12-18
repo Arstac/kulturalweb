@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<header class="masthead my-20">
+    <div class="text-center">
+        <h1 class="section-heading text-uppercase">MUSICA</h1>
+    </div>
+</header>
+
+<div class="container my-4">
+  <div class="list-group list-group-flush">
+    {% for cancion in canciones %}
+    <div class="row list-group-item align-items-center text-start" 
+         onmouseover="showPlayButton({{ cancion.id }})" 
+         onmouseout="hidePlayButton({{ cancion.id }})">
+      <div class="col-3 col-lg-1">
+        <img src="{% static 'assets/img/events/event1.png' %}" class="img-fluid rounded-2" alt="Event">
+      </div>
+      
+      <div class="col-7 col-lg-3">
+        <div class="fw-bold">{{ cancion.titulo }}</div>
+        <div>{{ cancion.artista.nombre }}</div>
+      </div>
+      
+      <div class="col-lg-2 d-none d-lg-block">{{ cancion.categoria}}</div>
+      <div class="col-lg-2 d-none d-lg-block">05:19</div>
+      
+      <div class="col-lg-3 d-none d-lg-flex justify-content-end">
+        <button class="btn play-btn" id="play-btn-{{ cancion.id }}" 
+                onclick="togglePlayPause({{ cancion.id }}, '{{ cancion.archivo_audio.url }}')">
+          <img src="{% static 'assets/img/icons/play.svg' %}" id="icon-{{ cancion.id }}" class="song-icon" alt="Play">
+        </button>
+      </div>
+      
+      <div class="col-2 d-block d-lg-none text-end">
+        <button class="btn">
+          <img src="{% static 'assets/img/icons/threedot_w.svg' %}" class="song-icon" alt="Menu">
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

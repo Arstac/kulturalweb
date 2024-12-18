@@ -1,0 +1,64 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg fixed-top navbar-scroll px-3" aria-label="Main navigation">
+  <div class="container-fluid">   
+    <a class="navbar-brand" href="{% url 'core:home' %}">
+      <img src="{% static 'assets/img/logos/k_lakultural_lletres_blanc.svg' %}" alt="La Kultural Logo" height="60px" style="max-width: 150px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
+      <div class="offcanvas-header">
+        <img src="{% static 'assets/img/logos/k_blanca.svg' %}" alt="La Kultural Logo" height="30px" style="max-width: 100px;">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">        
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 text-start">
+          <div class="menu-items">
+          <li class="nav-item"><a class="nav-link" href="{% url 'tienda:tienda' %}">TIENDA</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'musica:musica' %}">CANCIONES</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'eventos:eventos' %}">EVENTOS</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'booking:booking' %}">BOOKING</a></li>
+        </div>
+        <div class="control-items">
+          <li class="nav-item">
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            </form>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'carrito:carrito' %}">
+            <div class="svg-image">
+              <img src="{% static 'assets/img/icons/shopping-bag.svg' %}" alt="Cart Icon" class='icon-menu normal'>
+              <img src="{% static 'assets/img/icons/shopping-bag_green.svg' %}" alt="Cart Icon" class='icon-menu hover'>
+            </div>
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="svg-image">
+                <img src="{% static 'assets/img/icons/menu_user.svg' %}" alt="User Icon" class='icon-menu normal'>
+                <img src="{% static 'assets/img/icons/menu_user_green.svg' %}" alt="User Icon" class='icon-menu hover'>
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              {% if user.is_authenticated %}
+                <li><a class="dropdown-item" href="{% url 'usuarios:ajustes' %}">Ajustes</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'usuarios:logout' %}">Cerrar Sesión</a></li>
+              {% else %}
+                <li><a class="dropdown-item" href="{% url 'usuarios:login' %}">Iniciar Sesión</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'usuarios:signup' %}">Registrarse</a></li>
+              {% endif %}
+            </ul>
+          </li>
+        </div>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
