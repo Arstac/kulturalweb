@@ -98,7 +98,7 @@ ALLOWED_HOSTS = ['*']
 # Configuración de base de datos
 if ENVIRONMENT == 'production':
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = False
+    DEBUG = True
     
     DATABASES = {
         'default': {
