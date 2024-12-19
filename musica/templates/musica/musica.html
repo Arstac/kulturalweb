@@ -1,45 +1,294 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 <header class="masthead my-20">
     <div class="text-center">
-        <h1 class="section-heading text-uppercase">MUSICA</h1>
+        <h1 class="section-heading text-uppercase">MÚSICA</h1>
     </div>
 </header>
 
 <div class="container my-4">
-  <div class="list-group list-group-flush">
-    {% for cancion in canciones %}
-    <div class="row list-group-item align-items-center text-start" 
-         onmouseover="showPlayButton({{ cancion.id }})" 
-         onmouseout="hidePlayButton({{ cancion.id }})">
-      <div class="col-3 col-lg-1">
-        <img src="{% static 'assets/img/events/event1.png' %}" class="img-fluid rounded-2" alt="Event">
-      </div>
-      
-      <div class="col-7 col-lg-3">
-        <div class="fw-bold">{{ cancion.titulo }}</div>
-        <div>{{ cancion.artista.nombre }}</div>
-      </div>
-      
-      <div class="col-lg-2 d-none d-lg-block">{{ cancion.categoria}}</div>
-      <div class="col-lg-2 d-none d-lg-block">05:19</div>
-      
-      <div class="col-lg-3 d-none d-lg-flex justify-content-end">
-        <button class="btn play-btn" id="play-btn-{{ cancion.id }}" 
-                onclick="togglePlayPause({{ cancion.id }}, '{{ cancion.archivo_audio.url }}')">
-          <img src="{% static 'assets/img/icons/play.svg' %}" id="icon-{{ cancion.id }}" class="song-icon" alt="Play">
-        </button>
-      </div>
-      
-      <div class="col-2 d-block d-lg-none text-end">
-        <button class="btn">
-          <img src="{% static 'assets/img/icons/threedot_w.svg' %}" class="song-icon" alt="Menu">
-        </button>
-      </div>
+    <!-- Aquí tu listado de canciones, por ejemplo: -->
+    <div class="list-group list-group-flush">
+        {% for cancion in canciones %}
+        <div class="row list-group-item align-items-center text-start">
+            <div class="col-3 col-lg-1">
+                {% if cancion.album and cancion.album.portada %}
+                  <img src="{{ cancion.album.portada.url }}" class="img-fluid rounded-2" alt="{{ cancion.album.titulo }}">
+                {% else %}
+                  <img src="{% static 'assets/img/default_album.png' %}" class="img-fluid rounded-2" alt="Imagen predeterminada">
+                {% endif %}
+            </div>
+
+            <div class="col-7 col-lg-3">
+                <div class="fw-bold">{{ cancion.titulo }}</div>
+                <div>{{ cancion.artista.nombre }}</div>
+            </div>
+
+            <div class="col-lg-2 d-none d-lg-block">{{ cancion.categoria}}</div>
+            
+            <div class="col-lg-2 d-none d-lg-block">
+                {% if cancion.album %}
+                  {{ cancion.album.titulo }}
+                {% else %}
+                  Sin álbum
+                {% endif %}
+            </div>
+            <div class="col-lg-3 d-none d-lg-flex justify-content-end">
+              <button class="btn play-btn" onclick="toggleListPlayPause({{ cancion.id }}, '{{ cancion.archivo_audio.url }}', '{{ cancion.titulo|escapejs }}', '{{ cancion.artista.nombre|escapejs }}')">
+                  <i class="fas fa-play-circle" id="list-icon-{{ cancion.id }}"></i>
+              </button>
+          </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-  </div>
 </div>
 
+
+
+
+<!-- Barra del reproductor al final del contenido -->
+<div class="player row align-items-center justify-content-between text-start" 
+     style="position: fixed; bottom: 0; width: 100%; background: #000; color: #fff; padding: 10px; z-index: 999;">
+
+    <!-- Sección izquierda: Portada e información de la pista -->
+    <div class="col-12 col-md-4 d-flex align-items-center mb-2 mb-md-0">
+        <img src="{% static 'assets/img/default_album.png' %}" alt="Portada" class="img-fluid rounded-2 track-art" 
+             style="width: 50px; height: 50px; object-fit: cover;">
+        <div class="ms-3">
+            <div class="track-name fw-bold">Track Name</div>
+            <div class="track-artist">Track Artist</div>
+        </div>
+    </div>
+
+    <!-- Sección central: Controles -->
+    <div class="col-12 col-md-4 d-flex align-items-center justify-content-center mb-2 mb-md-0">
+        <button class="btn btn-link text-white random-track">
+            <i class="fas fa-random"></i>
+        </button>
+        <button class="btn btn-link text-white prev-track">
+            <i class="fa fa-step-backward"></i>
+        </button>
+        <button class="btn btn-link text-white playpause-track">
+            <i class="fa fa-play-circle"></i>
+        </button>
+        <button class="btn btn-link text-white next-track">
+            <i class="fa fa-step-forward"></i>
+        </button>
+        <button class="btn btn-link text-white repeat-track">
+            <i class="fa fa-repeat"></i>
+        </button>
+    </div>
+
+    <!-- Sección derecha: Barra de tiempo y duración -->
+    <div class="col-12 col-md-4 d-flex align-items-center justify-content-end">
+        <div class="current-time me-2">0:00</div>
+        <input type="range" class="form-range me-2" min="0" max="100" value="0" style="max-width:200px;">
+        <div class="total-duration">3:36</div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Aquí adaptas el JS del reproductor
+// Puedes convertir `music_list` en una variable dinámica o cargarla vía AJAX.
+// De momento, lo dejamos con un arreglo vacío y lo popularemos cuando se le dé a play.
+let track_art = document.querySelector('.track-art');
+let track_name = document.querySelector('.track-name');
+let track_artist = document.querySelector('.track-artist');
+
+let playpause_btn = document.querySelector('.playpause-track');
+let next_btn = document.querySelector('.next-track');
+let prev_btn = document.querySelector('.prev-track');
+let randomIcon = document.querySelector('.random-track i');
+let repeatIcon = document.querySelector('.repeat-track i');
+
+let curr_time = document.querySelector('.current-time');
+let total_duration = document.querySelector('.total-duration');
+let curr_track = document.createElement('audio');
+
+let track_index = 0;
+let isPlaying = false;
+let isRandom = false;
+let updateTimer;
+
+let music_list = []; // Se actualizará con la canción actual.
+let currentListTrackId = null; // ID de la canción que se está reproduciendo desde la lista.
+let currentListButtonIcon = null; // Icono del botón de la lista actual.
+
+function toggleListPlayPause(id, audioUrl, title, artist) {
+    const iconElement = document.getElementById(`list-icon-${id}`);
+
+    // Si no hay canción cargada o es una diferente a la actual
+    if (currentListTrackId !== id) {
+        // Si había una canción en reproducción, restaurar su ícono a play
+        if (currentListButtonIcon && currentListTrackId !== null) {
+            currentListButtonIcon.classList.remove('fa-pause-circle');
+            currentListButtonIcon.classList.add('fa-play-circle');
+        }
+
+        // Cargar nueva canción
+        music_list = [{
+            img : '{% static "assets/img/default_album.png" %}', 
+            name : title,
+            artist : artist,
+            music : audioUrl
+        }];
+
+        track_index = 0;
+        loadTrack(track_index);
+        playTrack(); // Reproducir la nueva canción
+
+        // Actualizar icono en la lista
+        iconElement.classList.remove('fa-play-circle');
+        iconElement.classList.add('fa-pause-circle');
+
+        // Actualizamos referencias
+        currentListTrackId = id;
+        currentListButtonIcon = iconElement;
+
+    } else {
+        // Si es la misma canción: alternar entre play y pause
+        if (isPlaying) {
+            pauseTrack();
+            iconElement.classList.remove('fa-pause-circle');
+            iconElement.classList.add('fa-play-circle');
+        } else {
+            playTrack();
+            iconElement.classList.remove('fa-play-circle');
+            iconElement.classList.add('fa-pause-circle');
+        }
+    }
+}
+
+function loadTrack(track_index){
+    clearInterval(updateTimer);
+    reset();
+
+    curr_track.src = music_list[track_index].music;
+    curr_track.load();
+
+    track_art.style.backgroundImage = "url(" + music_list[track_index].img + ")";
+    track_name.textContent = music_list[track_index].name;
+    track_artist.textContent = music_list[track_index].artist;
+
+    updateTimer = setInterval(setUpdate, 1000);
+    curr_track.addEventListener('ended', nextTrack);
+}
+
+function reset(){
+    curr_time.textContent = "00:00";
+    total_duration.textContent = "00:00";
+}
+
+function playpauseTrack(){
+    // Controlado desde el reproductor inferior
+    isPlaying ? pauseTrack() : playTrack();
+
+    // Si estamos controlando desde el reproductor inferior y hay una canción lista:
+    if (currentListButtonIcon) {
+        if (isPlaying) {
+            currentListButtonIcon.classList.remove('fa-play-circle');
+            currentListButtonIcon.classList.add('fa-pause-circle');
+        } else {
+            currentListButtonIcon.classList.remove('fa-pause-circle');
+            currentListButtonIcon.classList.add('fa-play-circle');
+        }
+    }
+}
+
+function playTrack(){
+    curr_track.play().then(() => {
+        isPlaying = true;
+        playpause_btn.innerHTML = '<i class="fas fa-pause-circle"></i>';
+    }).catch((error) => {
+        console.error("Error al reproducir:", error);
+    });
+}
+
+function pauseTrack(){
+    curr_track.pause();
+    isPlaying = false;
+    playpause_btn.innerHTML = '<i class="fas fa-play-circle"></i>';
+}
+
+function nextTrack(){
+    if(track_index < music_list.length - 1 && isRandom === false){
+        track_index += 1;
+    } else {
+        track_index = 0;
+    }
+    loadTrack(track_index);
+    playTrack();
+
+    // Si se pasan canciones de otra forma, podrías actualizar el icono de la lista
+    if (currentListButtonIcon) {
+        currentListButtonIcon.classList.remove('fa-pause-circle');
+        currentListButtonIcon.classList.add('fa-play-circle');
+        currentListButtonIcon = null;
+        currentListTrackId = null;
+    }
+}
+
+function prevTrack(){
+    if(track_index > 0){
+        track_index -= 1;
+    } else {
+        track_index = music_list.length -1;
+    }
+    loadTrack(track_index);
+    playTrack();
+
+    // Restaurar iconos si cambias manualmente
+    if (currentListButtonIcon) {
+        currentListButtonIcon.classList.remove('fa-pause-circle');
+        currentListButtonIcon.classList.add('fa-play-circle');
+        currentListButtonIcon = null;
+        currentListTrackId = null;
+    }
+}
+
+function setUpdate(){
+    if(!isNaN(curr_track.duration)){
+        let currentMinutes = Math.floor(curr_track.currentTime / 60);
+        let currentSeconds = Math.floor(curr_track.currentTime - currentMinutes * 60);
+        let durationMinutes = Math.floor(curr_track.duration / 60);
+        let durationSeconds = Math.floor(curr_track.duration - durationMinutes * 60);
+
+        if(currentSeconds < 10) currentSeconds = "0" + currentSeconds; 
+        if(durationSeconds < 10) durationSeconds = "0" + durationSeconds; 
+        if(currentMinutes < 10) currentMinutes = "0" + currentMinutes; 
+        if(durationMinutes < 10) durationMinutes = "0" + durationMinutes; 
+
+        curr_time.textContent = currentMinutes + ":" + currentSeconds;
+        total_duration.textContent = durationMinutes + ":" + durationSeconds;
+    }
+}
+
+// Eventos reproductor inferior
+playpause_btn.addEventListener('click', playpauseTrack);
+next_btn.addEventListener('click', nextTrack);
+prev_btn.addEventListener('click', prevTrack);
+
+function randomTrack(){
+    isRandom = !isRandom;
+    if(isRandom) {
+        randomIcon.classList.add('randomActive');
+    } else {
+        randomIcon.classList.remove('randomActive');
+    }
+}
+randomIcon.parentElement.addEventListener('click', randomTrack);
+
+function repeatTrack(){
+    loadTrack(track_index);
+    playTrack();
+}
+repeatIcon.parentElement.addEventListener('click', repeatTrack);
+</script>
 {% endblock %}

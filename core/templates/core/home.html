@@ -29,14 +29,20 @@
   </div>
 
   <div class="block-home p-2">
-  <h3 class="mb-5">CANCIONES</h3>
+  <h1 class="mb-5 ">CANCIONES</h1>
   <div class="mb-5 list-group list-group-flush">
+
     {% for cancion in canciones %}
     <div class="row list-group-item align-items-center text-start" 
          onmouseover="showPlayButton({{ cancion.id }})" 
          onmouseout="hidePlayButton({{ cancion.id }})">
+
       <div class="col-3 col-lg-1">
-        <img src="{% static 'assets/img/events/event1.png' %}" class="img-fluid rounded-2" alt="Event">
+        {% if cancion.album and cancion.album.portada %}
+          <img src="{{ cancion.album.portada.url }}" class="img-fluid rounded-2" alt="{{ cancion.album.titulo }}">
+        {% else %}
+          <img src="{% static 'assets/img/default_album.png' %}" class="img-fluid rounded-2" alt="Imagen predeterminada">
+        {% endif %}
       </div>
       
       <div class="col-7 col-lg-3">
@@ -45,7 +51,14 @@
       </div>
       
       <div class="col-lg-2 d-none d-lg-block">{{ cancion.categoria}}</div>
-      <div class="col-lg-2 d-none d-lg-block">05:19</div>
+      
+      <div class="col-lg-2 d-none d-lg-block">
+        {% if cancion.album %}
+          {{ cancion.album.titulo }}
+        {% else %}
+          Sin álbum
+        {% endif %}
+      </div>
       
       <div class="col-lg-3 d-none d-lg-flex justify-content-end">
         <button class="btn play-btn" id="play-btn-{{ cancion.id }}" 
@@ -65,8 +78,9 @@
   </div>
 
   <div class="block-home p-2">
-  <h3 class="mb-5">ARTISTAS</h3>
+  <h1 class="mb-5">ARTISTAS</h1>
   <div class="mb-5 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
       <!-- Event Card -->
       {% for artista in artistas %}
       <div class="col">
@@ -89,8 +103,11 @@
   </div>
 
   <div class="block-home p-2">
-  <h3 class="mb-5">EVENTOS</h3>
+  <!-- Si existen eventos: -->
+    {% if eventos %}
+  <h1 class="mb-5">EVENTOS</h1>
   <div class="mb-5 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
     <!-- Event Card -->
     {% for evento in eventos %}
     <div class="col">
@@ -112,12 +129,11 @@
         </a>
     </div>
     {% endfor%}
+
   </div>
+  {% endif %}
   </div>
 
 
 </div>
-
-
-
 {% endblock %}

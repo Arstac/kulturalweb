@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from .models import Cancion
 
 def musica(request):
-    canciones = Cancion.objects.all()
+    canciones = Cancion.objects.filter(visible=True)  # Solo artistas visibles
     contexto = {'canciones': canciones}
     return render(request, 'musica/musica.html', contexto)
 

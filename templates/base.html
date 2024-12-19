@@ -32,13 +32,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>      
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900|Open+Sans:400,400i,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/base.css' %}" rel="stylesheet" />
         <link href="{% static 'css/navbar.css' %}" rel="stylesheet" />
         <link href="{% static 'usuarios/css/login_logout.css' %}" rel="stylesheet" />
         <link href="{% static 'eventos/css/evento.css' %}" rel="stylesheet" />
         <link href="{% static 'musica/css/musica.css' %}" rel="stylesheet" />
+        <link href="{% static 'musica/css/player.css' %}" rel="stylesheet" />
         <link href="{% static 'tienda/css/producto.css' %}" rel="stylesheet" />
         <link href="{% static 'carrito/css/carrito.css' %}" rel="stylesheet" />
     </head>
@@ -51,6 +52,8 @@
         
         {% block content %}
         {% endblock %}
+
+        {% block extra_js %}{% endblock %}
 
         {% include 'footer.html' %}
         

@@ -5,13 +5,12 @@ from .models import Artista
 from musica.models import Cancion
 
 def booking(request):
-    artistas = Artista.objects.all()
+    artistas = Artista.objects.filter(visible=True)  # Solo artistas visibles
     canciones = Cancion.objects.all()
     contexto = {'mensaje': "Hola, mundo. Este es mi contexto.",
                 'artistas': artistas,
                 'canciones': canciones}
     return render(request, 'booking/booking.html', contexto)
-
 
 def artista(request, artista_id):
     artista = get_object_or_404(Artista, pk=artista_id)

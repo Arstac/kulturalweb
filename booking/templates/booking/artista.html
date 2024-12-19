@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
-<!-- Masthead-->
 <header class="masthead">
     <div class="text-center">
         <h1 class="section-heading text-uppercase">{{ artista.nombre }}</h1>
@@ -11,21 +11,57 @@
 <div class="container py-5 text-start">
     <div class="row mb-5">
       <div class="col-lg-6 d-flex flex-column justify-content-center">
-        <h2>{{artista.nombre}}</h2>
-        <p>{{artista.contacto}}</p>
-        <a href="#" class="btn btn-light text-uppercase">Contactar</a>
+        <h2>{{ artista.nombre }}</h2>
+        <p>{{ artista.contacto }}</p>
+        {% if artista.telefono %}
+          <p>Tel: {{ artista.telefono }}</p>
+        {% endif %}
+        {% if artista.sitio_web %}
+          <p><a href="{{ artista.sitio_web }}" target="_blank">Página web</a></p>
+        {% endif %}
+
+        <!-- Redes sociales -->
+        <div class="redes-sociales mt-3">
+          {% if artista.redes_sociales %}
+            <ul class="list-inline">
+              {% for red, url in artista.redes_sociales.items %}
+                <li class="list-inline-item">
+                  <a href="{{ url }}" target="_blank">
+                    {% if red == "facebook" %}
+                      <i class="fab fa-facebook-f fa-2x icono-artistas"></i>
+                    {% elif red == "instagram" %}
+                      <i class="fab fa-instagram fa-2x icono-artistas"></i>
+                    {% elif red == "twitter" %}
+                      <i class="fab fa-twitter fa-2x icono-artistas"></i>
+                    {% elif red == "youtube" %}
+                      <i class="fab fa-youtube fa-2x icono-artistas"></i>
+                    {% elif red == "soundcloud" %}
+                      <i class="fab fa-soundcloud fa-2x icono-artistas"></i>
+                    {% else %}
+                      <i class="fas fa-link"></i>
+                    {% endif %}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+
+        <a href="#" class="btn btn-light text-uppercase mt-3">Contactar</a>
       </div>
       <div class="col-lg-6">
         <div class="event-card p-3">
           {% if artista.imagen %}
-          <img src="{{ artista.imagen.url }}" alt="{{ artista.nombre }}" class="img-fluid">
+            <img src="{{ artista.imagen.url }}" alt="{{ artista.nombre }}" class="img-fluid">
           {% else %}
-          <p>No hay imagen disponible.</p>
+            <p>No hay imagen disponible.</p>
           {% endif %}
         </div>
       </div>
     </div>
     
+    {% include 'booking/artist_music.html' %}
+
     <div class="col tarjeta-info mb-5">
       <!-- Descripción -->
       <div class="row">
@@ -34,36 +70,19 @@
           <p>{{ artista.descripcion }}</p>
           </div>
       </div>
-    
-      <!-- Artistas -->
-      <div class="row mt-4">
-          <div class="col">
-          <h3>LOREM</h3>
-          <ul>
-              <li>Amygdala</li>
-          </ul>
-          </div>
-      </div>
-  
-      <!-- Información Adicional -->
-      <div class="row mt-4">
-        <div class="col">
-          <h3>INFORMACIÓN ADICIONAL</h3>
-          <p>No se pueden realizar cambios ni devoluciones de entradas ya adquiridas. Únicamente se reembolsará el importe de las entradas en caso de incidencia técnica o de cancelación del evento por parte de la organización. Las cancelaciones no incluyen casos de fuerza mayor.</p>
-        </div>
+
+      <div class="soundcloud-container mt-4">
+        {% if artista.enlace_soundcloud %}
+          <!-- Insertamos el iframe de SoundCloud adaptándolo a la URL del artista -->
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+          src="https://w.soundcloud.com/player/?url={{ artista.enlace_soundcloud|urlencode }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+        {% else %}
+          <p>Este artista no tiene SoundCloud disponible.</p>
+        {% endif %}
       </div>
     </div>
   
     <h3 class="mb-3">EVENTOS PRÓXIMOS</h3>
-    <!-- Inclueix events relacions i FAQS-->
-  {% include 'booking/artist_events.html' %}
-
-    <h3 class="mb-3">MÚSICA</h3>
-      <!-- Inclueix events relacions i FAQS-->
-    {% include 'booking/artist_music.html' %}
-
-     <!--{% include 'faqs.html' %}-->
-
+    {% include 'booking/artist_events.html' %}
 </div>
 {% endblock %}
-

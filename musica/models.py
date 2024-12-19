@@ -11,8 +11,7 @@ class CategoriaMusical(models.Model):
 class Album(models.Model):
     titulo = models.CharField(max_length=200)
     descripcion = models.TextField(blank=True, null=True)  # Opcional
-    artista_principal = models.ForeignKey(Artista, on_delete=models.CASCADE)  # Artista principal del álbum
-    artistas_colaboradores = models.ManyToManyField(Artista, related_name='albumes_colaborativos', blank=True)  # Colaboradores opcionales
+    artistas = models.ManyToManyField(Artista, related_name='albumes_colaborativos', blank=True)  # Colaboradores opcionales
     fecha_lanzamiento = models.DateField()
     portada = models.ImageField(upload_to='musica/portadas', blank=True, null=True)  # Imagen de portada
     categoria = models.ForeignKey(CategoriaMusical, on_delete=models.SET_NULL, null=True, blank=True)  # Categoría del álbum
@@ -28,6 +27,8 @@ class Cancion(models.Model):
     url = models.URLField(blank=True, null=True)  # URL opcional
     archivo_audio = models.FileField(upload_to='musica/canciones')
     fecha_lanzamiento = models.DateField(null=True, blank=True)
+    visible = models.BooleanField(default=True)  # Campo nuevo: define si es visible o no
+
 
     def __str__(self):
         album_info = f" ({self.album.titulo})" if self.album else ""
