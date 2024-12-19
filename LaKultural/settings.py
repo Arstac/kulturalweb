@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django_jsonforms',
     "whitenoise.runserver_nostatic",
+    'cloudinary',
+    'cloudinary_storage',
     'biografia',
     'booking',
     'eventos',
@@ -167,14 +169,18 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 #Per un entorn de produccio
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_URL = '/media/'
-#MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_ROOT = '/media_data/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_URL = os.getenv('CLOUDINARY_URL', 'cloudinary://725997334747238:ZHj-pnHBqLFxvEKG5Svhx46w5wM@dyhcaqlhv')
+
+MEDIA_URL = None
+#MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = None
 
 AUTHENTICATION_BACKENDS = [
     # La ruta a tu backend personalizado
