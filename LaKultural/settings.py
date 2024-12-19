@@ -178,7 +178,7 @@ CLOUDINARY_URL = os.getenv('CLOUDINARY_URL', 'cloudinary://725997334747238:ZHj-p
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'  # Esto es opcional; Cloudinary generará URLs automáticas
-MEDIA_ROOT = None
+MEDIA_ROOT = ''
 
 AUTHENTICATION_BACKENDS = [
     # La ruta a tu backend personalizado
