@@ -72,7 +72,7 @@
 // Función para mostrar el detalle de la canción en el modal
 function mostrarDetalleCancion(cancionId, audioUrl) {
     // Petición al backend para obtener más info de la canción
-    fetch(`/musica/detalle/${cancionId}/`)
+    fetch(`/musica/cancion_detalle/${cancionId}/`)
       .then(response => response.json())
       .then(data => {
           // Rellenar campos del modal
