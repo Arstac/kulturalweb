@@ -8,10 +8,12 @@ def musica(request):
     return render(request, 'musica/musica.html', contexto)
 
 def cancion_detalle(request, id):
+    # Suponiendo que el objeto existe
     cancion = Cancion.objects.get(id=id)
     data = {
         'titulo': cancion.titulo,
-        'artista': cancion.artista.nombre,  # Asumiendo que artista es un objeto relacionado
-        'imagen': cancion.artista.imagen.url  # Asumiendo que tienes un campo de imagen en el modelo
+        'artista': cancion.artista.nombre,
+        # Para la imagen, primero revisa si el artista tiene la propiedad imagen:
+        'imagen': cancion.artista.imagen.url if cancion.artista.imagen else ''
     }
     return JsonResponse(data)
