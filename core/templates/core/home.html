@@ -2,83 +2,68 @@
 {% load static %}
 
 {% block content %}
-<!-- Encabezado principal -->
-<div class="position-relative p-3 p-md-5 m-md-3 text-center">
-  <div class="col-md-5 p-lg-5 mx-auto my-5">
-    <h1 class="display-4 font-weight-normal">La Kultural</h1>
-    <p class="lead font-weight-normal">
-      Benvingut/da a l'associació que promou la música underground i els ritmes alternatius.
-    </p>
-    <a class="btn btn-outline-secondary" href="#booking-section">Descobreix més</a>
-  </div>
-  <div class="product-device box-shadow d-none d-md-block"></div>
-  <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+<!-- Sección Hero (Encabezado principal) -->
+<div class="container-fluid bg-light p-5 text-center">
+  <h1 class="display-4">La Kultural</h1>
+  <p class="lead">
+    Benvingut/da a l'associació que promou la música underground i els ritmes alternatius.
+  </p>
+  <a class="btn btn-dark" href="#booking-section">Saber més</a>
 </div>
 
-<div class="mb-5 d-none d-md-block mt-4">
-  <main class="px-3 main-cover mx-auto my-auto">
-      <h1>la Kultural</h1>
-      <p class="lead">Since 2016.</p>
-      <p class="lead">
-        <a href="#" class="btn btn-lg btn-light fw-bold border-white bg-white">Learn more</a>
-      </p>
-  </main>
-</div>
-
-<!-- Secció "Booking" -->
-<div id="booking-section" class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-  <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-    <div class="my-3 py-3">
-      <h1 class="display-5">Booking</h1>
-      <p class="lead">
-        <strong>Descobreix els nostres artistes i crea l’esdeveniment perfecte.</strong><br>
+<!-- Fila 1: Booking - Música -->
+<div class="container my-5">
+  <div class="row">
+    <!-- Booking -->
+    <div id="booking-section" class="col-md-6 d-flex flex-column justify-content-center bg-dark text-white p-5">
+      <h2 class="display-5">Booking</h2>
+      <p>
+        Descobreix els nostres artistes i crea l’esdeveniment perfecte.<br>
         A La Kultural, promovem artistes de música electrònica que destaquen pel seu talent 
         i per oferir experiències úniques. Si busques música underground amb vinils o sessions 
         amb taula de mescles, tenim els artistes ideals per fer que el teu esdeveniment 
         sigui inoblidable.
       </p>
+      <a class="btn btn-outline-light mt-3" href="{% url 'booking' %}">Descobreix els artistes</a>
     </div>
-    <a class="btn btn-outline-secondary" href="#booking-section">Descobreix més</a>
-  </div>
 
-  <!-- Secció "Canciones" -->
-  <div id="canciones-section" class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-    <div class="my-3 p-3">
-      <h1 class="display-5">Música</h1>
-      <p class="lead">
-        <strong>La música que dona vida a La Kultural</strong><br>
+    <!-- Música -->
+    <div id="canciones-section" class="col-md-6 d-flex flex-column justify-content-center bg-light text-dark p-5">
+      <h2 class="display-5">Música</h2>
+      <p>
+        La música que dona vida a La Kultural.<br>
         Els membres de La Kultural són més que artistes; són creadors que plasmen 
         l’esperit de la música underground a través de les seves produccions. 
         El nostre estil predominant és el <em>Drum and Bass</em>, tot i que 
         també explorem altres subgèneres de la música electrònica.
       </p>
+      <a class="btn btn-dark mt-3" href="{% url 'musica' %}">Descobreix nova música</a>
     </div>
-    <a class="btn btn-outline-secondary" href="#canciones-section">Descobreix més</a>
-  
   </div>
 </div>
 
-<!-- Secció "Events" -->
-<div id="events-section" class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-  <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-    <div class="my-3 p-3">
-      <h1 class="display-5">Esdeveniments</h1>
-      <p class="lead">
+<!-- Fila 2: Esdeveniments - Contacte -->
+<div class="container my-5">
+  <div class="row">
+    <!-- Esdeveniments -->
+    <div id="events-section" class="col-md-6 d-flex flex-column justify-content-center bg-light text-dark p-5">
+      <h2 class="display-5">Esdeveniments</h2>
+      <p>
         Vols gaudir d’actuacions en viu, festes temàtiques o festivals a gran escala?<br>
         A La Kultural organitzem i promocionem esdeveniments que donen protagonisme 
         a la música electrònica underground i a artistes amb molt de talent.
       </p>
+      <a class="btn btn-secondary mt-3" href="{% url 'eventos' %}">Esdeveniments pròxims</a>
     </div>
-    <a class="btn btn-outline-secondary" href="#events-section">Descobreix més</a>
-  </div>
-  <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-    <div class="my-3 py-3">
-      <h1 class="display-5">Contacte</h1>
-      <p class="lead">
+
+    <!-- Contacte -->
+    <div class="col-md-6 d-flex flex-column justify-content-center bg-dark text-white p-5">
+      <h2 class="display-5">Contacte</h2>
+      <p>
         Tens dubtes o vols col·laborar? Escriu-nos i fes possible la teva idea!
       </p>
+      <a class="btn btn-outline-light mt-3" href="#events-section">Contacta'ns</a>
     </div>
-    <a class="btn btn-outline-secondary" href="#events-section">Contacta'ns</a>
   </div>
 </div>
 {% endblock %}
