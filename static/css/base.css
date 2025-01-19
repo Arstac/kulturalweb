@@ -415,10 +415,6 @@ iframe {
   border: none;
 }
 
-.home-contenido {
-  margin: 5px;
-}
-
 .nowrap {
-  flex-wrap:nowrap;
+  margin: 0.5rem;
 }
