@@ -418,3 +418,7 @@ iframe {
 .home-contenido {
   margin: 5px;
 }
+
+.nowrap {
+  flex-wrap:nowrap;
+}
