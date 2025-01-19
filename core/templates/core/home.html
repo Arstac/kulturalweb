@@ -3,7 +3,7 @@
 
 {% block content %}
 <!-- Sección Hero (Encabezado principal) -->
-<div class="container-fluid bg-light p-5 text-center">
+<div class="container-fluid p-5 text-center">
   <h1 class="display-4">La Kultural</h1>
   <p class="lead">
     Benvingut/da a l'associació que promou la música underground i els ritmes alternatius.
@@ -13,7 +13,7 @@
 
 <!-- Fila 1: Booking - Música -->
 <div class="container my-5">
-  <div class="row">
+  <div class="row g-4"><!-- Usamos g-4 para añadir espacio entre columnas -->
     <!-- Booking -->
     <div id="booking-section" class="col-md-6 d-flex flex-column justify-content-center bg-dark text-white p-5">
       <h2 class="display-5">Booking</h2>
@@ -24,7 +24,9 @@
         amb taula de mescles, tenim els artistes ideals per fer que el teu esdeveniment 
         sigui inoblidable.
       </p>
-      <a class="btn btn-outline-light mt-3" href="{% url 'booking:booking' %}">Descobreix els artistes</a>
+      <a class="btn btn-outline-light mt-3" href="{% url 'booking:booking' %}">
+        Descobreix els artistes
+      </a>
     </div>
 
     <!-- Música -->
@@ -37,14 +39,16 @@
         El nostre estil predominant és el <em>Drum and Bass</em>, tot i que 
         també explorem altres subgèneres de la música electrònica.
       </p>
-      <a class="btn btn-dark mt-3" href="{% url 'musica:musica' %}">Descobreix nova música</a>
+      <a class="btn btn-dark mt-3" href="{% url 'musica:musica' %}">
+        Descobreix nova música
+      </a>
     </div>
   </div>
 </div>
 
 <!-- Fila 2: Esdeveniments - Contacte -->
 <div class="container my-5">
-  <div class="row">
+  <div class="row g-4"><!-- De nuevo, g-4 para espacio entre columnas -->
     <!-- Esdeveniments -->
     <div id="events-section" class="col-md-6 d-flex flex-column justify-content-center bg-light text-dark p-5">
       <h2 class="display-5">Esdeveniments</h2>
@@ -53,7 +57,9 @@
         A La Kultural organitzem i promocionem esdeveniments que donen protagonisme 
         a la música electrònica underground i a artistes amb molt de talent.
       </p>
-      <a class="btn btn-secondary mt-3" href="{% url 'eventos:eventos' %}">Esdeveniments pròxims</a>
+      <a class="btn btn-secondary mt-3" href="{% url 'eventos:eventos' %}">
+        Esdeveniments pròxims
+      </a>
     </div>
 
     <!-- Contacte -->
@@ -62,7 +68,9 @@
       <p>
         Tens dubtes o vols col·laborar? Escriu-nos i fes possible la teva idea!
       </p>
-      <a class="btn btn-outline-light mt-3" href="#events-section">Contacta'ns</a>
+      <a class="btn btn-outline-light mt-3" href="#events-section">
+        Contacta'ns
+      </a>
     </div>
   </div>
 </div>
