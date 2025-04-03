@@ -10,9 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-insegura-dev")
 # Para poder registrar usuarios en producción
-CSRF_TRUSTED_ORIGINS = ['*']
-
-
+CSRF_TRUSTED_ORIGINS = [
+    "http://164.90.167.192"
+]
 # Application definition
 
 INSTALLED_APPS = [
