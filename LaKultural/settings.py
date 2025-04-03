@@ -11,7 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-insegura-dev")
 # Para poder registrar usuarios en producción
 CSRF_TRUSTED_ORIGINS = [
-    "http://164.90.167.192"
+    "http://164.90.167.192",
+    "http://146.190.205.187",
+    "http://lakultural.eu",
+    "http://www.lakultural.eu"
 ]
 # Application definition
 
@@ -72,7 +75,7 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 # SECURITY WARNING: update this when you have the production host
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['lakultural.eu', 'www.lakultural.eu', '164.90.167.192']
 
 DEBUG = ENVIRONMENT != 'production'
 
