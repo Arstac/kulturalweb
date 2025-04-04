@@ -13,8 +13,11 @@
         {% for cancion in canciones %}
         <!-- Cada bloque es clicable para abrir el detalle de la canción -->
         <div class="row list-group-item align-items-center text-start"
-             style="cursor: pointer;"
-             onclick="mostrarDetalleCancion({{ cancion.id }}, '{{ cancion.archivo_audio.url }}')">
+            role="button"
+            tabindex="0"
+            onclick="mostrarDetalleCancion(...)"
+            onkeydown="if (event.key === 'Enter') mostrarDetalleCancion(...)">
+  
             <div class="col-3 col-lg-1">
                 {% if cancion.album and cancion.album.portada %}
                   <img src="{{ cancion.album.portada.url }}" class="img-fluid rounded-2" alt="{{ cancion.album.titulo }}">
@@ -39,6 +42,10 @@
                   Sin álbum
                 {% endif %}
             </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-4">
+            No hay canciones disponibles.
         </div>
         {% endfor %}
     </div>
@@ -71,21 +78,29 @@
 <script>
 // Función para mostrar el detalle de la canción en el modal
 function mostrarDetalleCancion(cancionId, audioUrl) {
-    // Petición al backend para obtener más info de la canción
-    fetch(`/musica/detalle/${cancionId}/`)
-      .then(response => response.json())
+  fetch(`/musica/detalle/${cancionId}/`)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Error al cargar los datos');
+          }
+          return response.json();
+      })
       .then(data => {
-          // Rellenar campos del modal
+          if (!data.imagen.startsWith('http')) {
+              data.imagen = window.location.origin + data.imagen;
+          }
           document.getElementById('modal-titulo').textContent = data.titulo;
           document.getElementById('modal-artista').textContent = data.artista;
           document.getElementById('modal-imagen').src = data.imagen;
           document.getElementById('modal-audio').src = audioUrl;
-
-          // Mostrar modal (asumiendo que usas Bootstrap 5)
-          let modal = new bootstrap.Modal(document.getElementById('cancionModal'));
+          
+          const modal = new bootstrap.Modal(document.getElementById('cancionModal'));
           modal.show();
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+          console.error('Error:', error);
+          alert('No se pudo cargar la canción');
+      });
 }
 </script>
 {% endblock %}

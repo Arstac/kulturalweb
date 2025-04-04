@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.templatetags.static import static
 from .models import Cancion
 
 def musica(request):
@@ -7,13 +8,11 @@ def musica(request):
     contexto = {'canciones': canciones}
     return render(request, 'musica/musica.html', contexto)
 
-def cancion_detalle(request, id):
-    # Suponiendo que el objeto existe
-    cancion = Cancion.objects.get(id=id)
+def cancion_detalle(request, cancion_id):
+    cancion = get_object_or_404(Cancion, id=cancion_id)
     data = {
         'titulo': cancion.titulo,
         'artista': cancion.artista.nombre,
-        # Para la imagen, primero revisa si el artista tiene la propiedad imagen:
-        'imagen': cancion.artista.imagen.url if cancion.artista.imagen else ''
+        'imagen': request.build_absolute_uri(cancion.album.portada.url) if cancion.album else static('assets/img/default_album.png')
     }
     return JsonResponse(data)
