@@ -418,3 +418,17 @@ iframe {
 .nowrap {
   margin: 0.5rem;
 }
+
+/* ---------------- */
+/*     LIST GROUP   */
+/* ---------------- */
+
+.list-group-item:hover {
+  transform: translateX(5px);
+  transition: transform 0.2s ease-in-out;
+}
+.list-group-item {
+  border-left: 0;
+  border-right: 0;
+}
+

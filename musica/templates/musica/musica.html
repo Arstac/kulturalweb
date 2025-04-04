@@ -11,46 +11,50 @@
 <div class="container my-4">
     <div class="list-group list-group-flush">
         {% for cancion in canciones %}
-        <a href="{% url 'detalle_cancion' cancion.id %}" class="text-decoration-none text-dark">
-            <div class="row list-group-item list-group-item-action align-items-center py-3">
-                <div class="col-4 col-md-2 col-lg-1">
-                    {% if cancion.album and cancion.album.portada %}
-                    <img src="{{ cancion.album.portada.url }}" 
-                         class="img-fluid rounded-2 shadow-sm" 
-                         alt="Portada de {{ cancion.album.titulo }}">
-                    {% else %}
-                    <img src="{% static 'assets/img/default_album.png' %}" 
-                         class="img-fluid rounded-2 opacity-75" 
-                         alt="Álbum no disponible">
-                    {% endif %}
-                </div>
+        <div class="row list-group-item align-items-center py-3 g-2">
+            <!-- Audio Player Hidden -->
+            <audio id="audio-{{ cancion.id }}" src="{{ cancion.archivo_audio.url }}"></audio>
+            
+            <div class="col-3 col-md-2 col-lg-1">
+                {% if cancion.album and cancion.album.portada %}
+                <img src="{{ cancion.album.portada.url }}" 
+                     class="img-fluid rounded-2 shadow-sm" 
+                     alt="Portada de {{ cancion.album.titulo }}">
+                {% else %}
+                <img src="{% static 'assets/img/default_album.png' %}" 
+                     class="img-fluid rounded-2 opacity-75" 
+                     alt="Álbum no disponible">
+                {% endif %}
+            </div>
 
-                <div class="col-8 col-md-10 col-lg-11">
-                    <div class="row align-items-center">
-                        <div class="col-12 col-md-4">
-                            <div class="fw-bold fs-5 text-primary">{{ cancion.titulo }}</div>
-                            <div class="text-muted">{{ cancion.artista.nombre }}</div>
-                        </div>
+            <div class="col-7 col-md-8 col-lg-9">
+                <a href="{% url 'musica:cancion_detalle' cancion.id %}" class="text-decoration-none text-dark">
+                    <div class="fw-bold fs-5 text-primary">{{ cancion.titulo }}</div>
+                    <div class="text-muted">{{ cancion.artista.nombre }}</div>
+                </a>
+            </div>
 
-                        <div class="col-md-3 d-none d-md-block">
-                            <span class="badge bg-secondary">{{ cancion.categoria }}</span>
-                        </div>
-
-                        <div class="col-md-4 d-none d-md-block">
-                            {% if cancion.album %}
-                            <i class="fas fa-compact-disc me-2"></i>{{ cancion.album.titulo }}
-                            {% else %}
-                            <span class="text-muted">Sin álbum asociado</span>
-                            {% endif %}
-                        </div>
-
-                        <div class="col-md-1 d-none d-md-block text-end">
-                            <i class="fas fa-chevron-right text-muted"></i>
-                        </div>
-                    </div>
+            <div class="col-2 col-md-2 col-lg-2 text-end">
+                <button class="btn btn-link text-dark play-button" 
+                        data-cancion-id="{{ cancion.id }}"
+                        aria-label="Reproducir/Pausar">
+                    <i class="fas fa-play fa-lg"></i>
+                </button>
+            </div>
+            
+            <div class="col-12 col-md-12">
+                <div class="d-flex justify-content-between mt-2">
+                    <span class="badge bg-secondary">{{ cancion.categoria }}</span>
+                    <small class="text-muted">
+                        {% if cancion.album %}
+                        <i class="fas fa-compact-disc me-2"></i>{{ cancion.album.titulo }}
+                        {% else %}
+                        Sin álbum asociado
+                        {% endif %}
+                    </small>
                 </div>
             </div>
-        </a>
+        </div>
         {% empty %}
         <div class="text-center py-5 bg-light rounded-3">
             <i class="fas fa-music fa-3x text-muted mb-3"></i>
@@ -59,4 +63,95 @@
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const playButtons = document.querySelectorAll('.play-button');
+    let currentAudio = null;
+    let currentButton = null;
+
+    playButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const cancionId = this.dataset.cancionId;
+            const audio = document.getElementById(`audio-${cancionId}`);
+            const icon = this.querySelector('i');
+
+            // Pausar audio actual si hay uno reproduciéndose
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentButton.querySelector('i').classList.replace('fa-pause', 'fa-play');
+            }
+
+            // Controlar reproducción actual
+            if (audio.paused) {
+                audio.play();
+                icon.classList.replace('fa-play', 'fa-pause');
+                currentAudio = audio;
+                currentButton = this;
+            } else {
+                audio.pause();
+                icon.classList.replace('fa-pause', 'fa-play');
+                currentAudio = null;
+                currentButton = null;
+            }
+
+            // Manejar finalización de audio
+            audio.addEventListener('ended', () => {
+                icon.classList.replace('fa-pause', 'fa-play');
+                currentAudio = null;
+                currentButton = null;
+            });
+        });
+    });
+
+    // Pausar todos al hacer clic fuera
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.play-button')) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentButton.querySelector('i').classList.replace('fa-pause', 'fa-play');
+                currentAudio = null;
+                currentButton = null;
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.play-button {
+    transition: all 0.3s ease;
+    min-width: 40px;
+}
+
+.play-button:hover {
+    transform: scale(1.1);
+    color: #0d6efd !important;
+}
+
+.list-group-item {
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.audio-progress {
+    height: 3px;
+    background-color: #e9ecef;
+    margin-top: 5px;
+}
+
+.audio-progress-bar {
+    height: 100%;
+    background-color: #0d6efd;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+</style>
 {% endblock %}
