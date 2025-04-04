@@ -11,10 +11,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-insegura-dev")
 # Para poder registrar usuarios en producción
 CSRF_TRUSTED_ORIGINS = [
-    "http://164.90.167.192",
-    "http://146.190.205.187",
+    "https://lakultural.eu",
+    "https://www.lakultural.eu",
+    "https://164.90.167.192",
+    "https://146.190.205.187",
     "http://lakultural.eu",
-    "http://www.lakultural.eu"
+    "http://www.lakultural.eu",
+    "http://164.90.167.192",
+    "http://146.190.205.187"
 ]
 # Application definition
 
