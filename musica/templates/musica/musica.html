@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<header class="masthead my-20">
+<header class="masthead my-4">
     <div class="text-center">
         <h1 class="section-heading text-uppercase">MÚSICA</h1>
     </div>
@@ -11,96 +11,52 @@
 <div class="container my-4">
     <div class="list-group list-group-flush">
         {% for cancion in canciones %}
-        <!-- Cada bloque es clicable para abrir el detalle de la canción -->
-        <div class="row list-group-item align-items-center text-start"
-            role="button"
-            tabindex="0"
-            onclick="mostrarDetalleCancion(...)"
-            onkeydown="if (event.key === 'Enter') mostrarDetalleCancion(...)">
-  
-            <div class="col-3 col-lg-1">
-                {% if cancion.album and cancion.album.portada %}
-                  <img src="{{ cancion.album.portada.url }}" class="img-fluid rounded-2" alt="{{ cancion.album.titulo }}">
-                {% else %}
-                  <img src="{% static 'assets/img/default_album.png' %}" class="img-fluid rounded-2" alt="Imagen predeterminada">
-                {% endif %}
-            </div>
+        <a href="{% url 'detalle_cancion' cancion.id %}" class="text-decoration-none text-dark">
+            <div class="row list-group-item list-group-item-action align-items-center py-3">
+                <div class="col-4 col-md-2 col-lg-1">
+                    {% if cancion.album and cancion.album.portada %}
+                    <img src="{{ cancion.album.portada.url }}" 
+                         class="img-fluid rounded-2 shadow-sm" 
+                         alt="Portada de {{ cancion.album.titulo }}">
+                    {% else %}
+                    <img src="{% static 'assets/img/default_album.png' %}" 
+                         class="img-fluid rounded-2 opacity-75" 
+                         alt="Álbum no disponible">
+                    {% endif %}
+                </div>
 
-            <div class="col-7 col-lg-3">
-                <div class="fw-bold">{{ cancion.titulo }}</div>
-                <div>{{ cancion.artista.nombre }}</div>
-            </div>
+                <div class="col-8 col-md-10 col-lg-11">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-4">
+                            <div class="fw-bold fs-5 text-primary">{{ cancion.titulo }}</div>
+                            <div class="text-muted">{{ cancion.artista.nombre }}</div>
+                        </div>
 
-            <div class="col-lg-2 d-none d-lg-block">
-                {{ cancion.categoria }}
-            </div>
+                        <div class="col-md-3 d-none d-md-block">
+                            <span class="badge bg-secondary">{{ cancion.categoria }}</span>
+                        </div>
 
-            <div class="col-lg-2 d-none d-lg-block">
-                {% if cancion.album %}
-                  {{ cancion.album.titulo }}
-                {% else %}
-                  Sin álbum
-                {% endif %}
+                        <div class="col-md-4 d-none d-md-block">
+                            {% if cancion.album %}
+                            <i class="fas fa-compact-disc me-2"></i>{{ cancion.album.titulo }}
+                            {% else %}
+                            <span class="text-muted">Sin álbum asociado</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-1 d-none d-md-block text-end">
+                            <i class="fas fa-chevron-right text-muted"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </a>
         {% empty %}
-        <div class="text-center py-4">
-            No hay canciones disponibles.
+        <div class="text-center py-5 bg-light rounded-3">
+            <i class="fas fa-music fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No hay canciones disponibles</h4>
         </div>
         {% endfor %}
     </div>
 </div>
-
-<!-- Modal que hará de 'card' emergente para mostrar el detalle -->
-<div class="modal fade" id="cancionModal" tabindex="-1" aria-labelledby="cancionModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Cabecera del modal -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="cancionModalLabel">Detalle de la canción</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <!-- Cuerpo del modal -->
-      <div class="modal-body">
-        <img id="modal-imagen" src="{% static 'assets/img/default_album.png' %}" class="img-fluid mb-3" alt="Portada" />
-        <h4 id="modal-titulo" class="fw-bold"></h4>
-        <p id="modal-artista"></p>
-        <audio id="modal-audio" controls class="w-100">
-          Tu navegador no soporta el elemento <code>audio</code>.
-        </audio>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-// Función para mostrar el detalle de la canción en el modal
-function mostrarDetalleCancion(cancionId, audioUrl) {
-  fetch(`/musica/detalle/${cancionId}/`)
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Error al cargar los datos');
-          }
-          return response.json();
-      })
-      .then(data => {
-          if (!data.imagen.startsWith('http')) {
-              data.imagen = window.location.origin + data.imagen;
-          }
-          document.getElementById('modal-titulo').textContent = data.titulo;
-          document.getElementById('modal-artista').textContent = data.artista;
-          document.getElementById('modal-imagen').src = data.imagen;
-          document.getElementById('modal-audio').src = audioUrl;
-          
-          const modal = new bootstrap.Modal(document.getElementById('cancionModal'));
-          modal.show();
-      })
-      .catch(error => {
-          console.error('Error:', error);
-          alert('No se pudo cargar la canción');
-      });
-}
-</script>
 {% endblock %}
