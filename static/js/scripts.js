@@ -94,10 +94,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let scrollLeft;
   
     slider.addEventListener('mousedown', (e) => {
-      isDown = true;
-      slider.classList.add('grabbing');
-      startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
+        isDown = true;
+        if (!slider) return; 
+        slider.classList.add('grabbing');
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
     });
   
     slider.addEventListener('mouseleave', () => {
@@ -121,10 +122,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //OBRIR EL MODAL DE TALLES EN EL PRODUCTE
 document.addEventListener('DOMContentLoaded', function() {
-  var modal = document.getElementById('modalTallas'); // Asegúrate de que el ID corresponde al de tu modal
-  var btn = document.getElementById('abrirModal'); // El botón que abre el modal
-  var span = document.querySelector('.close'); // El botón o elemento que cierra el modal
+    var modal = document.getElementById('modalTallas'); // Asegúrate de que el ID corresponde al de tu modal
+    var btn = document.getElementById('abrirModal'); // El botón que abre el modal
+    var span = document.querySelector('.close'); // El botón o elemento que cierra el modal
 
+    if (!modal || !btn || !span) return;
+    
   // Evento para abrir el modal
   btn.onclick = function() {
       modal.style.display = "block";
