@@ -84,69 +84,6 @@ window.addEventListener('scroll', function() {
 
 
 
-
-//PAGINA DEL EVENTO -- EVENTOS RELACIONATS (PERMET ARRASTRAR I SCROLLEJAR DES DE QUALSEVOL PUNT DE)
-// Selector del contenedor que quieres que sea desplazable
-document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.querySelector('.row-scrollable');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-  
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        if (!slider) return; 
-        slider.classList.add('grabbing');
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
-  
-    slider.addEventListener('mouseleave', () => {
-      isDown = false;
-      slider.classList.remove('grabbing');
-    });
-  
-    slider.addEventListener('mouseup', () => {
-      isDown = false;
-      slider.classList.remove('grabbing');
-    });
-  
-    slider.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX); // Controla la velocidad del arrastre
-      slider.scrollLeft = scrollLeft - walk;
-    });
-  });
-
-//OBRIR EL MODAL DE TALLES EN EL PRODUCTE
-document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById('modalTallas'); // Asegúrate de que el ID corresponde al de tu modal
-    var btn = document.getElementById('abrirModal'); // El botón que abre el modal
-    var span = document.querySelector('.close'); // El botón o elemento que cierra el modal
-
-    if (!modal || !btn || !span) return;
-    
-  // Evento para abrir el modal
-  btn.onclick = function() {
-      modal.style.display = "block";
-  }
-
-  // Evento para cerrar el modal al hacer clic en el botón de cerrar
-  span.onclick = function() {
-      modal.style.display = "none";
-  }
-
-  // Evento para cerrar el modal al hacer clic fuera de él
-  window.onclick = function(event) {
-      if (event.target == modal) {
-          modal.style.display = "none";
-      }
-  }
-});
-
-
 //ACTUALITZAR SUBTOTAL DEL CARRITO
 document.addEventListener('DOMContentLoaded', function () {
   const quantityInputs = document.querySelectorAll('.quantity-input');
