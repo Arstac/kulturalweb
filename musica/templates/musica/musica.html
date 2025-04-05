@@ -67,78 +67,89 @@
 
 {% block extra_js %}
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const playButtons = document.querySelectorAll('.play-button');
-    let currentAudio = null;
-    let currentButton = null;
-
-    playButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const cancionId = this.dataset.cancionId;
-            const audio = document.getElementById(`audio-${cancionId}`);
-            const icon = this.querySelector('i.fa'); // Selector más específico
-
-            if (!icon) {
-                console.error('Icono no encontrado en el botón');
-                return;
-            }
-
-            // Pausar audio actual si hay uno reproduciéndose
-            if (currentAudio && currentAudio !== audio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-                if (currentButton) {
-                    const prevIcon = currentButton.querySelector('i.fa');
-                    if (prevIcon) {
-                        prevIcon.classList.replace('fa-pause', 'fa-play');
+    document.addEventListener('DOMContentLoaded', function() {
+        const playButtons = document.querySelectorAll('.play-button');
+        let currentAudio = null;
+        let currentButton = null;
+    
+        playButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const cancionId = this.dataset.cancionId;
+                const audio = document.getElementById(`audio-${cancionId}`);
+                
+                // Selector corregido para Font Awesome 5+
+                const icon = this.querySelector('i[class^="fa"]'); 
+                
+                if (!icon) {
+                    console.error('Icono no encontrado en el botón');
+                    return;
+                }
+    
+                // Pausar audio actual si hay uno reproduciéndose
+                if (currentAudio && currentAudio !== audio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                    if (currentButton) {
+                        const prevIcon = currentButton.querySelector('i[class^="fa"]');
+                        if (prevIcon) {
+                            prevIcon.classList.replace('fa-pause', 'fa-play');
+                        }
                     }
                 }
-            }
-
-            // Controlar reproducción actual
-            if (audio.paused) {
-                audio.play().then(() => {
-                    icon.classList.replace('fa-play', 'fa-pause');
-                    currentAudio = audio;
-                    currentButton = this;
-                }).catch(error => {
-                    console.error('Error al reproducir:', error);
-                });
-            } else {
-                audio.pause();
-                icon.classList.replace('fa-pause', 'fa-play');
-                currentAudio = null;
-                currentButton = null;
-            }
-
-            // Manejar finalización de audio
-            audio.addEventListener('ended', () => {
-                icon.classList.replace('fa-pause', 'fa-play');
-                currentAudio = null;
-                currentButton = null;
+    
+                // Controlar reproducción actual
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        icon.classList.replace('fa-play', 'fa-pause');
+                        currentAudio = audio;
+                        currentButton = this;
+                    }).catch(error => {
+                        console.error('Error al reproducir:', error);
+                    });
+                } else {
+                    audio.pause();
+                    icon.classList.replace('fa-pause', 'fa-play');
+                    currentAudio = null;
+                    currentButton = null;
+                }
+    
+                // Manejar finalización de audio
+                const handleEnded = () => {
+                    if (currentButton) {
+                        const endedIcon = currentButton.querySelector('i[class^="fa"]');
+                        if (endedIcon) {
+                            endedIcon.classList.replace('fa-pause', 'fa-play');
+                        }
+                    }
+                    currentAudio = null;
+                    currentButton = null;
+                };
+                
+                // Remover listener anterior y añadir nuevo
+                audio.removeEventListener('ended', handleEnded);
+                audio.addEventListener('ended', handleEnded);
             });
         });
-    });
-
-    // Pausar todos al hacer clic fuera
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.play-button')) {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-                if (currentButton) {
-                    const prevIcon = currentButton.querySelector('i.fa');
-                    if (prevIcon) {
-                        prevIcon.classList.replace('fa-pause', 'fa-play');
+    
+        // Pausar todos al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.play-button')) {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                    if (currentButton) {
+                        const prevIcon = currentButton.querySelector('i[class^="fa"]');
+                        if (prevIcon) {
+                            prevIcon.classList.replace('fa-pause', 'fa-play');
+                        }
                     }
+                    currentAudio = null;
+                    currentButton = null;
                 }
-                currentAudio = null;
-                currentButton = null;
             }
-        }
+        });
     });
-});
-</script>
+    </script>
 
 <style>
 .play-button {
