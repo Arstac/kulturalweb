@@ -67,7 +67,7 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const playButtons = document.querySelectorAll('.play-button');
     let currentAudio = null;
     let currentButton = null;
@@ -76,21 +76,34 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const cancionId = this.dataset.cancionId;
             const audio = document.getElementById(`audio-${cancionId}`);
-            const icon = this.querySelector('i');
+            const icon = this.querySelector('i.fa'); // Selector más específico
+
+            if (!icon) {
+                console.error('Icono no encontrado en el botón');
+                return;
+            }
 
             // Pausar audio actual si hay uno reproduciéndose
             if (currentAudio && currentAudio !== audio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
-                currentButton.querySelector('i').classList.replace('fa-pause', 'fa-play');
+                if (currentButton) {
+                    const prevIcon = currentButton.querySelector('i.fa');
+                    if (prevIcon) {
+                        prevIcon.classList.replace('fa-pause', 'fa-play');
+                    }
+                }
             }
 
             // Controlar reproducción actual
             if (audio.paused) {
-                audio.play();
-                icon.classList.replace('fa-play', 'fa-pause');
-                currentAudio = audio;
-                currentButton = this;
+                audio.play().then(() => {
+                    icon.classList.replace('fa-play', 'fa-pause');
+                    currentAudio = audio;
+                    currentButton = this;
+                }).catch(error => {
+                    console.error('Error al reproducir:', error);
+                });
             } else {
                 audio.pause();
                 icon.classList.replace('fa-pause', 'fa-play');
@@ -113,7 +126,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
-                currentButton.querySelector('i').classList.replace('fa-pause', 'fa-play');
+                if (currentButton) {
+                    const prevIcon = currentButton.querySelector('i.fa');
+                    if (prevIcon) {
+                        prevIcon.classList.replace('fa-pause', 'fa-play');
+                    }
+                }
                 currentAudio = null;
                 currentButton = null;
             }
