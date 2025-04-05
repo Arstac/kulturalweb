@@ -81,7 +81,8 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 # SECURITY WARNING: update this when you have the production host
 ALLOWED_HOSTS = ['lakultural.eu', 'www.lakultural.eu', '164.90.167.192']
 
-DEBUG = ENVIRONMENT != 'production'
+DEBUG  = True
+ENVIRONMENT != 'production'
 
 DATABASES = {
     'default': {
