@@ -61,8 +61,9 @@ def checkout(request):
         "invoice": str(order.id),
         "currency_code": "EUR",
         "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
-        "return_url": request.build_absolute_uri(reverse('payment_success')),
-        "cancel_return": request.build_absolute_uri(reverse('payment_cancel')),
+        # Cambia estas líneas en la vista checkout:
+        "return_url": request.build_absolute_uri(reverse('carrito:payment_success')),
+        "cancel_return": request.build_absolute_uri(reverse('carrito:payment_cancel')),
     }
 
     form = PayPalPaymentsForm(initial=paypal_dict)
