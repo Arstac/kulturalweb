@@ -87,3 +87,9 @@ def update_item_quantity(request, item_id, product_id, quantity):
         'total_carrito': total_carrito,
         'total_items': total_items  # Devuelve el total de artículos en el carrito
     })
+    
+def payment_success(request):
+    return render(request, 'carrito/payment_success.html')
+
+def payment_cancel(request):
+    return render(request, 'carrito/payment_cancel.html')
