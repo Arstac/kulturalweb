@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header class="masthead">
+    <div class="text-center">
+        <h1 class="section-heading text-uppercase">{{ cancion.titulo }}</h1>
+    </div>
+</header>
+
+<div class="container py-5 text-start">
+    <div class="row mb-5">
+      <div class="col-lg-6 d-flex flex-column justify-content-center">
+        <h2>{{ cancion.titulo }}</h2>
+        <p><strong>Artista:</strong> {{ cancion.artista.nombre }}</p>
+        {% if cancion.album %}
+          <p><strong>Álbum:</strong> {{ cancion.album.titulo }}</p>
+        {% endif %}
+        {% if cancion.categoria %}
+          <p><strong>Categoría:</strong> {{ cancion.categoria.nombre }}</p>
+        {% endif %}
+        {% if cancion.fecha_lanzamiento %}
+          <p><strong>Lanzamiento:</strong> {{ cancion.fecha_lanzamiento }}</p>
+        {% endif %}
+        {% if cancion.url %}
+          <p><a href="{{ cancion.url }}" target="_blank">Escuchar online</a></p>
+        {% endif %}
+        {% if cancion.archivo_audio %}
+          <audio controls class="mt-3 w-100">
+              <source src="{{ cancion.archivo_audio.url }}" type="audio/mpeg">
+              Tu navegador no soporta el reproductor de audio.
+          </audio>
+        {% endif %}
+      </div>
+      <div class="col-lg-6">
+        {% if cancion.album and cancion.album.portada %}
+          <img src="{{ cancion.album.portada.url }}" alt="{{ cancion.album.titulo }}" class="img-fluid rounded shadow">
+        {% else %}
+          <img src="{% static 'assets/img/default_album.png' %}" class="img-fluid rounded shadow" alt="Sin portada">
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="tarjeta-info mb-5">
+      <div class="row">
+        <div class="col">
+          <h3 class="mb-3">Descripción</h3>
+          {% if cancion.album and cancion.album.descripcion %}
+            <p>{{ cancion.album.descripcion }}</p>
+          {% else %}
+            <p>No hay descripción disponible para esta canción.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col">
+      <h3 class="mb-4">Canciones Relacionadas</h3>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        {% for relacionada in relacionadas %}
+          <div class="col">
+            <div class="card h-100 bg-dark text-white shadow-sm">
+              {% if relacionada.album and relacionada.album.portada %}
+                <img src="{{ relacionada.album.portada.url }}" class="card-img-top" alt="{{ relacionada.titulo }}">
+              {% else %}
+                <img src="{% static 'assets/img/default_album.png' %}" class="card-img-top" alt="Sin portada">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ relacionada.titulo }}</h5>
+                <p class="card-text">{{ relacionada.artista.nombre }}</p>
+                <a href="{% url 'musica:cancion_detalle' relacionada.id %}" class="btn btn-outline-light btn-sm mt-2">Escuchar</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

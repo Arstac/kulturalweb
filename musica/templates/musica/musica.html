@@ -56,40 +56,11 @@
             </div>
         </div>
         {% empty %}
-        <div class="text-center py-5 bg-light rounded-3">
+        <div class="text-center py-5 bg-dark rounded-3">
             <i class="fas fa-music fa-3x text-muted mb-3"></i>
             <h4 class="text-muted">No hay canciones disponibles</h4>
         </div>
         {% endfor %}
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<style>
-.play-button {
-    transition: all 0.3s ease;
-    min-width: 40px;
-    outline: none !important;
-}
-
-.play-button:hover {
-    transform: scale(1.1);
-    color: var(--bs-primary) !important;
-}
-
-.play-button i {
-    vertical-align: middle;
-}
-
-.list-group-item {
-    transition: background-color 0.2s;
-    border-left: 0;
-    border-right: 0;
-}
-
-.list-group-item:hover {
-    background-color: #f8f9fa;
-}
-</style>
 {% endblock %}

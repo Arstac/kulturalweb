@@ -108,3 +108,34 @@ background-color: rgba(255, 255, 255, 0.1);
 #current-time, #total-time {
     margin-top: 10px;
 }
+
+
+
+/* ------------- */
+/* Musica.html */
+
+.play-button {
+    transition: all 0.3s ease;
+    min-width: 40px;
+    outline: none !important;
+}
+
+.play-button:hover {
+    transform: scale(1.1);
+    
+    color: var(--bs-primary) !important;
+}
+
+.play-button i {
+    vertical-align: middle;
+}
+
+.list-group-item {
+    transition: background-color 0.2s;
+    border-left: 0;
+    border-right: 0;
+}
+
+.list-group-item:hover {
+    background-color: var(--bs-dark);
+}
