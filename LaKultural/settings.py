@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -163,6 +165,7 @@ AUTHENTICATION_BACKENDS = [
 # Configuración de PayPal
 
 PAYPAL_TEST = True  # False en producción
-PAYPAL_RECEIVER_EMAIL = 'sb-4lhwd39771603@business.example.com'
-PAYPAL_CLIENT_ID = 'Ae9t_ogzZiNQMUmUdDmLYZiJRs_kd6BpRJ7LXV3AcMejKymAFSSD-s8VUp3RtRmxTIlwdmJ2rMp6Ssj2'
-PAYPAL_SECRET_KEY = 'EFNmC7nk1C5msKwDOXtJy6Dh-MFMRbPZD5AhcpFPJU-DmzZiHbQfpcm5x80XSYVbceiat0Ww2D-OCPec'
+
+PAYPAL_RECEIVER_EMAIL = os.getenv('PAYPAL_RECEIVER_EMAIL', '')
+PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID', '')
+PAYPAL_SECRET_KEY = os.getenv('PAYPAL_SECRET_KEY', '')

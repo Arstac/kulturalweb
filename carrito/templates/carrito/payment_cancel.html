@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <h1>Pago cancelado</h1>
-    <p>El proceso de pago ha sido cancelado.</p>
+
+<div class="container mt-5 text-center">
+    <h1 class="mb-4">Pago cancelado</h1>
+    <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">El proceso de pago fue interrumpido</h4>
+        <p>Tu carrito de compra se ha guardado para que puedas intentarlo nuevamente.</p>
+    </div>
+    <a href="{% url 'carrito:carrito' %}" class="btn btn-primary">Volver al carrito</a>
 </div>
+
 {% endblock %}
