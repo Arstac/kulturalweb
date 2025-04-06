@@ -1,6 +1,5 @@
 from django.urls import path, include
 from . import views
-from paypal.standard.ipn import urls as paypal_urls
 
 app_name = 'carrito' 
 
@@ -12,5 +11,4 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('payment/success/', views.payment_success, name='payment_success'),
     path('payment/cancel/', views.payment_cancel, name='payment_cancel'),
-    path('paypal/', include(paypal_urls)),
 ]

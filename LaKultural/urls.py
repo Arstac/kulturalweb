@@ -19,6 +19,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from paypal.standard.ipn import urls as paypal_urls
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('usuarios/', include ('usuarios.urls')),
@@ -30,6 +32,7 @@ urlpatterns = [
     path('biografia/', include ('biografia.urls')),
     path('carrito/', include ('carrito.urls')),
     path('', include ('core.urls')),
+    path('paypal/', include(paypal_urls)), 
 ]
 # Sirviendo archivos estáticos y multimedia (en desarrollo, no necesario con Cloudinary)
 if settings.DEBUG:
