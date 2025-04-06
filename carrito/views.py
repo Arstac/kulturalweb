@@ -1,7 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
 from tienda.models import Producto
-from .models import Carrito, ItemCarrito
+from .models import Carrito, ItemCarrito, Order
+from django.conf import settings
+from django.urls import reverse
+from paypal.standard.forms import PayPalPaymentsForm
 
 def carrito(request):
     #selecciona solo los 2 primeros productos si existen:
@@ -36,15 +39,39 @@ def quitar_producto(request, item_id):
         item.delete()
     return redirect('carrito:carrito')
 
+
+
 def checkout(request):
     carrito = Carrito.objects.get(usuario=request.user)
     items = carrito.items.all()
     total = carrito.total_carrito()
-    return render(request, 'carrito/checkout.html', {'carrito': carrito,
-                                                    'items': items,
-                                                    'total': total})
+    
+    # Crear orden
+    order = Order.objects.create(
+        user=request.user,
+        total=total,
+        payment_status='Pendiente'
+    )
+    
+    # Configurar PayPal
+    paypal_dict = {
+        "business": settings.PAYPAL_RECEIVER_EMAIL,
+        "amount": total,
+        "item_name": f"Orden #{order.id}",
+        "invoice": str(order.id),
+        "currency_code": "EUR",
+        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+        "return_url": request.build_absolute_uri(reverse('payment_success')),
+        "cancel_return": request.build_absolute_uri(reverse('payment_cancel')),
+    }
 
-
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    
+    return render(request, 'carrito/checkout.html', {
+        'order': order,
+        'form': form,
+        'total': total
+    })
 
 def update_item_quantity(request, item_id, product_id, quantity):
     item = get_object_or_404(ItemCarrito, id=item_id, producto_id=product_id)

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'usuarios',
     'carrito',
     'core',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -157,3 +158,11 @@ AUTHENTICATION_BACKENDS = [
     # Django ModelBackend para autenticación predeterminada
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+
+# Configuración de PayPal
+
+PAYPAL_TEST = True  # False en producción
+PAYPAL_RECEIVER_EMAIL = 'arnaucosta95@gmail.com'
+PAYPAL_CLIENT_ID = 'Ae9t_ogzZiNQMUmUdDmLYZiJRs_kd6BpRJ7LXV3AcMejKymAFSSD-s8VUp3RtRmxTIlwdmJ2rMp6Ssj2'
+PAYPAL_SECRET_KEY = 'EFNmC7nk1C5msKwDOXtJy6Dh-MFMRbPZD5AhcpFPJU-DmzZiHbQfpcm5x80XSYVbceiat0Ww2D-OCPec'
