@@ -31,6 +31,7 @@
 /* Ajustes para la cabecera y la separación inicial */
 .masthead {
   margin-top: 80px; /* Espacio superior para evitar solapamientos */
+  padding-top: 2.5em; /* Espacio superior para la cabecera */
 }
 
 /* Personalización del Offcanvas */

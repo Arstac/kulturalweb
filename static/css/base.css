@@ -474,7 +474,9 @@ iframe {
 }
 
 .hero-overlay {
-  position: relative;
+  position: absolute; /* CAMBIO AQUÍ: de relative a absolute */
+  top: 0;
+  left: 0;
   z-index: 2; /* contenido sobre el video */
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0.6); /* opcional para mejorar visibilidad */
@@ -488,11 +490,14 @@ iframe {
   padding: 0 15px;
 }
 
-.hero-overlay .btn {
-  margin-top: 20px;
-  padding: 10px 30px;
-  font-size: 1.2rem;
-  border-radius: 50px;
+
+.grafiti-logo {
+  max-width: 80%;
+  height: auto;
+  margin-bottom: 20px;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+  position: relative; 
+  z-index: 3; /* IMPORTANTE: asegurar que esté delante */
 }
 
 /* ---------------- */
