@@ -2,13 +2,20 @@
 {% load static %}
 
 {% block content %}
-<!-- Sección Hero (Encabezado principal) -->
-<div class="h-100 container-fluid p-5 mt-5 text-center">
-  <h1 class="display-4 p-5">La Kultural</h1>
-  <p class="lead m-3">
-    Benvingut/da a l'associació que promou la música underground i els ritmes alternatius.
-  </p>
-  <a class="btn btn-dark m-3" href="#booking-section">Saber més</a>
+<!-- Sección Hero (Encabezado principal con vídeo de fondo) -->
+<div class="hero-section">
+  <video autoplay loop muted playsinline>
+    <source src="{% static 'assets/videos/video_home.mp4' %}" type="video/mp4">
+  </video>
+
+  <!-- Capa de contenido sobre el video -->
+  <div class="hero-overlay">
+    <h1 class="display-4">La Kultural</h1>
+    <p class="lead">
+      Benvingut/da a l'associació que promou la música underground i els ritmes alternatius.
+    </p>
+    <a class="btn btn-dark" href="#booking-section">Saber més</a>
+  </div>
 </div>
 
 <!-- Fila 1: Booking - Música -->
