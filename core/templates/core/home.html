@@ -17,70 +17,72 @@
     <a class="btn btn-dark" href="#booking-section">Saber més</a>
   </div>
 </div>
-
-<!-- Fila 1: Booking - Música -->
-<div class="container my-5">
-  <div class="row gap-4 justify-content-center">
-    <!-- Booking -->
-    <div id="booking-section" class="col-md-5 h-100 d-flex flex-column bg-dark text-white p-5 rounded-3 shadow home-contenido">
-      <div class="d-flex justify-content-center">
-        <img src="{% static 'assets/img/icons/artistas_icon.png' %}" alt="Booking" class="icono mb-3" style="width: 80px;">
+<div class="container py-5">
+  
+  <div class="row justify-content-center g-4">
+    
+    <!-- Artistas -->
+    <div class="col-md-5 col-lg-4">
+      <div class="card card-custom shadow h-100">
+        <div class="card-body text-center d-flex flex-column">
+          <img src="{% static 'assets/img/icons/artistas_icon.png' %}" alt="Artistas" class="icono mx-auto my-3">
+          <h4 class="card-title">Artistes</h4>
+          <p class="card-text flex-grow-1">
+            Descobreix artistes únics que fan de cada esdeveniment una experiència especial.
+          </p>
+          <a href="{% url 'booking:booking' %}" class="btn btn-dark mt-auto">Descobreix els artistes</a>
+        </div>
       </div>
-      <p class="text-center">
-        Descobreix els nostres artistes i crea l’esdeveniment perfecte.<br>
-        A La Kultural, promovem artistes de música electrònica que destaquen pel seu talent i per oferir experiències úniques. Si busques música underground amb vinils o sessions amb taula de mescles, tenim els artistes ideals per fer que el teu esdeveniment sigui inoblidable.
-      </p>
-      <a class="btn btn-outline-light mt-auto" href="{% url 'booking:booking' %}">
-        Descobreix els artistes
-      </a>
     </div>
 
     <!-- Música -->
-    <div id="canciones-section" class="col-md-5 h-100 d-flex flex-column bg-light text-dark p-5 rounded-3 shadow home-contenido">
-      <div class="d-flex justify-content-center">
-        <img src="{% static 'assets/img/icons/musica_icon.png' %}" alt="Música" class="icono mb-3" style="width: 80px;">
+    <div class="col-md-5 col-lg-4">
+      <div class="card card-custom shadow h-100">
+        <div class="card-body text-center d-flex flex-column">
+          <img src="{% static 'assets/img/icons/musica_icon.png' %}" alt="Música" class="icono mx-auto my-3">
+          <h4 class="card-title">Música</h4>
+          <p class="card-text flex-grow-1">
+            Descobreix nova música underground amb els nostres artistes de Drum and Bass i més.
+          </p>
+          <a href="{% url 'musica:musica' %}" class="btn btn-dark mt-auto">Escolta nova música</a>
+        </div>
       </div>
-      <p class="text-center">
-        La música que dona vida a La Kultural.<br>
-        Els membres de La Kultural són més que artistes; són creadors que plasmen l’esperit de la música underground a través de les seves produccions. El nostre estil predominant és el <em>Drum and Bass</em>, tot i que també explorem altres subgèneres de la música electrònica.
-      </p>
-      <a class="btn btn-dark mt-auto" href="{% url 'musica:musica' %}">
-        Descobreix nova música
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- Fila 2: Esdeveniments - Contacte -->
-<div class="container my-5">
-  <div class="row gap-4 justify-content-center">
-    <!-- Esdeveniments -->
-    <div id="events-section" class="col-md-5 h-100 d-flex flex-column bg-light text-dark p-5 rounded-3 shadow home-contenido">
-      <div class="d-flex justify-content-center">
-        <img src="{% static 'assets/img/icons/eventos_icon.png' %}" alt="Esdeveniments" class="icono mb-3" style="width: 80px;">
-      </div>
-      <p class="text-center">
-        Vols gaudir d’actuacions en viu, festes temàtiques o festivals a gran escala?<br>
-        A La Kultural organitzem esdeveniments que donen protagonisme a la música electrònica underground i a artistes amb molt de talent.
-      </p>
-      <a class="btn btn-dark mt-auto" href="{% url 'eventos:eventos' %}">
-        Esdeveniments pròxims
-      </a>
     </div>
 
-    <!-- Contacte / Tienda -->
-    <div class="col-md-5 h-100 d-flex flex-column bg-dark text-white p-5 rounded-3 shadow home-contenido">
-      <div class="d-flex justify-content-center">
-        <img src="{% static 'assets/img/icons/tienda_icon.png' %}" alt="Tienda" class="icono mb-3" style="width: 80px;">
-      </div>
-      <p class="text-center">
-        Estigues a la última amb els nostres productes únics!
-      </p>
-      <a class="btn btn-outline-light mt-auto" href="#contact-section">
-        Contacta'ns
-      </a>
-    </div>
   </div>
+
+  <div class="row justify-content-center g-4 mt-4">
+    
+    <!-- Eventos -->
+    <div class="col-md-5 col-lg-4">
+      <div class="card card-custom shadow h-100">
+        <div class="card-body text-center d-flex flex-column">
+          <img src="{% static 'assets/img/icons/eventos_icon.png' %}" alt="Esdeveniments" class="icono mx-auto my-3">
+          <h4 class="card-title">Esdeveniments</h4>
+          <p class="card-text flex-grow-1">
+            Concerts, festes temàtiques i festivals que no et pots perdre.
+          </p>
+          <a href="{% url 'eventos:eventos' %}" class="btn btn-dark mt-auto">Esdeveniments pròxims</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tienda -->
+    <div class="col-md-5 col-lg-4">
+      <div class="card card-custom shadow h-100">
+        <div class="card-body text-center d-flex flex-column">
+          <img src="{% static 'assets/img/icons/tienda_icon.png' %}" alt="Tienda" class="icono mx-auto my-3">
+          <h4 class="card-title">Botiga</h4>
+          <p class="card-text flex-grow-1">
+            Productes únics per als amants de la música electrònica alternativa.
+          </p>
+          <a href="#contact-section" class="btn btn-dark mt-auto">Veure productes</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 {% endblock %}

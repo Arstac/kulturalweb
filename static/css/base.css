@@ -498,6 +498,42 @@ iframe {
   filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
   position: relative; 
   z-index: 3; /* IMPORTANTE: asegurar que esté delante */
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
 }
 
+.card-custom {
+  border-radius: 15px;
+  background-color: #222831; /* Color oscuro elegante */
+  color: #ffffff;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-custom:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.4);
+}
+
+.icono {
+  width: 70px;
+  height: auto;
+  opacity: 0.9;
+}
+
+.card-title {
+  color: #cddc39; /* Amarillo/verde para título */
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .card-custom {
+    margin-bottom: 20px;
+  }
+}
 /* ---------------- */
