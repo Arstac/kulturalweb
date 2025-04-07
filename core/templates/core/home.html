@@ -13,34 +13,31 @@
 
 <!-- Fila 1: Booking - Música -->
 <div class="container my-5">
-  <div class="row nowrap">
+  <div class="row gap-4 justify-content-center">
     <!-- Booking -->
-    <div id="booking-section" class="home-contenido col-md-6 d-flex flex-column justify-content-center bg-dark text-white p-5 rounded-3 shadow">
-      <img src="{% static 'assets/img/icons/artistas_icon.png' %}" alt="Booking" class="icono mb-3" style="width: 80px;">
-      <p>
+    <div id="booking-section" class="col-md-5 h-100 d-flex flex-column bg-dark text-white p-5 rounded-3 shadow home-contenido">
+      <div class="d-flex justify-content-center">
+        <img src="{% static 'assets/img/icons/artistas_icon.png' %}" alt="Booking" class="icono mb-3" style="width: 80px;">
+      </div>
+      <p class="text-center">
         Descobreix els nostres artistes i crea l’esdeveniment perfecte.<br>
-
-        A La Kultural, promovem artistes de música electrònica que destaquen pel seu talent 
-        i per oferir experiències úniques. Si busques música underground amb vinils o sessions 
-        amb taula de mescles, tenim els artistes ideals per fer que el teu esdeveniment 
-        sigui inoblidable.
+        A La Kultural, promovem artistes de música electrònica que destaquen pel seu talent i per oferir experiències úniques. Si busques música underground amb vinils o sessions amb taula de mescles, tenim els artistes ideals per fer que el teu esdeveniment sigui inoblidable.
       </p>
-      <a class="btn btn-outline-light mt-3" href="{% url 'booking:booking' %}">
+      <a class="btn btn-outline-light mt-auto" href="{% url 'booking:booking' %}">
         Descobreix els artistes
       </a>
     </div>
 
     <!-- Música -->
-    <div id="canciones-section" class="home-contenido col-md-6 d-flex flex-column justify-content-center bg-light text-dark p-5 rounded-3 shadow">
-      <img src="{% static 'assets/img/icons/musica_icon.png' %}" alt="Música" class="icono mb-3" style="width: 80px;">
-      <p>
+    <div id="canciones-section" class="col-md-5 h-100 d-flex flex-column bg-light text-dark p-5 rounded-3 shadow home-contenido">
+      <div class="d-flex justify-content-center">
+        <img src="{% static 'assets/img/icons/musica_icon.png' %}" alt="Música" class="icono mb-3" style="width: 80px;">
+      </div>
+      <p class="text-center">
         La música que dona vida a La Kultural.<br>
-        Els membres de La Kultural són més que artistes; són creadors que plasmen 
-        l’esperit de la música underground a través de les seves produccions. 
-        El nostre estil predominant és el <em>Drum and Bass</em>, tot i que 
-        també explorem altres subgèneres de la música electrònica.
+        Els membres de La Kultural són més que artistes; són creadors que plasmen l’esperit de la música underground a través de les seves produccions. El nostre estil predominant és el <em>Drum and Bass</em>, tot i que també explorem altres subgèneres de la música electrònica.
       </p>
-      <a class="btn btn-dark mt-3" href="{% url 'musica:musica' %}">
+      <a class="btn btn-dark mt-auto" href="{% url 'musica:musica' %}">
         Descobreix nova música
       </a>
     </div>
@@ -49,30 +46,34 @@
 
 <!-- Fila 2: Esdeveniments - Contacte -->
 <div class="container my-5">
-  <div class="row nowrap">
+  <div class="row gap-4 justify-content-center">
     <!-- Esdeveniments -->
-    <div id="events-section" class="home-contenido col-md-6 d-flex flex-column justify-content-center bg-light text-dark p-5 rounded-3 shadow">
-      <img src="{% static 'assets/img/icons/eventos_icon.png' %}" alt="Esdeveniments" class="icono mb-3" style="width: 80px;">
-      <p>
+    <div id="events-section" class="col-md-5 h-100 d-flex flex-column bg-light text-dark p-5 rounded-3 shadow home-contenido">
+      <div class="d-flex justify-content-center">
+        <img src="{% static 'assets/img/icons/eventos_icon.png' %}" alt="Esdeveniments" class="icono mb-3" style="width: 80px;">
+      </div>
+      <p class="text-center">
         Vols gaudir d’actuacions en viu, festes temàtiques o festivals a gran escala?<br>
-        A La Kultural organitzem i promocionem esdeveniments que donen protagonisme 
-        a la música electrònica underground i a artistes amb molt de talent.
+        A La Kultural organitzem esdeveniments que donen protagonisme a la música electrònica underground i a artistes amb molt de talent.
       </p>
-      <a class="btn btn-dark mt-3" href="{% url 'eventos:eventos' %}">
+      <a class="btn btn-dark mt-auto" href="{% url 'eventos:eventos' %}">
         Esdeveniments pròxims
       </a>
     </div>
 
-    <!-- Contacte -->
-    <div class="home-contenido col-md-6 d-flex flex-column justify-content-center bg-dark text-white p-5 rounded-3 shadow">
-      <img src="{% static 'assets/img/icons/tienda_icon.png' %}" alt="Contacte" class="icono mb-3" style="width: 80px;">
-      <p>
+    <!-- Contacte / Tienda -->
+    <div class="col-md-5 h-100 d-flex flex-column bg-dark text-white p-5 rounded-3 shadow home-contenido">
+      <div class="d-flex justify-content-center">
+        <img src="{% static 'assets/img/icons/tienda_icon.png' %}" alt="Tienda" class="icono mb-3" style="width: 80px;">
+      </div>
+      <p class="text-center">
         Estigues a la última amb els nostres productes únics!
       </p>
-      <a class="btn btn-outline-light mt-3" href="#events-section">
+      <a class="btn btn-outline-light mt-auto" href="#contact-section">
         Contacta'ns
       </a>
     </div>
   </div>
 </div>
+
 {% endblock %}
