@@ -528,13 +528,12 @@ iframe {
 
 .kultural-text {
   font-family: 'Montserrat', sans-serif;
-  font-weight: bold;
   font-size: 2rem;
   color: #42FCC0; /* un verde/aguamarina neón */
   text-shadow: 
-    0 0 5px #42FCC0,
-    0 0 10px #42FCC0,
-    0 0 20px #42FCC0;
+    0 0 5px #31bb8f,
+    0 0 10px #27725a,
+    0 0 20px #1a966e;
 }
 /* Colores de los textos */
 /* Color1: #48F783 */
