@@ -1,37 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
-
+<link rel="stylesheet" href="{% static 'core/css/estilos.css' %}">
 {% block content %}
-<!-- Sección Hero (Encabezado principal con vídeo de fondo) -->
 <div class="hero-section">
   <video autoplay loop muted playsinline>
     <source src="{% static 'assets/videos/video_home.mp4' %}" type="video/mp4">
   </video>
 
-  <!-- Capa de contenido sobre el video -->
   <div class="hero-overlay">
     <img src="{% static 'assets/img/kultural_grafiti.png' %}" alt="La Kultural" class="img-fluid grafiti-logo">
-    <p class="lead kultural-text">
-      Associació Kultural Alternativa
-    </p>
     <a href="#booking-section">
       <img src="{% static 'assets/img/icons/mas_info_icon.png' %}" alt="mas_info" class="icono-portada mx-auto my-3">
     </a>
   </div>
 </div>
+
 <div class="container py-5">
-  
   <div class="row justify-content-center g-4">
-    
+
     <!-- Artistas -->
     <div class="col-md-5 col-lg-4">
       <div class="card card-custom shadow h-100">
         <div class="card-body text-center d-flex flex-column">
           <img src="{% static 'assets/img/icons/artistas_icon.png' %}" alt="Artistas" class="icono mx-auto my-3">
-          <p class="card-text flex-grow-1">
+          <p class="card-text flex-grow-1 text-justify">
             Descobreix artistes únics que fan de cada esdeveniment una experiència especial.
           </p>
-          <a href="{% url 'booking:booking' %}" class="btn btn-dark mt-auto">Descobreix els artistes</a>
+          <a href="{% url 'booking:booking' %}" class="btn btn-dark btn-custom-bg mt-auto">Descobreix els artistes</a>
         </div>
       </div>
     </div>
@@ -41,27 +36,26 @@
       <div class="card card-custom shadow h-100">
         <div class="card-body text-center d-flex flex-column">
           <img src="{% static 'assets/img/icons/musica_icon.png' %}" alt="Música" class="icono mx-auto my-3">
-          <p class="card-text flex-grow-1">
+          <p class="card-text flex-grow-1 text-justify">
             Descobreix nova música underground amb els nostres artistes de Drum and Bass i més.
           </p>
-          <a href="{% url 'musica:musica' %}" class="btn btn-dark mt-auto">Escolta nova música</a>
+          <a href="{% url 'musica:musica' %}" class="btn btn-dark btn-custom-bg mt-auto">Escolta nova música</a>
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="row justify-content-center g-4 mt-4">
-    
+
     <!-- Eventos -->
     <div class="col-md-5 col-lg-4">
       <div class="card card-custom shadow h-100">
         <div class="card-body text-center d-flex flex-column">
           <img src="{% static 'assets/img/icons/eventos_icon.png' %}" alt="Esdeveniments" class="icono mx-auto my-3">
-          <p class="card-text flex-grow-1">
+          <p class="card-text flex-grow-1 text-justify">
             Concerts, festes temàtiques i festivals que no et pots perdre.
           </p>
-          <a href="{% url 'eventos:eventos' %}" class="btn btn-dark mt-auto">Esdeveniments pròxims</a>
+          <a href="{% url 'eventos:eventos' %}" class="btn btn-dark btn-custom-bg mt-auto">Esdeveniments pròxims</a>
         </div>
       </div>
     </div>
@@ -71,10 +65,10 @@
       <div class="card card-custom shadow h-100">
         <div class="card-body text-center d-flex flex-column">
           <img src="{% static 'assets/img/icons/tienda_icon.png' %}" alt="Tienda" class="icono mx-auto my-3">
-          <p class="card-text flex-grow-1">
+          <p class="card-text flex-grow-1 text-justify">
             Productes únics per als amants de la música electrònica alternativa.
           </p>
-          <a href="#contact-section" class="btn btn-dark mt-auto">Veure productes</a>
+          <a href="#contact-section" class="btn btn-dark btn-custom-bg mt-auto">Veure productes</a>
         </div>
       </div>
     </div>
@@ -84,5 +78,3 @@
 </div>
 
 {% endblock %}
-
-
