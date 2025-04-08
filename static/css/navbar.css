@@ -24,7 +24,7 @@
 
 /* Efectos de Hover para enlaces */
 .navbar-nav .nav-link:hover {
-  color: #bdf005; /* Color al pasar el mouse por encima */
+  color: #48F783; /* Color al pasar el mouse por encima */
   transition: color 0.3s ease-in-out; /* Suavizado de la transición de color */
 }
 

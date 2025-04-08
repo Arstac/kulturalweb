@@ -51,12 +51,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, .title {
-  color: #d1f748; /* Este es un color fucsia neón */
+  color: #48F783; /* Este es un color fucsia neón */
   font-weight: 900;
 }
 
 .icono-artistas {
-  color: #d1f748; /* Este es un color fucsia neón */
+  color: #48F783; /* Este es un color fucsia neón */
 }
 
 /* elimina la decoracion de los enlaces */
@@ -219,28 +219,13 @@ a, .btn {
 }
 
 /* ----------------- */
-/*  VINILS FLOTANTS  */
+/*  MUSICA  */
 /* ----------------- */
-#floating-vinyls {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Esto asegura que los vinilos no interfieran con los clics en la página */
-  z-index: 10; /* Asegúrate de que este valor sea menor que otros elementos que deben estar por encima de los vinilos */
+.titulo-cancion {
+  font-weight: bold;
+  color: #42BEFC; /* Este es un color fucsia neón */
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
 }
-
-.floating-vinyl {
-  position: absolute;
-  width: 100px; /* Ajusta el tamaño como prefieras */
-  opacity: 0.7; /* Ajusta la opacidad para que no sea demasiado dominante */
-  transition: transform 0.2s ease-out;
-  will-change: transform;
-}
-
-
-
 /* ------------- */
 /*     MEDIA     */
 /* ------------- */
@@ -258,7 +243,6 @@ a, .btn {
   }
 }
 
-
 /* ---------------- */
 /*     BASE HOME    */
 /* ---------------- */
@@ -269,14 +253,6 @@ a, .btn {
   padding: 2rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-
-
-
-
-
-
-
-
 
 
 .audio-player {
@@ -299,7 +275,7 @@ a, .btn {
     cursor: pointer;
     box-shadow: 0 2px 10px 0 #0008;
     .progress {
-      background: coral;
+      background: #42BEFC;
       width: 0%;
       height: 100%;
       transition: 0.25s;
@@ -387,7 +363,7 @@ a, .btn {
         box-shadow: 0 0 20px #000a;
         transition: .25s;
         .volume-percentage {
-          background: coral;
+          background: #42BEFC;
           height: 100%;
           width: 75%;
         }
@@ -492,7 +468,7 @@ iframe {
 
 
 .grafiti-logo {
-  max-width: 80%;
+  max-width: 35%;
   height: auto;
   margin-bottom: 20px;
   filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
@@ -515,15 +491,66 @@ iframe {
 }
 
 .icono {
-  width: 70px;
+  max-width: 50%;
   height: auto;
   opacity: 0.9;
 }
 
+.icono-portada {
+  max-width: 30%;
+  height: auto;
+  opacity: 0.9;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+.icono-portada:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+  /* Cambia el color de la sombra según el hover */
+  filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0.7));
+}
+
+.icono:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+  /* Cambia el color de la sombra según el hover */
+  filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0.7));
+  opacity: 1;
+}
+
 .card-title {
-  color: #cddc39; /* Amarillo/verde para título */
+  color: #48F783; /* Amarillo/verde para título */
   font-weight: bold;
   margin-bottom: 1rem;
+}
+
+.kultural-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 2rem;
+  color: #42FCC0; /* un verde/aguamarina neón */
+  text-shadow: 
+    0 0 5px #42FCC0,
+    0 0 10px #42FCC0,
+    0 0 20px #42FCC0;
+}
+/* Colores de los textos */
+/* Color1: #48F783 */
+/* Color2: #309FA0 */
+/* Color3: #42FCC0 */
+/* Color4: #42FC42 */
+/* Color5: #42BEFC */
+
+
+.card-button {
+  background-color: #309fa0; /* Color fucsia neón */
+  color: #000; /* Color del texto */
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .card-text {
