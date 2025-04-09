@@ -168,25 +168,21 @@
 }
 
 .custombg1 {
-  background: linear-gradient(to bottom, #C2007A, #F200A4);
-  border: 4px solid;
-  border-image: linear-gradient(to bottom, #ED028C, #F902EC) 1;
+  background: linear-gradient(to bottom, #F200A4, #C2007A);
+  border: 4px solid #ED028C;
 }
 
 .custombg2 {
-  background: linear-gradient(to bottom, #05AC13, #00D628);
-  border: 4px solid;
-  border-image: linear-gradient(to bottom, #01ED33, #00F843) 1;
+  background: linear-gradient(to bottom, #00D628, #05AC13);
+  border: 4px solid #01ED33;
 }
 
 .custombg3 {
-  background: linear-gradient(to bottom, #0038A6, #004EEA);
-  border: 4px solid;
-  border-image: linear-gradient(to bottom, #0441CF, #0086FD) 1;
+  background: linear-gradient(to bottom, #004EEA, #0038A6);
+  border: 4px solid #0441CF;
 }
 
 .custombg4 {
-  background: linear-gradient(to bottom, #6001BD, #9000E2);
-  border: 4px solid;
-  border-image: linear-gradient(to bottom, #8200D5, #C700F5) 1;
+  background: linear-gradient(to bottom, #9000E2, #6001BD);
+  border: 4px solid #8200D5;
 }
