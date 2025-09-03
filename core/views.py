@@ -11,22 +11,23 @@ from django.shortcuts import get_object_or_404
 
 def artista(request, artista_id):
     artista = get_object_or_404(Artista, pk=artista_id)
-    canciones = Cancion.objects.filter(artista=artista)
-
+    canciones = Cancion.objects.filter(artista=artista, visible=True)
     eventos_del_artista = artista.eventos.all()
 
-    contexto = {'artista':artista,
-                'canciones':canciones,
-                'eventos_artista':eventos_del_artista}
+    contexto = {
+        'artista': artista,
+        'canciones': canciones,
+        'eventos_artista': eventos_del_artista
+    }
 
     return render(request, 'booking/artista.html', contexto)
 
     
     
 def home(request):
-    artistas = Artista.objects.all()
-    canciones = Cancion.objects.all()
-    eventos = Evento.objects.all()
+    artistas = Artista.objects.filter(visible=True)
+    canciones = Cancion.objects.filter(visible=True)
+    eventos = Evento.objects.all().order_by('fecha')[:6]  # Próximos eventos
     
     contexto = {'artistas': artistas, 'canciones': canciones, 'eventos': eventos}
     
@@ -39,17 +40,24 @@ def buscar(request):
         query = request.GET.get('term', '')
         results = []
 
+        if len(query) < 2:  # Evitar consultas muy cortas
+            return JsonResponse(results, safe=False)
+
+        # Buscar eventos
         for evento in Evento.objects.filter(nombre__icontains=query)[:5]:
-            results.append({'label': evento.nombre, 'url': f"/eventos/{evento.id}", 'type': 'Evento'})
+            results.append({'label': evento.nombre, 'url': f"/eventos/{evento.id}/", 'type': 'Evento'})
 
-        for artista in Artista.objects.filter(nombre__icontains=query)[:5]:
-            results.append({'label': artista.nombre, 'url': f"/booking/artista/{artista.id}", 'type': 'Artista'})
+        # Buscar artistas (solo visibles)
+        for artista in Artista.objects.filter(nombre__icontains=query, visible=True)[:5]:
+            results.append({'label': artista.nombre, 'url': f"/booking/artista/{artista.id}/", 'type': 'Artista'})
 
-        for producto in Producto.objects.filter(nombre__icontains=query)[:5]:
-            results.append({'label': producto.nombre, 'url': f"/tienda/detalle/{producto.id}", 'type': 'Producto'})
+        # Buscar productos (solo activos)
+        for producto in Producto.objects.filter(nombre__icontains=query, activo=True)[:5]:
+            results.append({'label': producto.nombre, 'url': f"/tienda/{producto.id}/", 'type': 'Producto'})
 
-        for cancion in Cancion.objects.filter(titulo__icontains=query)[:5]:
-            results.append({'label': cancion.titulo, 'url': f"/musica/detalle/{cancion.id}", 'type': 'Canción'})
+        # Buscar canciones (solo visibles)
+        for cancion in Cancion.objects.filter(titulo__icontains=query, visible=True)[:5]:
+            results.append({'label': cancion.titulo, 'url': f"/musica/detalle/{cancion.id}/", 'type': 'Canción'})
 
         return JsonResponse(results, safe=False)
     return JsonResponse({"error": "No es AJAX"}, status=400)

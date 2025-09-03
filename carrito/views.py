@@ -1,35 +1,52 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
-from tienda.models import Producto
-from .models import Carrito, ItemCarrito, Order
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 
-from tienda.models import Talla, Modelo
+from tienda.models import Producto, Talla, Modelo
+from .models import Carrito, ItemCarrito, Order
 
+@login_required
 def carrito(request):
-    #selecciona solo los 2 primeros productos si existen:
-    productos = Producto.objects.all()
-    productos = productos[:2]
+    # Selecciona solo los 2 primeros productos si existen:
+    productos = Producto.objects.all()[:2]
+    
     try:
         carrito = Carrito.objects.get(usuario=request.user)
         items = carrito.items.all()
         total_articulos = sum(item.cantidad for item in items)
     except Carrito.DoesNotExist:
+        carrito = None
         items = []
         total_articulos = 0
-    return render(request, 'carrito/carrito.html', {'carrito': carrito,
-                                                    'items': items,
-                                                    'productos': productos,
-                                                    'total_articulos': total_articulos})
+    
+    return render(request, 'carrito/carrito.html', {
+        'carrito': carrito,
+        'items': items,
+        'productos': productos,
+        'total_articulos': total_articulos
+    })
 
+@login_required
+@login_required
 def agregar_producto(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
+    if request.method != 'POST':
+        return redirect('carrito:carrito')
+        
+    producto = get_object_or_404(Producto, id=producto_id, activo=True)
+    
+    # Verificar stock si existe
+    if hasattr(producto, 'stock') and producto.stock <= 0:
+        messages.error(request, f"El producto {producto.nombre} no está disponible.")
+        return redirect('tienda:producto', producto_id=producto_id)
+    
     talla_id = request.POST.get("talla_id")
     modelo_id = request.POST.get("modelo_id")
-    talla = Talla.objects.filter(id=talla_id).first()
-    modelo = Modelo.objects.filter(id=modelo_id).first()
+    talla = Talla.objects.filter(id=talla_id).first() if talla_id else None
+    modelo = Modelo.objects.filter(id=modelo_id).first() if modelo_id else None
 
     carrito, created = Carrito.objects.get_or_create(usuario=request.user)
 
@@ -37,13 +54,18 @@ def agregar_producto(request, producto_id):
         carrito=carrito,
         producto=producto,
         talla=talla,
-        modelo=modelo
+        modelo=modelo,
+        defaults={'cantidad': 1}
     )
 
-    item.cantidad += 1
-    item.save()
+    if not created:
+        item.cantidad += 1
+        item.save()
+        
     return redirect('carrito:carrito')
 
+@login_required
+@login_required
 def quitar_producto(request, item_id):
     item = get_object_or_404(ItemCarrito, id=item_id)
     if item.cantidad > 1:
@@ -55,10 +77,25 @@ def quitar_producto(request, item_id):
 
 
 
+@login_required
 def checkout(request):
-    carrito = Carrito.objects.get(usuario=request.user)
-    items = carrito.items.all()
-    total = carrito.total_carrito()
+    try:
+        carrito = Carrito.objects.get(usuario=request.user)
+        items = carrito.items.all()
+        
+        if not items.exists():
+            messages.warning(request, "Tu carrito está vacío.")
+            return redirect('carrito:carrito')
+            
+        total = carrito.total_carrito()
+        
+        if total <= 0:
+            messages.error(request, "Error en el cálculo del total.")
+            return redirect('carrito:carrito')
+            
+    except Carrito.DoesNotExist:
+        messages.warning(request, "No tienes un carrito activo.")
+        return redirect('carrito:carrito')
     
     # Crear orden
     order = Order.objects.create(
@@ -88,6 +125,8 @@ def checkout(request):
         'total': total
     })
 
+@login_required
+@login_required
 def update_item_quantity(request, item_id, product_id, quantity):
     item = get_object_or_404(ItemCarrito, id=item_id, producto_id=product_id)
     item.cantidad = int(quantity)

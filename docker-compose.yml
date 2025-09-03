@@ -18,10 +18,12 @@ services:
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.production
     environment:
-      POSTGRES_DB: lakultural
-      POSTGRES_USER: lakultural_user
-      POSTGRES_PASSWORD: superpasswordsegura
+      POSTGRES_DB: ${POSTGRES_DB:-lakultural}
+      POSTGRES_USER: ${POSTGRES_USER:-lakultural_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   nginx:
     image: nginx:latest
