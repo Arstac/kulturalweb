@@ -31,6 +31,14 @@
               Tu navegador no soporta el reproductor de audio.
           </audio>
         {% endif %}
+        {% if cancion.producto %}
+          <form method="POST" action="{% url 'carrito:agregar_producto' cancion.producto.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success mt-3 w-100">Comprar por {{ cancion.producto.precio }} €</button>
+          </form>
+        {% else %}
+          <p class="text-muted">Esta canción no está disponible para la compra.</p>
+        {% endif %}
       </div>
       <div class="col-lg-6">
         {% if cancion.album and cancion.album.portada %}
@@ -57,7 +65,7 @@
 
 <div class="row mt-5">
     <div class="col">
-      <h3 class="mb-4">Canciones Relacionadas</h3>
+      <h3 class="mb-4">Musica Relacionada</h3>
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         {% for relacionada in relacionadas %}
           <div class="col">

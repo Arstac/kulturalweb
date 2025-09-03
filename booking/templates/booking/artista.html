@@ -48,8 +48,33 @@
           {% endif %}
         </div>
 
-        <a href="#" class="btn btn-light text-uppercase mt-3">Contactar</a>
+        <!-- Botón Contactar -->
+        <button id="toggleFormulario" class="btn btn-light text-uppercase mt-3">Contactar</button>
+
+        <!-- Formulario oculto -->
+        <div id="formularioContacto" class="mt-4" style="display: none;">
+          <form id="formContactoArtista">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Tu nombre</label>
+              <input type="text" class="form-control" id="nombre" name="nombre" autocomplete="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Tu email</label>
+              <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="mensaje" class="form-label">Mensaje</label>
+              <textarea class="form-control" id="mensaje" name="mensaje" rows="4" autocomplete="off" required></textarea>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span id="mensajeEnvio" class="text-success" style="display: none;">Mensaje enviado correctamente.</span>
+              <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </form>
+        </div>
       </div>
+
       <div class="col-lg-6">
         <div class="event-card p-3">
           {% if artista.imagen %}
@@ -60,10 +85,8 @@
         </div>
       </div>
     </div>
-    
 
     <div class="col tarjeta-info mb-5">
-      <!-- Descripción -->
       <div class="row">
           <div class="col">
           <h3 class="mb-3">DESCRIPCIÓN</h3>
@@ -74,18 +97,61 @@
 
     <div class="soundcloud-container mt-4">
       {% if artista.enlace_soundcloud %}
-        <!-- Insertamos el iframe de SoundCloud adaptándolo a la URL del artista -->
         <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
         src="https://w.soundcloud.com/player/?url={{ artista.enlace_soundcloud|urlencode }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
       {% else %}
         <p>Este artista no tiene SoundCloud disponible.</p>
       {% endif %}
     </div>
-    
   
     {% include 'booking/artist_music.html' %}
 
     <h3 class="mb-3">EVENTOS PRÓXIMOS</h3>
     {% include 'booking/artist_events.html' %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.getElementById('toggleFormulario');
+      const formDiv = document.getElementById('formularioContacto');
+      const mensajeEnvio = document.getElementById('mensajeEnvio');
+  
+      toggleBtn.addEventListener('click', () => {
+          formDiv.style.display = formDiv.style.display === 'none' ? 'block' : 'none';
+          mensajeEnvio.style.display = 'none'; // Oculta mensaje si lo había
+      });
+  
+      const form = document.getElementById('formContactoArtista');
+      if (form) {
+          form.addEventListener('submit', function (e) {
+              e.preventDefault();
+              const formData = new FormData(form);
+  
+              fetch("{% url 'booking:enviar_contacto_artista' %}", {
+                  method: 'POST',
+                  headers: {
+                      'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                  },
+                  body: formData
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.ok) {
+                      mensajeEnvio.style.display = 'inline';
+                      form.reset();
+  
+                      setTimeout(() => {
+                          formDiv.style.display = 'none';
+                          mensajeEnvio.style.display = 'none';
+                      }, 3000);
+                  } else {
+                      alert("Error al enviar: " + (data.errores ? JSON.stringify(data.errores) : 'Inténtalo más tarde.'));
+                  }
+              });
+          });
+      }
+  });
+  </script>
 {% endblock %}

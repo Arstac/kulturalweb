@@ -13,6 +13,7 @@ class Evento(models.Model):
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
     artistas = models.ManyToManyField(Artista, through='ArtistaEvento', related_name='eventos')
+    link_compra = models.URLField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.nombre

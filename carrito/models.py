@@ -1,6 +1,6 @@
 from django.db import models
 from usuarios.models import Usuario
-from tienda.models import Producto
+from tienda.models import Producto, Talla, Modelo
 
 class Carrito(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name="carrito")
@@ -16,13 +16,17 @@ class ItemCarrito(models.Model):
     carrito = models.ForeignKey(Carrito, related_name='items', on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=0)
+    
+    talla = models.ForeignKey(Talla, null=True, blank=True, on_delete=models.SET_NULL)
+    modelo = models.ForeignKey(Modelo, null=True, blank=True, on_delete=models.SET_NULL)
+
 
     def subtotal(self):
         return self.cantidad * self.producto.precio
 
     def __str__(self):
-        return f"{self.cantidad} de {self.producto.nombre}"
-    
+        return f"{self.cantidad} de {self.producto.nombre} ({self.talla}, {self.modelo})"
+
     
 class Order(models.Model):
     user = models.ForeignKey(Usuario, on_delete=models.CASCADE)

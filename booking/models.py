@@ -21,3 +21,12 @@ class Artista(models.Model):
     def __str__(self):
         return self.nombre
     
+class BookingConfig(models.Model):
+    email_destino = models.EmailField(default="contacto@lakultural.eu")
+
+    def __str__(self):
+        return "Configuración de Booking"
+
+    class Meta:
+        verbose_name = "Configuración de contacto"
+        verbose_name_plural = "Configuración de contacto"

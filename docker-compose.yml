@@ -35,6 +35,8 @@ services:
       - /var/www/certbot:/var/www/certbot
       - static_volume:/app/staticfiles
       - media_volume:/app/media
+      - ./nginx/certs/dev/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
+      - ./nginx/certs/dev/privkey.pem:/etc/ssl/private/privkey.pem:ro
     depends_on:
       - web
 

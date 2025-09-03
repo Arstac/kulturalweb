@@ -20,8 +20,10 @@ def musica(request):
 
 def cancion_detalle(request, cancion_id):
     cancion = get_object_or_404(Cancion, id=cancion_id)
-    relacionadas = Cancion.objects.filter(artista=cancion.artista, visible=True).exclude(id=cancion.id)[:4]  # Muestra máximo 4
+    relacionadas = Cancion.objects.filter(artista=cancion.artista, visible=True).exclude(id=cancion.id)[:4]
+    producto = getattr(cancion, 'producto', None)
     return render(request, 'musica/cancion_detalle.html', {
         'cancion': cancion,
         'relacionadas': relacionadas,
+        'producto': producto,
     })

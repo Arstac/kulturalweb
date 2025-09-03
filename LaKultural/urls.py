@@ -33,6 +33,7 @@ urlpatterns = [
     path('carrito/', include ('carrito.urls')),
     path('', include ('core.urls')),
     path('paypal/', include(paypal_urls)), 
+    path('accounts/', include('allauth.urls')), 
 ]
 # Sirviendo archivos estáticos y multimedia (en desarrollo, no necesario con Cloudinary)
 if settings.DEBUG:

@@ -35,27 +35,35 @@
             <p>{{ producto.descripcion }}</p>
           </div>
       </div>
-  
+      
       <!-- Información Adicional -->
       <div class="row mt-4">
         <div class="col">
-          <a href="{% url 'carrito:agregar_producto' producto_id=producto.id %}" class="btn btn-light btn-compra text-uppercase mb-5 w-100">Añadir al carrito</a>
-          <h3>INFORMACIÓN ADICIONAL</h3>
-          <!-- Selección de modelo y talla. Deberá aparecer una lista con cada talla y otra con cada modelo y poder seleccionar la combinacion adecuada. Incluir un boton para abrir una pagina donde hay infomracion para seleccion talla adecuada -->
-          <label for="talla">Selecciona tu talla:</label>
-          <select name="talla" id="talla" class='label-product'>
-            <option value="s">S</option>
-            <option value="m">M</option>
-            <option value="l">L</option>
-            <option value="xl">XL</option>
-          </select>
-          <label for="talla">Selecciona tu modelo:</label>
-          <select name="modelo" id="modelo" class='label-product'>
-            <option value="modelo1">Modelo 1</option>
-            <option value="modelo2">Modelo 2</option>
-            <option value="modelo3">Modelo 3</option>
-            <option value="modelo4">Modelo 4</option>
-          </select>
+          <form method="POST" action="{% url 'carrito:agregar_producto' producto.id %}">
+            {% csrf_token %}
+            <h3>INFORMACIÓN ADICIONAL</h3>
+
+            <label for="talla">Selecciona tu talla:</label>
+            <select name="talla_id" id="talla" class="form-control mb-3" required>
+              {% for talla in producto.tallas.all %}
+                <option value="{{ talla.id }}">{{ talla.nombre }}</option>
+              {% empty %}
+                <option disabled>No hay tallas disponibles</option>
+              {% endfor %}
+            </select>
+
+            <label for="modelo">Selecciona tu modelo:</label>
+            <select name="modelo_id" id="modelo" class="form-control mb-3" required>
+              {% for modelo in producto.modelos.all %}
+                <option value="{{ modelo.id }}">{{ modelo.nombre }}</option>
+              {% empty %}
+                <option disabled>No hay modelos disponibles</option>
+              {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-light btn-compra text-uppercase mb-3 w-100">Añadir al carrito</button>
+          </form>
+
           <button id="abrirModal" class="btn btn-dark text-uppercase">Guía de tallas</button>
         </div>
       </div>

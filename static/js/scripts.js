@@ -173,3 +173,40 @@ function preparePlayer(songId, audioUrl, title, artist, imageUrl) {
     const audioPlayer = document.getElementById('fixedAudioPlayer');
     if (audioPlayer) audioPlayer.src = audioUrl;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('search-results');
+
+    input.addEventListener('input', function () {
+        const query = input.value;
+        if (query.length < 2) {
+            resultsContainer.innerHTML = '';
+            return;
+        }
+
+        fetch(`/buscar/?term=${encodeURIComponent(query)}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            resultsContainer.innerHTML = '';
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.classList.add('list-group-item', 'list-group-item-action');
+                li.innerHTML = `<strong>${item.label}</strong> <small class="text-muted">(${item.type})</small>`;
+                li.onclick = () => window.location.href = item.url;
+                resultsContainer.appendChild(li);
+            });
+        });
+    });
+
+    // Ocultar resultados al hacer clic fuera
+    document.addEventListener('click', function (e) {
+        if (!resultsContainer.contains(e.target) && e.target !== input) {
+            resultsContainer.innerHTML = '';
+        }
+    });
+});

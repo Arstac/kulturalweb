@@ -15,15 +15,16 @@
       <div class="offcanvas-body">        
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 text-start">
           <div class="menu-items">
-          <li class="nav-item"><a class="nav-link" href="{% url 'musica:musica' %}">CANCIONES</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'musica:musica' %}">MÚSICA</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'booking:booking' %}">BOOKING</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'eventos:eventos' %}">EVENTOS</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'tienda:tienda' %}">TIENDA</a></li>
         </div>
         <div class="control-items">
           <li class="nav-item">
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            <form class="d-flex position-relative" role="search">
+              <input id="search-input" class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" autocomplete="off">
+              <ul id="search-results" class="list-group position-absolute w-100" style="z-index: 1000;"></ul>
             </form>
           </li>
           {% if user.is_authenticated %}

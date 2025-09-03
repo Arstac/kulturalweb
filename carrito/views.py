@@ -6,6 +6,8 @@ from django.conf import settings
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 
+from tienda.models import Talla, Modelo
+
 def carrito(request):
     #selecciona solo los 2 primeros productos si existen:
     productos = Producto.objects.all()
@@ -24,8 +26,20 @@ def carrito(request):
 
 def agregar_producto(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
+    talla_id = request.POST.get("talla_id")
+    modelo_id = request.POST.get("modelo_id")
+    talla = Talla.objects.filter(id=talla_id).first()
+    modelo = Modelo.objects.filter(id=modelo_id).first()
+
     carrito, created = Carrito.objects.get_or_create(usuario=request.user)
-    item, created = ItemCarrito.objects.get_or_create(carrito=carrito, producto=producto)
+
+    item, created = ItemCarrito.objects.get_or_create(
+        carrito=carrito,
+        producto=producto,
+        talla=talla,
+        modelo=modelo
+    )
+
     item.cantidad += 1
     item.save()
     return redirect('carrito:carrito')

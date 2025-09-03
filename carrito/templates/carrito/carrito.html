@@ -27,7 +27,7 @@
                     
                     <!-- IMATGE PRODUCTE -->
                     <div class="col-lg-1 mb-2 mb-lg-0">
-                        <img src="{% static 'assets/img/events/event1.png' %}" class="img-fluid rounded-2" alt="Carrito">
+                        <img src="{{ item.producto.imagen.url }}" class="img-fluid rounded-2" alt="{{ item.producto.nombre }}">
                     </div>
                 
                     <!-- NOM I CATEGORIA PRODUCTE -->
@@ -35,7 +35,11 @@
                         <div class="fw-bold">{{ item.producto.nombre }}</div>
                         <div>{{ item.producto.categoria.nombre }}</div>
                     </div>
-                
+
+                    <div class="fw-bold">{{ item.producto.nombre }}</div>
+                    <div>{{ item.producto.categoria.nombre }}</div>
+                    <div class="text-muted small">Talla: {{ item.talla.nombre }} | Modelo: {{ item.modelo.nombre }}</div>
+                                    
                     <!-- PREU PRODUCTE -->
                     <div class="col-sm-3 col-lg-2 mb-2 mb-lg-0">
                         {% if item.producto.descuento_activo %}

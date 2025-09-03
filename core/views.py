@@ -5,6 +5,7 @@ from eventos.models import Evento
 from booking.models import Artista
 from tienda.models import Producto
 from musica.models import Cancion
+from django.shortcuts import get_object_or_404
 
 
 
@@ -34,21 +35,22 @@ def home(request):
 
 
 def buscar(request):
-    if request.is_ajax():
-        query = request.GET.get('term', '')  # 'term' será lo que el usuario está escribiendo
-        eventos = Evento.objects.filter(nombre__icontains=query)
-        artistas = Artista.objects.filter(nombre__icontains=query)
-        productos = Producto.objects.filter(nombre__icontains=query)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        query = request.GET.get('term', '')
         results = []
-        for evento in eventos:
-            results.append(evento.nombre)
-        for artista in artistas:
-            results.append(artista.nombre)
-        for producto in productos:
-            results.append(producto.nombre)
-        data = {
-            'list': results
-        }
-        return JsonResponse(data)
-    else:
-        return JsonResponse({"error": "Error: no se realizó una solicitud AJAX"}, status=400)
+
+        for evento in Evento.objects.filter(nombre__icontains=query)[:5]:
+            results.append({'label': evento.nombre, 'url': f"/eventos/{evento.id}", 'type': 'Evento'})
+
+        for artista in Artista.objects.filter(nombre__icontains=query)[:5]:
+            results.append({'label': artista.nombre, 'url': f"/booking/artista/{artista.id}", 'type': 'Artista'})
+
+        for producto in Producto.objects.filter(nombre__icontains=query)[:5]:
+            results.append({'label': producto.nombre, 'url': f"/tienda/detalle/{producto.id}", 'type': 'Producto'})
+
+        for cancion in Cancion.objects.filter(titulo__icontains=query)[:5]:
+            results.append({'label': cancion.titulo, 'url': f"/musica/detalle/{cancion.id}", 'type': 'Canción'})
+
+        return JsonResponse(results, safe=False)
+    return JsonResponse({"error": "No es AJAX"}, status=400)
+    

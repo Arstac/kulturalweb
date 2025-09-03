@@ -1,5 +1,6 @@
 from django.db import models
 from usuarios.models import Usuario
+from musica.models import Cancion
 
 class CategoriaArticulo(models.Model):
     nombre = models.CharField(max_length=100)
@@ -8,6 +9,18 @@ class CategoriaArticulo(models.Model):
     def __str__(self):
         return self.nombre
 
+class Modelo(models.Model):
+    nombre = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+class Talla(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.nombre
+    
 class Producto(models.Model):
     categoria = models.ForeignKey(CategoriaArticulo, related_name='productos', on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
@@ -18,8 +31,9 @@ class Producto(models.Model):
     descuento_activo = models.BooleanField(default=False)
     stock = models.IntegerField(default=0)  # Añadido para control de inventario
     activo = models.BooleanField(default=True)  # Para activar/desactivar productos fácilmente
-    modelo = models.CharField(max_length=100, blank=True, null=True) # Opcional para productos no ropa
-    tallas = models.CharField(max_length=255, blank=True, null=True)  
+    modelos = models.ManyToManyField(Modelo, blank=True, related_name='productos')
+    tallas = models.ManyToManyField(Talla, blank=True, related_name='productos')
+    cancion = models.OneToOneField(Cancion, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.nombre

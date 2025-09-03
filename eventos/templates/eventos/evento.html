@@ -14,7 +14,7 @@
         <h2>{{evento.nombre}}</h2>
         <p>{{evento.fecha}}</p>
         <p>{{evento.lugar}}</p>
-        <a href="#" class="btn btn-light text-uppercase">Comprar Entradas</a>
+        <a href="{{ evento.link_compra }}" class="btn btn-light text-uppercase" target="_blank" rel="noopener noreferrer">Comprar Entradas</a>
       </div>
       <div class="col-lg-6">
         <div class="event-card p-3">
@@ -35,23 +35,11 @@
         <p>{{ evento.descripcion }}</p>
         </div>
     </div>
-    
-    <!-- Artistas -->
-    <div class="row mt-4">
-        <div class="col">
-        <h3>ARTISTAS</h3>
-        <ul>
-          {% for artista in artistas_del_evento %}
-            <li>{{ artista.nombre }}</li>
-          {% endfor %}
-        </ul>
-        </div>
-    </div>
-  
+      
   <!-- Información Adicional -->
   <div class="row mt-4">
     <div class="col">
-      <h3>INFORMACIÓN ADICIONAL</h3>
+      <h3>INFO</h3>
       <p>Horario: {{evento.hora_inicio}} – {{ evento.hora_fin }} </p>
       <p>Edad: +{{ evento.edad_minima}} Años</p>
       <p>No se pueden realizar cambios ni devoluciones de entradas ya adquiridas. Únicamente se reembolsará el importe de las entradas en caso de incidencia técnica o de cancelación del evento por parte de la organización. Las cancelaciones no incluyen casos de fuerza mayor.</p>

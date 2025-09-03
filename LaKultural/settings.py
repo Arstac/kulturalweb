@@ -6,6 +6,17 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.ionos.es'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # TLS activado, obligatorio en el puerto 587
+
+EMAIL_HOST_USER = 'contacto@lakultural.eu'       # el email completo
+EMAIL_HOST_PASSWORD = 'lakultural.2025'   # tu contraseña real
+
+DEFAULT_FROM_EMAIL = 'contacto@lakultural.eu'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -13,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-insegura-dev")
 # Para poder registrar usuarios en producción
 CSRF_TRUSTED_ORIGINS = [
+    "https://localhost",
     "https://lakultural.eu",
     "https://www.lakultural.eu",
     "https://164.90.167.192",
@@ -32,6 +44,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django_jsonforms',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'biografia',
     'booking',
     'eventos',
@@ -42,7 +59,10 @@ INSTALLED_APPS = [
     'carrito',
     'core',
     'paypal.standard.ipn',
+    'storages',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,6 +70,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    'allauth.account.middleware.AccountMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -79,13 +100,19 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 # Modo de entorno: 'development' o 'production'
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+# ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+ENVIRONMENT='production'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+# if ENVIRONMENT == 'production':
+#     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# else:
+#     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    
 # SECURITY WARNING: update this when you have the production host
-ALLOWED_HOSTS = ['lakultural.eu', 'www.lakultural.eu', '164.90.167.192']
+ALLOWED_HOSTS = ['localhost', 'lakultural.eu', 'www.lakultural.eu', '164.90.167.192']
 
 DEBUG  = True
-ENVIRONMENT != 'production'
 
 DATABASES = {
     'default': {
@@ -141,8 +168,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-
+AWS_ACCESS_KEY_ID = os.environ.get('DIGITAL_OCEAN_KEY_ID', 'TU_API_KEY')
+AWS_SECRET_ACCESS_KEY = os.environ.get('DIGITAL_OCEAN_API_KEY', 'TU_API_KEY')
+AWS_STORAGE_BUCKET_NAME = 'lakultural-space'
+AWS_S3_ENDPOINT_URL = 'https://fra1.digitaloceanspaces.com'  # ej: https://ams3.digitaloceanspaces.com
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT_URL.replace("https://", "")}'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -158,9 +190,22 @@ AUTHENTICATION_BACKENDS = [
     # La ruta a tu backend personalizado
     'usuarios.backends.EmailOrUsernameModelBackend',
     # Django ModelBackend para autenticación predeterminada
+    'allauth.account.auth_backends.AuthenticationBackend', 
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/usuarios/login/'
+
+# ACCOUNT_USERNAME_REQUIRED = True
+# ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+# ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_QUERY_EMAIL = True
 
 # Configuración de PayPal
 
