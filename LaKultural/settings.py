@@ -101,7 +101,7 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 
 # Modo de entorno: 'development' o 'production'
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
-    
+
 # SECURITY WARNING: update this when you have the production host
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
@@ -117,6 +117,16 @@ if not SECRET_KEY:
 if not DEBUG and SECRET_KEY and (len(SECRET_KEY) < 50 or len(set(SECRET_KEY)) < 5):
     raise ValueError("SECRET_KEY debe tener al menos 50 caracteres y 5 caracteres únicos para producción")
 
+# Configuración de base de datos
+# Prioriza DATABASE_URL (recomendado en producción), luego variables PG*
+# y por último SQLite en desarrollo.
+import dj_database_url  # type: ignore
+
+DB_CONN_MAX_AGE = int(os.getenv('DB_CONN_MAX_AGE', '60'))
+DB_SSL_REQUIRE = os.getenv('DB_SSL_REQUIRE', 'False').lower() == 'true'
+DB_SSL_MODE = os.getenv('DB_SSL_MODE', 'require')  # p.ej. 'require' o 'verify-full'
+DB_SSL_ROOT_CERT = os.getenv('DB_SSL_ROOT_CERT')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -124,17 +134,28 @@ DATABASES = {
     }
 }
 
-# Configuración de PostgreSQL para producción (comentada para desarrollo)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get("PGDATABASE", "lakultural"),
-#         'USER': os.environ.get("PGUSER", "lakultural_user"),
-#         'PASSWORD': os.environ.get("PGPASSWORD", ""),
-#         'HOST': os.environ.get("PGHOST", "localhost"),
-#         'PORT': os.environ.get("PGPORT", "5432"),
-#     }
-# }
+database_url = os.getenv('DATABASE_URL')
+if database_url:
+    DATABASES['default'] = dj_database_url.parse(
+        database_url,
+        conn_max_age=DB_CONN_MAX_AGE,
+        ssl_require=DB_SSL_REQUIRE,
+    )
+elif os.getenv('PGDATABASE') and os.getenv('PGUSER') and os.getenv('PGPASSWORD') and os.getenv('PGHOST'):
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('PGDATABASE'),
+        'USER': os.environ.get('PGUSER'),
+        'PASSWORD': os.environ.get('PGPASSWORD'),
+        'HOST': os.environ.get('PGHOST'),
+        'PORT': os.environ.get('PGPORT', '5432'),
+        'CONN_MAX_AGE': DB_CONN_MAX_AGE,
+        'OPTIONS': {},
+    }
+    if DB_SSL_REQUIRE:
+        DATABASES['default']['OPTIONS']['sslmode'] = DB_SSL_MODE
+        if DB_SSL_ROOT_CERT:
+            DATABASES['default']['OPTIONS']['sslrootcert'] = DB_SSL_ROOT_CERT
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

@@ -89,3 +89,15 @@ INFO 2025-09-03 19:33:23,584 basehttp 5839 6154465280 "GET /musica/ HTTP/1.1" 20
 INFO 2025-09-03 19:33:23,983 basehttp 5839 6154465280 "GET /booking/ HTTP/1.1" 200 6581
 INFO 2025-09-03 19:33:24,638 basehttp 5839 6154465280 "GET / HTTP/1.1" 200 9242
 INFO 2025-09-03 19:33:24,697 basehttp 5839 6154465280 "GET /static/assets/videos/video_home.mp4 HTTP/1.1" 200 8211691
+INFO 2025-09-03 19:50:10,254 basehttp 5839 6154465280 "GET /tienda/ HTTP/1.1" 200 6557
+INFO 2025-09-03 19:50:11,367 basehttp 5839 6154465280 "GET /eventos/ HTTP/1.1" 200 6558
+INFO 2025-09-03 19:50:12,277 basehttp 5839 6154465280 "GET /booking/ HTTP/1.1" 200 6581
+INFO 2025-09-03 19:50:13,146 basehttp 5839 6154465280 "GET /musica/ HTTP/1.1" 200 6681
+INFO 2025-09-03 19:50:13,758 basehttp 5839 6154465280 "GET / HTTP/1.1" 200 9242
+INFO 2025-09-03 19:50:13,805 basehttp 5839 6154465280 "GET /static/assets/videos/video_home.mp4 HTTP/1.1" 200 8211691
+INFO 2025-09-04 19:47:12,782 autoreload 5839 8293904960 /Users/arnau/Desktop/lakultural-web-prod/kulturalweb/LaKultural/settings.py changed, reloading.
+INFO 2025-09-04 19:47:13,546 autoreload 53839 8293904960 Watching for file changes with StatReloader
+INFO 2025-09-04 19:47:17,853 autoreload 53839 8293904960 /Users/arnau/Desktop/lakultural-web-prod/kulturalweb/LaKultural/settings.py changed, reloading.
+INFO 2025-09-04 19:47:18,290 autoreload 53905 8293904960 Watching for file changes with StatReloader
+INFO 2025-09-04 19:51:01,394 autoreload 53905 8293904960 /Users/arnau/Desktop/lakultural-web-prod/kulturalweb/LaKultural/settings.py changed, reloading.
+INFO 2025-09-04 19:53:23,264 autoreload 57143 8293904960 Watching for file changes with StatReloader
