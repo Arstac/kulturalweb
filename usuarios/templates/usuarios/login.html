@@ -37,11 +37,14 @@
               <div class="text-center">
                 <button type="submit" class="btn btn-light w-100 btn-lg mt-2 mb-3">Iniciar sesión</button>
               </div>
-              <div class="text-center mb-3">
-                <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
-                  Iniciar sesión con Google
-                </a>
-              </div>
+                {% get_providers as socialaccount_providers %}
+                {% if socialaccount_providers %}
+                <div class="text-center mb-3">
+                  <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
+                    Iniciar sesión con Google
+                  </a>
+                </div>
+                {% endif %}
               <p class="text-center">
                 <a href="{% url 'usuarios:signup' %}" class="text-muted">¿No tienes una cuenta? Crea una</a>
               </p>

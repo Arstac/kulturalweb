@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<section class="signup-section marge-sup">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow card-login-background">
+                    <div class="card-body text-center">
+                        {% if process == "connect" %}
+                        <h1 class="mb-4">
+                            {% trans "Conectar" %} {{ provider.name }}
+                        </h1>
+                        <p>
+                            {% blocktrans with provider_name=provider.name %}Estás a punto de conectar una nueva cuenta
+                            de terceros de {{ provider_name }} a tu cuenta.{% endblocktrans %}
+                        </p>
+                        {% else %}
+                        <h1 class="mb-4">
+                            {% trans "Iniciar sesión con" %} {{ provider.name }}
+                        </h1>
+                        <p>
+                            {% blocktrans with provider_name=provider.name %}Estás a punto de iniciar sesión usando tu
+                            cuenta de {{ provider_name }}.{% endblocktrans %}
+                        </p>
+                        {% endif %}
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-grid gap-2 col-8 mx-auto mt-4">
+                                <button type="submit" class="btn btn-outline-danger btn-lg">
+                                    {% trans "Continuar" %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
