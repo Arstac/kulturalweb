@@ -23,7 +23,7 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'contacto@lakultural.eu')
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 # Para poder registrar usuarios en producción
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://lakultural.eu,https://www.lakultural.eu,http://localhost:8000,http://127.0.0.1:8000').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://lakultural.eu,https://www.lakultural.eu,http://localhost:8000,http://127.0.0.1:8000,https://kulturalweb-app-cvctt.ondigitalocean.app').split(',')
 # Application definition
 
 INSTALLED_APPS = [
@@ -93,7 +93,7 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 # SECURITY WARNING: update this when you have the production host
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,kulturalweb-app-cvctt.ondigitalocean.app').split(',')
 
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
