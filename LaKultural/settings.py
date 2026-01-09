@@ -23,17 +23,7 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'contacto@lakultural.eu')
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 # Para poder registrar usuarios en producción
-CSRF_TRUSTED_ORIGINS = [
-    "https://localhost",
-    "https://lakultural.eu",
-    "https://www.lakultural.eu",
-    "https://164.90.167.192",
-    "https://146.190.205.187",
-    "http://lakultural.eu",
-    "http://www.lakultural.eu",
-    "http://164.90.167.192",
-    "http://146.190.205.187"
-]
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://lakultural.eu,https://www.lakultural.eu,http://localhost:8000,http://127.0.0.1:8000').split(',')
 # Application definition
 
 INSTALLED_APPS = [
