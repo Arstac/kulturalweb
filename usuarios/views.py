@@ -14,7 +14,7 @@ def signup_view(request):
             # Especifica explícitamente el backend de autenticación
             user.backend = settings.AUTHENTICATION_BACKENDS[0]
             login(request, user)  # Inicia sesión con el usuario recién creado.
-            return redirect('core:home')  # Redirige al usuario a la página 'home'.
+            return redirect('/')  # Redirige al usuario a la página 'home'.
     else:
         form = SignupForm()
     return render(request, 'usuarios/signup.html', {'form': form})
@@ -29,7 +29,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user:
                 login(request, user)    
-                return redirect('core:home')
+                return redirect('/')
     else:
         form = LoginForm()
     return render(request, 'usuarios/login.html', {'form': form})

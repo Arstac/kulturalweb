@@ -1,0 +1,32 @@
+<div class="container py-5 my-5">
+    <div class="row align-items-center g-5 {% if instance.alignment == 'right' %}flex-row-reverse{% endif %}">
+
+        <!-- Imagen -->
+        <div class="col-lg-6">
+            <div class="position-relative">
+                <img src="{{ instance.image.url }}" alt="{{ instance.title }}"
+                    class="img-fluid rounded-4 shadow-lg w-100 object-fit-cover"
+                    style="min-height: 400px; max-height: 600px;">
+                <!-- Decorative element -->
+                <div class="position-absolute top-0 start-0 w-100 h-100 rounded-4 border border-white opacity-25"
+                    style="transform: translate(15px, 15px); z-index: -1;"></div>
+            </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="col-lg-6 text-white">
+            <h2 class="display-5 fw-bold mb-4">{{ instance.title }}</h2>
+
+            <div class="lead mb-4 text-white-50">
+                {{ instance.description|safe }}
+            </div>
+
+            {% if instance.button_text %}
+            <a href="{% if instance.internal_page %}{{ instance.internal_page.get_absolute_url }}{% else %}{{ instance.button_url }}{% endif %}"
+                class="btn btn-light btn-lg px-4 rounded-pill">
+                {{ instance.button_text }} <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>

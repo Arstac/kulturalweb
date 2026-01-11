@@ -27,6 +27,7 @@ CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://lakultural.org
 # Application definition
 
 INSTALLED_APPS = [
+    "djangocms_admin_style",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -50,19 +51,30 @@ INSTALLED_APPS = [
     'core',
     'paypal.standard.ipn',
     'storages',
+    'cms',
+    'menus',
+    'treebeard',
+    'sekizai',
+    'djangocms_text_ckeditor',
 ]
 
 SITE_ID = 1
 
 MIDDLEWARE = [
+    'cms.middleware.utils.ApphookReloadMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     'allauth.account.middleware.AccountMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
 ]
 
 ROOT_URLCONF = "LaKultural.urls"
@@ -78,6 +90,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.i18n",
+                "cms.context_processors.cms_settings",
+                "sekizai.context_processors.sekizai",
             ],
         },
     },
@@ -170,7 +185,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "es-es"
+LANGUAGE_CODE = "es"
 
 TIME_ZONE = 'Europe/Madrid'
 
@@ -279,7 +294,9 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'
+    X_FRAME_OPTIONS = 'SAMEORIGIN'
+    
+CMS_WELCOME = False
 
 # ACCOUNT_USERNAME_REQUIRED = True
 # ACCOUNT_EMAIL_REQUIRED = True
@@ -296,3 +313,31 @@ PAYPAL_TEST = os.getenv('PAYPAL_TEST', 'True').lower() == 'true'  # False en pro
 PAYPAL_RECEIVER_EMAIL = os.getenv('PAYPAL_RECEIVER_EMAIL')
 PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID')
 PAYPAL_SECRET_KEY = os.getenv('PAYPAL_SECRET_KEY')
+
+# Django CMS Settings
+CMS_CONFIRM_VERSION4 = True
+CMS_TEMPLATES = [
+    ('home.html', 'Home Page'),
+    ('base.html', 'Standard Page'),
+]
+
+LANGUAGES = [
+    ('es', 'Español'),
+]
+
+CMS_LANGUAGES = {
+    1: [
+        {
+            'code': 'es',
+            'name': 'Español',
+            'redirect_on_fallback': True,
+            'public': True,
+            'hide_untranslated': False,
+        },
+    ],
+    'default': {
+        'redirect_on_fallback': True,
+        'public': True,
+        'hide_untranslated': False,
+    },
+}
