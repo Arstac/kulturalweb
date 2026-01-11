@@ -341,3 +341,6 @@ CMS_LANGUAGES = {
         'hide_untranslated': False,
     },
 }
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
