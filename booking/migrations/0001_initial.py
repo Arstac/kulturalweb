@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "email_destino",
-                    models.EmailField(default="contacto@lakultural.eu", max_length=254),
+                    models.EmailField(default="contacto@lakultural.org", max_length=254),
                 ),
             ],
             options={
