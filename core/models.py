@@ -49,3 +49,39 @@ class CardPluginModel(CMSPlugin):
 
     def __str__(self):
         return self.title
+
+class EventsGridPluginModel(CMSPlugin):
+    title = models.CharField(max_length=255, default="Próximos Eventos", blank=True)
+    count = models.IntegerField(default=3, help_text="Número de eventos a mostrar.")
+
+    def __str__(self):
+        return f"Eventos Grid ({self.count})"
+
+class ShopShowcasePluginModel(CMSPlugin):
+    title = models.CharField(max_length=255, default="Novedades en la Tienda", blank=True)
+    count = models.IntegerField(default=4, help_text="Número de productos a mostrar.")
+
+    def __str__(self):
+        return f"Tienda Showcase ({self.count})"
+
+class CTAPluginModel(CMSPlugin):
+    VARIANT_CHOICES = [
+        ('dark', 'Oscuro (Negro/Gris)'),
+        ('light', 'Claro (Blanco/Gris)'),
+        ('brand', 'Corporativo (Verde/Color Principal)'),
+    ]
+
+    text = HTMLField(verbose_name="Texto Principal")
+    button_text = models.CharField(max_length=50)
+    internal_page = PageField(
+        verbose_name="Página interna",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='cta_plugin_link'
+    )
+    button_url = models.URLField(blank=True, null=True, verbose_name="Enlace externo")
+    variant = models.CharField(max_length=20, choices=VARIANT_CHOICES, default='dark')
+
+    def __str__(self):
+        return f"CTA: {self.button_text}"

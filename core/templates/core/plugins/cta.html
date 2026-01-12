@@ -1,0 +1,18 @@
+<div
+    class="py-5 {% if instance.variant == 'dark' %}bg-dark text-white{% elif instance.variant == 'brand' %}bg-primary text-white{% else %}bg-light text-dark{% endif %}">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="cta-content fs-4">
+                    {{ instance.text|safe }}
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% if instance.internal_page %}{{ instance.internal_page.get_absolute_url }}{% else %}{{ instance.button_url }}{% endif %}"
+                    class="btn btn-lg {% if instance.variant == 'light' %}btn-dark{% else %}btn-light text-dark{% endif %} rounded-pill px-5 fw-bold">
+                    {{ instance.button_text }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
