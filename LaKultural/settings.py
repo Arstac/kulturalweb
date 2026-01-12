@@ -220,7 +220,12 @@ if ENVIRONMENT == 'production':
     
     # Asegurar que el dominio está limpio (sin https://)
     _endpoint_clean = AWS_S3_ENDPOINT_URL.replace("https://", "").replace("http://", "")
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint_clean}'
+    
+    # Lógica inteligente para evitar duplicar el nombre del bucket
+    if _endpoint_clean.startswith(AWS_STORAGE_BUCKET_NAME):
+        AWS_S3_CUSTOM_DOMAIN = _endpoint_clean
+    else:
+        AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint_clean}'
     
     # Configuración para archivos públicos (sin firma)
     AWS_QUERYSTRING_AUTH = False
