@@ -230,12 +230,19 @@ if ENVIRONMENT == 'production':
     # Configuración para archivos públicos (sin firma)
     AWS_QUERYSTRING_AUTH = False
     
+    # IMPORTANTE: Forzar estructura correcta
+    AWS_LOCATION = ''  # Forzar raíz del bucket
+    AWS_S3_ADDRESSING_STYLE = "virtual"  # Usar subdominio (bucket.region...)
+    
     # IMPORTANTE: Forzar que MEDIA_URL apunte a Spaces
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
     
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "location": "",
+            },
         },
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
