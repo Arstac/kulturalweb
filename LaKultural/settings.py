@@ -214,10 +214,15 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
 # Configuración de almacenamiento condicional
-if ENVIRONMENT == 'production' and AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY:
+if ENVIRONMENT == 'production':
+    if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
+        raise ValueError("ERRO CRÍTICO: ENVIRONMENT='production' pero faltan DIGITAL_OCEAN_KEY_ID o DIGITAL_OCEAN_API_KEY.")
+    
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    print("INFO: Usando DigitalOcean Spaces (S3) para almacenamiento.")
 else:
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    print("WARNING: Usando almacenamiento local (FileSystemStorage). Si estás en producción, las imágenes se perderán al redesplegar.")
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
