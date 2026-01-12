@@ -108,7 +108,7 @@ WSGI_APPLICATION = "LaKultural.wsgi.application"
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 # SECURITY WARNING: update this when you have the production host
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,kulturalweb-app-cvctt.ondigitalocean.app').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,kulturalweb-app-cvctt.ondigitalocean.app,lakultural.eu').split(',')
 
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
