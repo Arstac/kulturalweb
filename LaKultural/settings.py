@@ -12,10 +12,10 @@ EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.ionos.es')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
 
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'contacto@lakultural.org')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'contacto@lakultural.eu')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'contacto@lakultural.org')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'contacto@lakultural.eu')
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,7 +23,7 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'contacto@lakultural.org')
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 # Para poder registrar usuarios en producción
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://lakultural.org,https://www.lakultural.org,http://localhost:8000,http://127.0.0.1:8000,https://kulturalweb-app-cvctt.ondigitalocean.app').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://lakultural.eu,https://www.lakultural.eu,http://localhost:8000,http://127.0.0.1:8000,https://kulturalweb-app-cvctt.ondigitalocean.app').split(',')
 # Application definition
 
 INSTALLED_APPS = [
@@ -218,6 +218,16 @@ if ENVIRONMENT == 'production':
     if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
         raise ValueError("ERRO CRÍTICO: ENVIRONMENT='production' pero faltan DIGITAL_OCEAN_KEY_ID o DIGITAL_OCEAN_API_KEY.")
     
+    # Asegurar que el dominio está limpio (sin https://)
+    _endpoint_clean = AWS_S3_ENDPOINT_URL.replace("https://", "").replace("http://", "")
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint_clean}'
+    
+    # Configuración para archivos públicos (sin firma)
+    AWS_QUERYSTRING_AUTH = False
+    
+    # IMPORTANTE: Forzar que MEDIA_URL apunte a Spaces
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+    
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
@@ -226,7 +236,9 @@ if ENVIRONMENT == 'production':
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
     }
-    print("INFO: Usando DigitalOcean Spaces (S3) para almacenamiento (Django 5 STORAGES).")
+    print(f"INFO: Usando S3. Bucket: {AWS_STORAGE_BUCKET_NAME}")
+    print(f"INFO: Domain: {AWS_S3_CUSTOM_DOMAIN}")
+    print(f"INFO: MEDIA_URL: {MEDIA_URL}")
 else:
     STORAGES = {
         "default": {

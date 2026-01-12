@@ -45,7 +45,7 @@ def enviar_contacto_artista(request):
             mensaje_completo = f"Nombre: {nombre}\nEmail: {email}\n\nMensaje:\n{mensaje}"
 
             config = BookingConfig.objects.first()
-            destino = config.email_destino if config else 'contacto@lakultural.org'
+            destino = config.email_destino if config else 'contacto@lakultural.eu'
 
             send_mail(asunto, mensaje_completo, settings.DEFAULT_FROM_EMAIL, [destino])
             return JsonResponse({'ok': True})
