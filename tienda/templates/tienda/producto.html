@@ -3,9 +3,9 @@
 {% block content %}
 <!-- Masthead-->
 <header class="masthead">
-    <div class="text-center">
-        <h1 class="section-heading text-uppercase">TIENDA</h1>
-    </div>
+  <div class="text-center">
+    <h1 class="section-heading text-uppercase">TIENDA</h1>
+  </div>
 </header>
 
 <div class="container text-start">
@@ -18,7 +18,7 @@
         <p>No hay imagen disponible.</p>
         {% endif %}
       </div>
-      
+
       <div class="d-flex flex-column justify-content-center">
         <h2>{{producto.nombre}}</h2>
         <p>{{producto.descripcion}}</p>
@@ -30,12 +30,12 @@
     <div class="col-lg-6 tarjeta-info-producto col-product">
       <!-- Descripción -->
       <div class="row">
-          <div class="col">
-            <h3 class="mb-3">DESCRIPCIÓN</h3>
-            <p>{{ producto.descripcion }}</p>
-          </div>
+        <div class="col">
+          <h3 class="mb-3">DESCRIPCIÓN</h3>
+          <p>{{ producto.descripcion }}</p>
+        </div>
       </div>
-      
+
       <!-- Información Adicional -->
       <div class="row mt-4">
         <div class="col">
@@ -43,23 +43,27 @@
             {% csrf_token %}
             <h3>INFORMACIÓN ADICIONAL</h3>
 
+            {% if producto.tallas.all %}
             <label for="talla">Selecciona tu talla:</label>
             <select name="talla_id" id="talla" class="form-control mb-3" required>
               {% for talla in producto.tallas.all %}
-                <option value="{{ talla.id }}">{{ talla.nombre }}</option>
+              <option value="{{ talla.id }}">{{ talla.nombre }}</option>
               {% empty %}
-                <option disabled>No hay tallas disponibles</option>
+              <option disabled>No hay tallas disponibles</option>
               {% endfor %}
             </select>
+            {% endif %}
 
+            {% if producto.modelos.all %}
             <label for="modelo">Selecciona tu modelo:</label>
             <select name="modelo_id" id="modelo" class="form-control mb-3" required>
               {% for modelo in producto.modelos.all %}
-                <option value="{{ modelo.id }}">{{ modelo.nombre }}</option>
+              <option value="{{ modelo.id }}">{{ modelo.nombre }}</option>
               {% empty %}
-                <option disabled>No hay modelos disponibles</option>
+              <option disabled>No hay modelos disponibles</option>
               {% endfor %}
             </select>
+            {% endif %}
 
             <button type="submit" class="btn btn-light btn-compra text-uppercase mb-3 w-100">Añadir al carrito</button>
           </form>
@@ -71,7 +75,9 @@
       <!-- Política de devoluciones -->
       <div class="row mt-4">
         <div class="col">
-          <p>No se pueden realizar cambios ni devoluciones de entradas ya adquiridas. Únicamente se reembolsará el importe de las entradas en caso de incidencia técnica o de cancelación del evento por parte de la organización. Las cancelaciones no incluyen casos de fuerza mayor.</p>
+          <p>No se pueden realizar cambios ni devoluciones de entradas ya adquiridas. Únicamente se reembolsará el
+            importe de las entradas en caso de incidencia técnica o de cancelación del evento por parte de la
+            organización. Las cancelaciones no incluyen casos de fuerza mayor.</p>
         </div>
       </div>
     </div>

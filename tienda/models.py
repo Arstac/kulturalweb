@@ -29,14 +29,25 @@ class Producto(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     descuento = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     descuento_activo = models.BooleanField(default=False)
-    stock = models.IntegerField(default=0)  # Añadido para control de inventario
-    activo = models.BooleanField(default=True)  # Para activar/desactivar productos fácilmente
-    modelos = models.ManyToManyField(Modelo, blank=True, related_name='productos')
-    tallas = models.ManyToManyField(Talla, blank=True, related_name='productos')
+    stock = models.IntegerField(default=0)
+    activo = models.BooleanField(default=True)
     cancion = models.OneToOneField(Cancion, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.nombre
+
+class Ropa(Producto):
+    modelos = models.ManyToManyField(Modelo, blank=True, related_name='prenda_ropa')
+    tallas = models.ManyToManyField(Talla, blank=True, related_name='prenda_ropa')
+
+    class Meta:
+        verbose_name = "Prenda de Ropa"
+        verbose_name_plural = "Prendas de Ropa"
+
+class Objeto(Producto):
+    class Meta:
+        verbose_name = "Objeto / Merch"
+        verbose_name_plural = "Objetos / Merch"
 
 class ImagenProducto(models.Model):
     producto = models.ForeignKey(Producto, related_name='imagenes', on_delete=models.CASCADE)

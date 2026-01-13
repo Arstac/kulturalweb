@@ -28,7 +28,7 @@
                     <p class="card-text small">{{ evento.descripcion|truncatewords:20 }}</p>
                 </div>
                 <div class="card-footer bg-white border-0 p-4 pt-0">
-                    <a href="{% url 'detalle_evento' evento.id %}" class="btn btn-outline-dark w-100 rounded-pill">Ver
+                    <a href="{% url 'eventos:evento' evento.id %}" class="btn btn-outline-dark w-100 rounded-pill">Ver
                         Entradas</a>
                 </div>
             </div>

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block content %}
+<section class="signup-section marge-sup my-5 pt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold text-uppercase">{% trans "Crear Cuenta" %}</h2>
+                            <p class="text-muted">¿Ya tienes cuenta? <a href="{{ login_url }}"
+                                    class="text-decoration-none fw-bold">Inicia sesión</a>.</p>
+                        </div>
+
+                        <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                            {% csrf_token %}
+
+                            {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <ul class="mb-0 list-unstyled">
+                                    {% for field in form %}
+                                    {% if field.errors %}
+                                    {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            {% for field in form.hidden_fields %}
+                            {{ field }}
+                            {% endfor %}
+
+                            {% for field in form.visible_fields %}
+                            <div class="mb-3 text-start">
+                                <label for="{{ field.id_for_label }}" class="form-label fw-bold">
+                                    {{ field.label }}
+                                </label>
+
+                                {% if field.field.widget.input_type == 'password' %}
+                                <input type="password" name="{{ field.name }}" id="{{ field.id_for_label }}"
+                                    class="form-control" placeholder="{{ field.label }}" required>
+                                {% else %}
+                                {% if field.field.required %}
+                                <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.name }}"
+                                    id="{{ field.id_for_label }}" class="form-control" placeholder="{{ field.label }}"
+                                    value="{{ field.value|default:'' }}" required>
+                                {% else %}
+                                <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.name }}"
+                                    id="{{ field.id_for_label }}" class="form-control" placeholder="{{ field.label }}"
+                                    value="{{ field.value|default:'' }}">
+                                {% endif %}
+                                {% endif %}
+
+                                {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ field.errors|striptags }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+
+                            {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button class="btn btn-dark btn-lg rounded-pill" type="submit">
+                                    {% trans "Registrarse" %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-13 14:48+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+#: biografia/cms_apps.py:8
+msgid "Biografia Application"
+msgstr ""
+
+#: booking/cms_apps.py:8
+msgid "Booking Application"
+msgstr ""
+
+#: core/cms_plugins.py:9
+msgid "Hero Header"
+msgstr ""
+
+#: core/cms_plugins.py:20
+msgid "Card (Image+Text)"
+msgstr ""
+
+#: core/cms_plugins.py:31
+msgid "Grilla de Eventos"
+msgstr ""
+
+#: core/cms_plugins.py:50
+msgid "Escaparate Tienda"
+msgstr ""
+
+#: core/cms_plugins.py:68
+msgid "Call to Action (CTA)"
+msgstr ""
+
+#: eventos/cms_apps.py:8
+msgid "Eventos Application"
+msgstr ""
+
+#: musica/cms_apps.py:8
+msgid "Musica Application"
+msgstr ""
+
+#: templates/account/login.html:13
+msgid "Iniciar Sesión"
+msgstr ""
+
+#: templates/account/login.html:65
+msgid "Entrar"
+msgstr ""
+
+#: templates/account/signup.html:13
+msgid "Crear Cuenta"
+msgstr ""
+
+#: templates/account/signup.html:80
+msgid "Registrarse"
+msgstr ""
+
+#: templates/socialaccount/login.html:13
+msgid "Conectar"
+msgstr ""
+
+#: templates/socialaccount/login.html:16
+#, python-format
+msgid ""
+"Estás a punto de conectar una nueva cuenta\n"
+"                            de terceros de %(provider_name)s a tu cuenta."
+msgstr ""
+
+#: templates/socialaccount/login.html:21
+msgid "Iniciar sesión con"
+msgstr ""
+
+#: templates/socialaccount/login.html:24
+#, python-format
+msgid ""
+"Estás a punto de iniciar sesión usando tu\n"
+"                            cuenta de %(provider_name)s."
+msgstr ""
+
+#: templates/socialaccount/login.html:33
+msgid "Continuar"
+msgstr ""
+
+#: tienda/cms_apps.py:8
+msgid "Tienda Application"
+msgstr ""

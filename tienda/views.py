@@ -10,6 +10,13 @@ def tienda(request):
 
 def producto(request, producto_id):
     producto = get_object_or_404(Producto, pk=producto_id, activo=True)
+    
+    # "Downcast" a la clase hija si existe, para acceder a campos específicos (tallas, modelos)
+    if hasattr(producto, 'ropa'):
+        producto = producto.ropa
+    elif hasattr(producto, 'objeto'):
+        producto = producto.objeto
+        
     # Filtrar productos con la misma CategoriaArticulo (solo activos)
     related_productos = Producto.objects.filter(
         categoria=producto.categoria, 

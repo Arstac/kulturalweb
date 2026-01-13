@@ -191,6 +191,10 @@ TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
 USE_L10N = True
 
 USE_TZ = True
