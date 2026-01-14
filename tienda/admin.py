@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import Producto, CategoriaArticulo, ImagenProducto,Modelo, Talla
+from .models import Producto, CategoriaArticulo, ImagenProducto, Modelo, Talla, Ropa, Objeto
 
 class ImagenProductoInline(admin.TabularInline):
     model = ImagenProducto
@@ -16,10 +16,10 @@ admin.site.register(CategoriaArticulo)
 admin.site.register(Modelo)
 admin.site.register(Talla)
 
-@admin.register(models.Ropa)
+@admin.register(Ropa)
 class RopaAdmin(ProductoAdmin):
     filter_horizontal = ('tallas', 'modelos')
 
-@admin.register(models.Objeto)
+@admin.register(Objeto)
 class ObjetoAdmin(ProductoAdmin):
     pass
