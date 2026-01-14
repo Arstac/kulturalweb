@@ -15,3 +15,11 @@ admin.site.register(Producto, ProductoAdmin)
 admin.site.register(CategoriaArticulo)
 admin.site.register(Modelo)
 admin.site.register(Talla)
+
+@admin.register(models.Ropa)
+class RopaAdmin(ProductoAdmin):
+    filter_horizontal = ('tallas', 'modelos')
+
+@admin.register(models.Objeto)
+class ObjetoAdmin(ProductoAdmin):
+    pass

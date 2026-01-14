@@ -357,12 +357,19 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_QUERY_EMAIL = True
 
+
 # Configuración de PayPal
 PAYPAL_TEST = os.getenv('PAYPAL_TEST', 'True').lower() == 'true'  # False en producción
 
 PAYPAL_RECEIVER_EMAIL = os.getenv('PAYPAL_RECEIVER_EMAIL')
 PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID')
 PAYPAL_SECRET_KEY = os.getenv('PAYPAL_SECRET_KEY')
+
+# Configuración de Stripe
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
+
 
 # Django CMS Settings
 CMS_CONFIRM_VERSION4 = True

@@ -59,3 +59,4 @@ pytz==2024.2
 # General utilities
 six==1.16.0
 packaging==24.2
+stripe

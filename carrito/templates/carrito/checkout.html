@@ -2,16 +2,84 @@
 {% load static %}
 
 {% block content %}
+<!-- Cargar librería de Stripe -->
+<script src="https://js.stripe.com/v3/"></script>
+
 <section class="checkout-section py-5" style="background-color: #111; color: #48F783;">
   <div class="container text-center">
-    <h1 class="display-4 text-success mb-4">Checkout</h1>
+    <h1 class="display-4 text-success mb-4">Finalizar Compra</h1>
 
-    <div class="card mx-auto shadow-lg p-4" style="max-width: 500px; background-color: #1c1c1c;">
-      <h2 class="text-white mb-3">Total a pagar: <strong>{{ total }}€</strong></h2>
-      <div class="paypal-button-wrapper d-flex justify-content-center">
-        {{ form.render }}
+    <div class="card mx-auto shadow-lg p-4" style="max-width: 600px; background-color: #1c1c1c;">
+      <h2 class="text-white mb-4">Total a pagar: <strong>{{ total }}€</strong></h2>
+
+      <p class="text-white mb-3">Selecciona un método de pago:</p>
+
+      <!-- Opción 1: Stripe (Tarjeta) -->
+      <button id="checkout-button" class="btn btn-success btn-lg w-100 mb-3"
+        style="font-weight: bold; background-color: #48F783; color: #000; border: none;">
+        💳 Pagar con Tarjeta
+      </button>
+
+      <!-- Separador -->
+      <div class="d-flex align-items-center mb-3">
+        <hr class="flex-grow-1" style="border-color: #444;">
+        <span class="mx-2 text-muted">O</span>
+        <hr class="flex-grow-1" style="border-color: #444;">
       </div>
+
+      <!-- Opción 2: PayPal -->
+      <div class="paypal-button-wrapper d-flex justify-content-center w-100"
+        style="background-color: white; border-radius: 5px; padding: 10px;">
+        {{ paypal_form.render }}
+      </div>
+
     </div>
   </div>
 </section>
+
+<script type="text/javascript">
+  // Inicializar Stripe
+  var stripe = Stripe('{{ stripe_public_key }}');
+
+  var checkoutButton = document.getElementById('checkout-button');
+
+  checkoutButton.addEventListener('click', function () {
+    // Deshabilitar botón para evitar doble click
+    checkoutButton.disabled = true;
+    checkoutButton.innerHTML = "Procesando...";
+
+    fetch("{% url 'carrito:create_checkout_session' order.id %}", {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (session) {
+        if (session.error) {
+          alert(session.error);
+          checkoutButton.disabled = false;
+          checkoutButton.innerHTML = "💳 Pagar con Tarjeta";
+        } else {
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        }
+      })
+      .then(function (result) {
+        if (result && result.error) {
+          alert(result.error.message);
+          checkoutButton.disabled = false;
+          checkoutButton.innerHTML = "💳 Pagar con Tarjeta";
+        }
+      })
+      .catch(function (error) {
+        console.error('Error:', error);
+        alert("Ocurrió un error al conectar con Stripe.");
+        checkoutButton.disabled = false;
+        checkoutButton.innerHTML = "💳 Pagar con Tarjeta";
+      });
+  });
+</script>
 {% endblock %}

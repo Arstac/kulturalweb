@@ -36,6 +36,13 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     paypal_transaction_id = models.CharField(max_length=255, blank=True)
     shipping_address = models.TextField(blank=True, null=True, help_text="Dirección de envío proporcionada por PayPal")
+    
+    PAYMENT_METHOD_CHOICES = [
+        ('PAYPAL', 'PayPal'),
+        ('STRIPE', 'Stripe'),
+    ]
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='PAYPAL')
+    stripe_payment_intent = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"Orden #{self.id} - {self.user.username}"
