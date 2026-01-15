@@ -2,154 +2,210 @@
 {% load static %}
 {% block content %}
 
-<!-- Masthead-->
+<!-- Masthead -->
 <header class="masthead">
     <div class="text-center">
         <h1 class="section-heading text-uppercase">CARRITO</h1>
     </div>
 </header>
 
-<div class="container container-carrito">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="row fix-height">
-            <div class="col-lg-9 col-md-6 scrolly">
-                <div class="ibox">
-                    <div class="ibox-title">
-                        <span class="pull-right total-items">(<strong>{{ total_articulos }}</strong>) artículos</span>
-                        <h5>Artículos en el carrito</h5>
-                    </div>
+<div class="container py-4">
+    <div class="row g-4">
 
-                    <!-- CARRITO LIST -->
-                    <div class="list-group list-group-flush">
-                        {% for item in items %}
-                        <!-- List items dynamically generated. -->
-                        <div class="row carrito-list list-group-item align-items-center text-start">
+        <!-- COLUMNA PRINCIPAL: Items del carrito -->
+        <div class="col-lg-8">
+            <div class="card" style="background-color: #1c1c1c; border: 1px solid #333;">
+                <div class="card-header d-flex justify-content-between align-items-center"
+                    style="background-color: #252525; border-bottom: 1px solid #333;">
+                    <h5 class="mb-0 text-white">Artículos en el carrito</h5>
+                    <span class="badge bg-success total-items">{{ total_articulos }} artículos</span>
+                </div>
 
-                            <!-- IMATGE PRODUCTE -->
-                            <div class="col-lg-1 mb-2 mb-lg-0">
-                                <img src="{{ item.producto.imagen.url }}" class="img-fluid rounded-2"
-                                    alt="{{ item.producto.nombre }}">
-                            </div>
+                <div class="card-body p-0">
+                    {% if items %}
+                    {% for item in items %}
+                    <div class="cart-item d-flex align-items-center p-3" style="border-bottom: 1px solid #333;">
 
-                            <!-- NOM I CATEGORIA PRODUCTE -->
-                            <div class="col-sm-3 col-lg-3 mb-2 mb-lg-0">
-                                <div class="fw-bold">{{ item.producto.nombre }}</div>
-                                <div>{{ item.producto.categoria.nombre }}</div>
-                            </div>
-
-                            <div class="fw-bold">{{ item.producto.nombre }}</div>
-                            <div>{{ item.producto.categoria.nombre }}</div>
-                            <div class="text-muted small">Talla: {{ item.talla.nombre }} | Modelo: {{ item.modelo.nombre
-                                }}</div>
-
-                            <!-- PREU PRODUCTE -->
-                            <div class="col-sm-3 col-lg-2 mb-2 mb-lg-0">
-                                {% if item.producto.descuento_activo %}
-                                {{ item.producto.precio_descuento }} €
-                                <s class="small text-muted">{{ item.producto.precio }} €</s>
-                                {% else %}
-                                {{ item.producto.precio }} €
-                                {% endif %}
-                            </div>
-
-                            <!-- QUANTITAT -->
-                            <div class="col-lg-2 mb-2 mb-lg-0">
-                                <input type="number" class="form-control w-auto quantity-input"
-                                    data-product-id="{{ item.producto.id }}" value="{{ item.cantidad }}" name="cantidad"
-                                    min="1" max="100" data-item-id="{{ item.id }}">
-                            </div>
-
-                            <!-- SUBTOTAL PRODUCTE -->
-                            <div class="col-lg-2 mb-2 mb-lg-0 ">
-                                <h4 class="subtotal" data-item-id="{{ item.id }}">{{ item.subtotal }} €</h4>
-                            </div>
-
-                            <!-- Action Buttons for non-mobile view -->
-                            <div class=" col-lg-2 d-flex final-menu">
-                                <a href="{% url 'carrito:quitar_producto' item.id %}" class="text-muted"><i
-                                        class="fa fa-trash"></i></a>
-                            </div>
-
-
+                        <!-- Imagen -->
+                        <div class="flex-shrink-0 me-3">
+                            <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}" class="rounded"
+                                style="width: 80px; height: 80px; object-fit: cover;">
                         </div>
-                        {% endfor %}
+
+                        <!-- Info producto -->
+                        <div class="flex-grow-1">
+                            <h6 class="text-white mb-1">{{ item.producto.nombre }}</h6>
+                            <small class="text-muted d-block">{{ item.producto.categoria.nombre }}</small>
+                            {% if item.talla or item.modelo %}
+                            <small class="text-muted">
+                                {% if item.talla %}Talla: {{ item.talla.nombre }}{% endif %}
+                                {% if item.talla and item.modelo %} | {% endif %}
+                                {% if item.modelo %}Modelo: {{ item.modelo.nombre }}{% endif %}
+                            </small>
+                            {% endif %}
+                        </div>
+
+                        <!-- Precio unitario (solo desktop) -->
+                        <div class="d-none d-md-block text-end me-3" style="min-width: 80px;">
+                            <small class="text-muted">Precio</small>
+                            <div class="text-white">{{ item.producto.precio }} €</div>
+                        </div>
+
+                        <!-- Cantidad -->
+                        <div class="me-3" style="width: 80px;">
+                            <input type="number" class="form-control form-control-sm text-center quantity-input"
+                                data-product-id="{{ item.producto.id }}" data-item-id="{{ item.id }}"
+                                value="{{ item.cantidad }}" min="1" max="100"
+                                style="background-color: #2a2a2a; border-color: #444; color: #fff;">
+                        </div>
+
+                        <!-- Subtotal -->
+                        <div class="text-end me-3" style="min-width: 90px;">
+                            <small class="text-muted d-block">Subtotal</small>
+                            <strong class="text-success subtotal" data-item-id="{{ item.id }}">
+                                {{ item.subtotal }} €
+                            </strong>
+                        </div>
+
+                        <!-- Eliminar -->
+                        <a href="{% url 'carrito:quitar_producto' item.id %}" class="btn btn-outline-danger btn-sm"
+                            title="Eliminar">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="text-center py-5">
+                        <p class="text-muted mb-3">Tu carrito está vacío</p>
+                        <a href="{% url 'tienda:tienda' %}" class="btn btn-success">
+                            Ir a la tienda
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Footer con botones -->
+                {% if items %}
+                <div class="card-footer d-flex justify-content-between align-items-center"
+                    style="background-color: #252525; border-top: 1px solid #333;">
+                    <a href="{% url 'tienda:tienda' %}" class="btn btn-outline-light btn-sm">
+                        <i class="fa fa-arrow-left me-1"></i> Seguir comprando
+                    </a>
+                    <a href="{% url 'carrito:checkout' %}" class="btn btn-success">
+                        <i class="fa fa-shopping-cart me-1"></i> Checkout
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- COLUMNA LATERAL: Resumen -->
+        <div class="col-lg-4">
+            <!-- Resumen del pedido -->
+            <div class="card mb-3" style="background-color: #1c1c1c; border: 1px solid #333;">
+                <div class="card-header" style="background-color: #252525; border-bottom: 1px solid #333;">
+                    <h5 class="mb-0 text-white">Resumen del pedido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span style="color: #aaa;">Subtotal ({{ total_articulos }} artículos)</span>
+                        <span class="text-white">{{ carrito.total_carrito }} €</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span style="color: #aaa;">Envío</span>
+                        <span class="text-white">
+                            {% if carrito.shipping_cost == 0 %}
+                            <span class="text-success">Gratis</span>
+                            {% else %}
+                            {{ carrito.shipping_cost }} €
+                            {% endif %}
+                        </span>
+                    </div>
+                    <hr style="border-color: #444;">
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong class="text-white">Total</strong>
+                        <strong class="text-success fs-4">{{ carrito.total_con_envio }} €</strong>
                     </div>
 
-                    <div class="ibox-content">
-                        <a href="{% url 'tienda:tienda'  %}" class="btn btn-white"><i class="fa fa-arrow-left"></i>
-                            Seguir comprando</a>
-                        <a href="{% url 'carrito:checkout' %}" class="btn btn-primary pull-right"><i
-                                class="fa fa-shopping-cart"></i> Checkout</a>
+                    <a href="{% url 'carrito:checkout' %}" class="btn btn-success w-100 mb-2"
+                        style="background-color: #48F783; color: #000; border: none; font-weight: bold;">
+                        <i class="fa fa-lock me-1"></i> Finalizar compra
+                    </a>
+
+                    <small style="color: #888;" class="d-block text-center">
+                        <i class="fa fa-truck me-1"></i> Envío gratis en pedidos +40€
+                    </small>
+                </div>
+            </div>
+
+            <!-- Soporte (compacto) -->
+            <div class="card" style="background-color: #1c1c1c; border: 1px solid #333;">
+                <div class="card-body py-3">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fa fa-headset text-success" style="font-size: 24px;"></i>
+                        </div>
+                        <div>
+                            <strong class="text-white d-block">¿Necesitas ayuda?</strong>
+                            <a href="tel:608020304" class="text-success text-decoration-none">
+                                608 02 03 04
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="tarjeta-checkout">
-                    <div class="ibox">
-                        <div class="ibox-title">
-                            <h5>Resumen del pedido</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <span>
-                                Total
-                            </span>
-                            <h2 class="font-bold total-carrito">
-                                {{ carrito.total_carrito }} €
-                            </h2>
-                            <hr>
-                            <span class="text-muted small">
-                                *Los envíos superiores a 40€ son gratuitos
-                            </span>
-                            <div class="m-t-sm">
-                                <div class="btn-group">
-                                    <a href="{% url 'carrito:checkout' %}" class="btn btn-primary btn-sm"><i
-                                            class="fa fa-shopping-cart"></i> Continuar</a>
-                                    <a href="{% url 'tienda:tienda'  %}" class="btn btn-white btn-sm"> Cancelar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="ibox">
-                        <div class="ibox-title">
-                            <h5>Soporte</h5>
+            <!-- Productos recomendados (solo si hay items en carrito) -->
+            {% if items and productos %}
+            <div class="card mt-3" style="background-color: #1c1c1c; border: 1px solid #333;">
+                <div class="card-header py-2" style="background-color: #252525; border-bottom: 1px solid #333;">
+                    <small class="text-muted mb-0">También te puede interesar</small>
+                </div>
+                <div class="card-body p-0">
+                    {% for producto in productos %}
+                    <a href="{% url 'tienda:producto' producto.id %}"
+                        class="d-flex align-items-center p-2 text-decoration-none"
+                        style="border-bottom: 1px solid #333;">
+                        <img src="{{ producto.imagen.url }}" class="rounded me-2"
+                            style="width: 40px; height: 40px; object-fit: cover;">
+                        <div class="flex-grow-1">
+                            <small class="text-white d-block">{{ producto.nombre }}</small>
+                            <small class="text-success">{{ producto.precio }} €</small>
                         </div>
-                        <div class="ibox-content text-center">
-                            <h3><i class="fa fa-phone"></i> 608 02 03 04</h3>
-                            <span class="small">
-                                En caso de tener algún problema durante la compra no dude contactar con nosotros
-                                mediante este <a href="#">enlace</a>.
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <p class="font-bold">
-                                Otros productos que te pueden interesar
-                            </p>
-                            <hr>
-                            {% for producto in productos %}
-                            <div>
-                                <a href="#" class="product-name"> {{ producto.nombre }}</a>
-                                <div class="small m-t-xs">
-                                    {{ producto.descripcion}}
-                                </div>
-                                <div class="m-t text-righ">
-
-                                    <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i
-                                            class="fa fa-long-arrow-right"></i> </a>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            <hr>
-                        </div>
-                    </div>
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Actualizar cantidad
+        document.querySelectorAll('.quantity-input').forEach(function (input) {
+            input.addEventListener('change', function () {
+                const itemId = this.dataset.itemId;
+                const productId = this.dataset.productId;
+                const quantity = this.value;
+
+                fetch(`/carrito/update/${itemId}/${productId}/${quantity}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar subtotal del item
+                        document.querySelector(`.subtotal[data-item-id="${itemId}"]`).textContent = data.subtotal + ' €';
+                        // Actualizar totales
+                        document.querySelectorAll('.total-carrito').forEach(el => {
+                            el.textContent = data.total_carrito + ' €';
+                        });
+                        document.querySelectorAll('.total-items').forEach(el => {
+                            el.textContent = data.total_items + ' artículos';
+                        });
+                    });
+            });
+        });
+    });
+</script>
 
 {% endblock %}

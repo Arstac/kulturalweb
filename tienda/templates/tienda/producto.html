@@ -1,101 +1,214 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<!-- Masthead-->
-<header class="masthead">
-  <div class="text-center">
-    <h1 class="section-heading text-uppercase">TIENDA</h1>
-  </div>
-</header>
 
-<div class="container text-start">
-  <div class="row mb-5">
-    <div class="col-lg-6 col-product">
-      <div class="event-card m-3 p-3 event-card-producto">
-        {% if producto.imagen %}
-        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid card-img-top rounded-3">
-        {% else %}
-        <p>No hay imagen disponible.</p>
+<section class="product-page py-5" style="background-color: #111; min-height: 70vh;">
+  <div class="container">
+    <!-- Contenedor principal con márgenes laterales en desktop -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+
+        <div class="row g-4 g-lg-5">
+          <!-- COLUMNA IZQUIERDA: Imagen -->
+          <div class="col-lg-6">
+            <div class="product-image-container position-sticky" style="top: 100px;">
+              {% if producto.imagen %}
+              <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded-3 w-100"
+                style="max-height: 500px; object-fit: contain; background: #1c1c1c;">
+              {% else %}
+              <div class="bg-dark rounded-3 d-flex align-items-center justify-content-center" style="height: 400px;">
+                <span class="text-muted">Sin imagen</span>
+              </div>
+              {% endif %}
+
+              <!-- Galería de imágenes adicionales si existen -->
+              {% if producto.imagenes.all %}
+              <div class="d-flex gap-2 mt-3 flex-wrap">
+                {% for img in producto.imagenes.all %}
+                <img src="{{ img.imagen.url }}" alt="Imagen adicional" class="rounded"
+                  style="width: 60px; height: 60px; object-fit: cover; cursor: pointer; border: 1px solid #333;">
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: Info del producto -->
+          <div class="col-lg-6">
+            <!-- Categoría y nombre -->
+            <nav aria-label="breadcrumb" class="mb-2">
+              <small style="color: #888;">
+                <a href="{% url 'tienda:tienda' %}" class="text-decoration-none" style="color: #888;">Tienda</a>
+                <span class="mx-1">/</span>
+                <span style="color: #aaa;">{{ producto.categoria.nombre }}</span>
+              </small>
+            </nav>
+
+            <h1 class="text-white mb-2" style="font-size: 2rem; font-weight: bold;">
+              {{ producto.nombre }}
+            </h1>
+
+            <!-- Precio -->
+            <div class="mb-4">
+              {% if producto.descuento_activo %}
+              <span class="text-success fs-3 fw-bold">{{ producto.precio_descuento }} €</span>
+              <span class="text-muted text-decoration-line-through ms-2">{{ producto.precio }} €</span>
+              {% else %}
+              <span class="text-success fs-3 fw-bold">{{ producto.precio }} €</span>
+              {% endif %}
+            </div>
+
+            <!-- Descripción -->
+            <div class="mb-4">
+              <p style="color: #ccc; line-height: 1.7;">{{ producto.descripcion }}</p>
+            </div>
+
+            <!-- Formulario de compra -->
+            <form method="POST" action="{% url 'carrito:agregar_producto' producto.id %}" class="mb-4">
+              {% csrf_token %}
+
+              <!-- Selector de talla (solo si es ropa con tallas) -->
+              {% if producto.tallas.exists %}
+              <div class="mb-3">
+                <label class="form-label text-white mb-2">Talla</label>
+                <div class="d-flex flex-wrap gap-2">
+                  {% for talla in producto.tallas.all %}
+                  <div>
+                    <input type="radio" class="btn-check" name="talla_id" id="talla_{{ talla.id }}"
+                      value="{{ talla.id }}" {% if forloop.first %}checked{% endif %} required>
+                    <label class="btn btn-outline-light btn-sm" for="talla_{{ talla.id }}">
+                      {{ talla.nombre }}
+                    </label>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+
+              <!-- Selector de modelo/color (solo si existe) -->
+              {% if producto.modelos.exists %}
+              <div class="mb-3">
+                <label class="form-label text-white mb-2">Modelo</label>
+                <select name="modelo_id" class="form-select"
+                  style="background-color: #2a2a2a; border-color: #444; color: #fff;" required>
+                  {% for modelo in producto.modelos.all %}
+                  <option value="{{ modelo.id }}">{{ modelo.nombre }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% endif %}
+
+              <!-- Botón añadir al carrito -->
+              <button type="submit" class="btn btn-success btn-lg w-100 mb-3"
+                style="background-color: #48F783; color: #000; border: none; font-weight: bold;">
+                <i class="fa fa-shopping-cart me-2"></i> Añadir al carrito
+              </button>
+            </form>
+
+            <!-- Guía de tallas (solo para ropa) -->
+            {% if producto.tallas.exists %}
+            <button type="button" class="btn btn-outline-secondary btn-sm mb-4" data-bs-toggle="modal"
+              data-bs-target="#modalTallas">
+              <i class="fa fa-ruler me-1"></i> Guía de tallas
+            </button>
+            {% endif %}
+
+            <!-- Info adicional -->
+            <div class="border-top pt-4" style="border-color: #333 !important;">
+              <div class="d-flex align-items-center mb-3" style="color: #aaa;">
+                <i class="fa fa-truck me-2 text-success"></i>
+                <small>Envío gratis en pedidos +40€</small>
+              </div>
+              <div class="d-flex align-items-center mb-3" style="color: #aaa;">
+                <i class="fa fa-shield-alt me-2 text-success"></i>
+                <small>Pago seguro con tarjeta o PayPal</small>
+              </div>
+              {% if not producto.requires_shipping %}
+              <div class="d-flex align-items-center mb-3" style="color: #aaa;">
+                <i class="fa fa-download me-2 text-success"></i>
+                <small>Producto digital - Descarga instantánea</small>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Productos relacionados -->
+        {% if related_productos %}
+        <div class="mt-5 pt-5 border-top" style="border-color: #333 !important;">
+          <h4 class="text-white mb-4">También te puede interesar</h4>
+          <div class="row g-3">
+            {% for related in related_productos %}
+            <div class="col-6 col-md-4 col-lg-2">
+              <a href="{% url 'tienda:producto' related.id %}" class="text-decoration-none">
+                <div class="card h-100" style="background-color: #1c1c1c; border: 1px solid #333;">
+                  <img src="{{ related.imagen.url }}" class="card-img-top" alt="{{ related.nombre }}"
+                    style="height: 120px; object-fit: cover;">
+                  <div class="card-body p-2">
+                    <small class="text-white d-block text-truncate">{{ related.nombre }}</small>
+                    <small class="text-success">{{ related.precio }} €</small>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
         {% endif %}
-      </div>
 
-      <div class="d-flex flex-column justify-content-center">
-        <h2>{{producto.nombre}}</h2>
-        <p>{{producto.descripcion}}</p>
-        <p>{{producto.precio}} €</p>
-      </div>
-
-    </div>
-
-    <div class="col-lg-6 tarjeta-info-producto col-product">
-      <!-- Descripción -->
-      <div class="row">
-        <div class="col">
-          <h3 class="mb-3">DESCRIPCIÓN</h3>
-          <p>{{ producto.descripcion }}</p>
-        </div>
-      </div>
-
-      <!-- Información Adicional -->
-      <div class="row mt-4">
-        <div class="col">
-          <form method="POST" action="{% url 'carrito:agregar_producto' producto.id %}">
-            {% csrf_token %}
-            <h3>INFORMACIÓN ADICIONAL</h3>
-
-            {% if producto.tallas.all %}
-            <label for="talla">Selecciona tu talla:</label>
-            <select name="talla_id" id="talla" class="form-control mb-3" required>
-              {% for talla in producto.tallas.all %}
-              <option value="{{ talla.id }}">{{ talla.nombre }}</option>
-              {% empty %}
-              <option disabled>No hay tallas disponibles</option>
-              {% endfor %}
-            </select>
-            {% endif %}
-
-            {% if producto.modelos.all %}
-            <label for="modelo">Selecciona tu modelo:</label>
-            <select name="modelo_id" id="modelo" class="form-control mb-3" required>
-              {% for modelo in producto.modelos.all %}
-              <option value="{{ modelo.id }}">{{ modelo.nombre }}</option>
-              {% empty %}
-              <option disabled>No hay modelos disponibles</option>
-              {% endfor %}
-            </select>
-            {% endif %}
-
-            <button type="submit" class="btn btn-light btn-compra text-uppercase mb-3 w-100">Añadir al carrito</button>
-          </form>
-
-          <button id="abrirModal" class="btn btn-dark text-uppercase">Guía de tallas</button>
-        </div>
-      </div>
-
-      <!-- Política de devoluciones -->
-      <div class="row mt-4">
-        <div class="col">
-          <p>No se pueden realizar cambios ni devoluciones de entradas ya adquiridas. Únicamente se reembolsará el
-            importe de las entradas en caso de incidencia técnica o de cancelación del evento por parte de la
-            organización. Las cancelaciones no incluyen casos de fuerza mayor.</p>
-        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="row mb-5">
-    <!-- Inclueix events relacions i FAQS-->
-    {% include 'tienda/related_products.html' %}
-    {% include 'tienda/faqs.html' %}
-
-  </div>
-
-</div>
-<!-- Modal -->
-<div id="modalTallas" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Aquí va tu guía de tallas...</p>
+<!-- Modal Guía de Tallas -->
+<div class="modal fade" id="modalTallas" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background-color: #1c1c1c; border: 1px solid #333;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-white">Guía de Tallas</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-dark table-sm">
+          <thead>
+            <tr>
+              <th>Talla</th>
+              <th>Pecho (cm)</th>
+              <th>Largo (cm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>S</td>
+              <td>96-100</td>
+              <td>68</td>
+            </tr>
+            <tr>
+              <td>M</td>
+              <td>100-104</td>
+              <td>70</td>
+            </tr>
+            <tr>
+              <td>L</td>
+              <td>104-108</td>
+              <td>72</td>
+            </tr>
+            <tr>
+              <td>XL</td>
+              <td>108-112</td>
+              <td>74</td>
+            </tr>
+            <tr>
+              <td>XXL</td>
+              <td>112-116</td>
+              <td>76</td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="text-muted">Las medidas son aproximadas y pueden variar según el modelo.</small>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -373,6 +373,10 @@ STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 # URL base del sitio (para enlaces en emails)
 SITE_URL = os.getenv('SITE_URL', 'https://lakultural.eu')
 
+# Configuración de envío (solo España por ahora)
+SHIPPING_COST = 4.95  # Coste de envío en euros
+SHIPPING_FREE_THRESHOLD = 40.00  # Envío gratis a partir de este importe
+
 
 # Django CMS Settings
 CMS_CONFIRM_VERSION4 = True

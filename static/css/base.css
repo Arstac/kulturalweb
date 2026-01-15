@@ -2,34 +2,51 @@
  * Globals
  */
 
- @font-face {
-  font-family: 'Eurostile';
-  src: url('/static/fonts/Eurostile-Bold-Oblique.woff') format('woff');
-  font-style: italic; /* Esto hará que el texto sea cursiva */
-  font-weight: bold; /* Esto hará que el texto sea negrita */
-
-  font-display: swap; /* Mejora el rendimiento de carga de la fuente */
+/* Override Bootstrap text-muted for better visibility on dark backgrounds */
+.text-muted {
+  color: #999 !important;
 }
 
 @font-face {
-  font-family: 'GraffitiYouth'; /* Nombre que usarás en tu CSS */
+  font-family: 'Eurostile';
+  src: url('/static/fonts/Eurostile-Bold-Oblique.woff') format('woff');
+  font-style: italic;
+  /* Esto hará que el texto sea cursiva */
+  font-weight: bold;
+  /* Esto hará que el texto sea negrita */
+
+  font-display: swap;
+  /* Mejora el rendimiento de carga de la fuente */
+}
+
+@font-face {
+  font-family: 'GraffitiYouth';
+  /* Nombre que usarás en tu CSS */
   src: url('/static/fonts/GraffitiYouth-Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 
-html, body {
-  height: 100vh; /* Esto hace que el body tenga el 100% de la altura del viewport */
-  margin: 0; /* Elimina cualquier margen predeterminado */
-  padding: 0; /* Elimina cualquier padding predeterminado */
-  scrollbar-width: none; /* Para Firefox */
-  -ms-overflow-style: none; /* Para Internet Explorer 10+ */
+html,
+body {
+  height: 100vh;
+  /* Esto hace que el body tenga el 100% de la altura del viewport */
+  margin: 0;
+  /* Elimina cualquier margen predeterminado */
+  padding: 0;
+  /* Elimina cualquier padding predeterminado */
+  scrollbar-width: none;
+  /* Para Firefox */
+  -ms-overflow-style: none;
+  /* Para Internet Explorer 10+ */
 }
 
 html::-webkit-scrollbar {
-  display: none; /* Para Chrome, Safari y Opera */
-  }
+  display: none;
+  /* Para Chrome, Safari y Opera */
+}
+
 body {
   font-family: 'Open Sans', sans-serif;
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
@@ -39,29 +56,39 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  
+
 }
 
 
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Eurostile', sans-serif;
   margin-bottom: 0.5em;
 
 }
 
-h1, .title {
-  color: #48F783; /* Este es un color fucsia neón */
+h1,
+.title {
+  color: #48F783;
+  /* Este es un color fucsia neón */
   font-weight: 900;
 }
 
 .icono-artistas {
-  color: #48F783; /* Este es un color fucsia neón */
+  color: #48F783;
+  /* Este es un color fucsia neón */
 }
 
 /* elimina la decoracion de los enlaces */
-a, .btn {
-  text-decoration: none; /* Opcional: si no quieres subrayados en los enlaces */
+a,
+.btn {
+  text-decoration: none;
+  /* Opcional: si no quieres subrayados en los enlaces */
 }
 
 .main-cover {
@@ -73,18 +100,22 @@ a, .btn {
 /* ------------- */
 
 .artista-song a {
-    color: rgb(190, 190, 190); /* Cambia el color de los enlaces */
-    text-decoration: none; /* Elimina el subrayado del enlace */
+  color: rgb(190, 190, 190);
+  /* Cambia el color de los enlaces */
+  text-decoration: none;
+  /* Elimina el subrayado del enlace */
 }
 
 /* Cambia el color de los enlaces al pasar el mouse */
 .artista-song a:hover {
-    color: rgb(255, 255, 255); /* Cambia 'grey' por el color que prefieras para el hover */
+  color: rgb(255, 255, 255);
+  /* Cambia 'grey' por el color que prefieras para el hover */
 }
 
 /* Cambia el color de los enlaces visitados */
 .artista-song a:visited {
-    color: rgb(190, 190, 190); /* Cambia el color para enlaces visitados */
+  color: rgb(190, 190, 190);
+  /* Cambia el color para enlaces visitados */
 }
 
 /* ------------- */
@@ -103,22 +134,31 @@ a, .btn {
 
 /* Serveix per a que la imatge estigui en blanc i negre i al passar el ratoli torni el color */
 .card-img-top {
-  filter: grayscale(100%); /* Convertir imagen a blanco y negro */
-  transition: filter 0.5s ease; /* Efecto de transición suave */
+  filter: grayscale(100%);
+  /* Convertir imagen a blanco y negro */
+  transition: filter 0.5s ease;
+  /* Efecto de transición suave */
 }
+
 .card-img-top:hover {
-  filter: grayscale(0); /* Restaurar color al pasar el ratón por encima */
+  filter: grayscale(0);
+  /* Restaurar color al pasar el ratón por encima */
 }
 
 .card-movement:hover {
-  transform: scale(1.05); /* Efecto de zoom */
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Sombra más pronunciada */
-  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease; /* Transición suave para el zoom y la sombra */
+  transform: scale(1.05);
+  /* Efecto de zoom */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  /* Sombra más pronunciada */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  /* Transición suave para el zoom y la sombra */
 }
 
 .card-shadow:hover {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Sombra más pronunciada */
-  transition: box-shadow 0.3s ease, filter 0.3s ease; /* Transición suave para la sombra */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  /* Sombra más pronunciada */
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
+  /* Transición suave para la sombra */
 }
 
 /* A REVISAR: */
@@ -132,14 +172,15 @@ a, .btn {
 .btn-light:hover,
 .btn-light:focus {
   color: #333;
-  text-shadow: none; /* Prevent inheritance from `body` */
+  text-shadow: none;
+  /* Prevent inheritance from `body` */
 }
 
 .tarjeta-info {
   background-color: rgba(120, 120, 120, 0.1);
   border-radius: 1rem;
   padding: 2rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
 }
 
@@ -183,19 +224,26 @@ a, .btn {
 /*  ESTILS DE MODAL  */
 /* ----------------- */
 .modal {
-  display: none; /* Ocultar el modal por defecto */
-  position: fixed; /* Posición fija */
-  z-index: 1; /* Por encima de todo */
+  display: none;
+  /* Ocultar el modal por defecto */
+  position: fixed;
+  /* Posición fija */
+  z-index: 1;
+  /* Por encima de todo */
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Permitir desplazamiento */
-  background-color: rgba(0,0,0,0.4); /* Fondo oscuro */
+  overflow: auto;
+  /* Permitir desplazamiento */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Fondo oscuro */
 }
-.icon-menu{
+
+.icon-menu {
   height: 40px;
 }
+
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
@@ -223,9 +271,11 @@ a, .btn {
 /* ----------------- */
 .titulo-cancion {
   font-weight: bold;
-  color: #42BEFC; /* Este es un color fucsia neón */
+  color: #42BEFC;
+  /* Este es un color fucsia neón */
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
 }
+
 /* ------------- */
 /*     MEDIA     */
 /* ------------- */
@@ -239,7 +289,8 @@ a, .btn {
 /* Ajusta los estilos de responsividad según sea necesario */
 @media (max-width: 768px) {
   .signup-section .col-md-8 {
-    width: 90%; /* Puede ajustar esto para cambiar el ancho en dispositivos más pequeños */
+    width: 90%;
+    /* Puede ajustar esto para cambiar el ancho en dispositivos más pequeños */
   }
 }
 
@@ -251,7 +302,7 @@ a, .btn {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 1rem;
   padding: 2rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -268,12 +319,14 @@ a, .btn {
 
   display: grid;
   grid-template-rows: 6px auto;
+
   .timeline {
     background: white;
     width: 100%;
     position: relative;
     cursor: pointer;
     box-shadow: 0 2px 10px 0 #0008;
+
     .progress {
       background: #42BEFC;
       width: 0%;
@@ -281,17 +334,19 @@ a, .btn {
       transition: 0.25s;
     }
   }
+
   .controls {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
     padding: 0 20px;
 
-    > * {
+    >* {
       display: flex;
       justify-content: center;
       align-items: center;
     }
+
     .toggle-play {
       &.play {
         cursor: pointer;
@@ -301,15 +356,18 @@ a, .btn {
         width: 0;
         border: 7px solid #0000;
         border-left: 13px solid white;
+
         &:hover {
           transform: scale(1.1);
         }
       }
+
       &.pause {
         height: 15px;
         width: 20px;
         cursor: pointer;
         position: relative;
+
         &:before {
           position: absolute;
           top: 0;
@@ -319,6 +377,7 @@ a, .btn {
           height: 15px;
           width: 3px;
         }
+
         &:after {
           position: absolute;
           top: 0;
@@ -328,46 +387,55 @@ a, .btn {
           height: 15px;
           width: 3px;
         }
+
         &:hover {
           transform: scale(1.1);
         }
       }
     }
+
     .time {
       display: flex;
 
-      > * {
+      >* {
         padding: 2px;
       }
     }
+
     .volume-container {
       cursor: pointer;
+
       .volume-button {
         height: 26px;
         display: flex;
         align-items: center;
+
         .volume {
           transform: scale(0.7);
         }
       }
-      
+
       position: relative;
       z-index: 2;
+
       .volume-slider {
         position: absolute;
-        left: -3px; top: 15px;
+        left: -3px;
+        top: 15px;
         z-index: -1;
         width: 0;
         height: 15px;
         background: white;
         box-shadow: 0 0 20px #000a;
         transition: .25s;
+
         .volume-percentage {
           background: #42BEFC;
           height: 100%;
           width: 75%;
         }
       }
+
       &:hover {
         .volume-slider {
           left: -123px;
@@ -403,9 +471,8 @@ iframe {
   transform: translateX(5px);
   transition: transform 0.2s ease-in-out;
 }
+
 .list-group-item {
   border-left: 0;
   border-right: 0;
 }
-
-

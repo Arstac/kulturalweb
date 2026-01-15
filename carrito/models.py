@@ -1,13 +1,40 @@
 from django.db import models
+from django.conf import settings
+from decimal import Decimal
 from usuarios.models import Usuario
 from tienda.models import Producto, Talla, Modelo
+
 
 class Carrito(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name="carrito")
     creado_en = models.DateTimeField(auto_now_add=True)
 
     def total_carrito(self):
+        """Subtotal de productos (sin envío)"""
         return sum(item.subtotal() for item in self.items.all())
+    
+    def has_physical_products(self):
+        """Retorna True si hay productos que requieren envío"""
+        return any(item.producto.requires_shipping for item in self.items.all())
+    
+    def shipping_cost(self):
+        """Calcula el coste de envío"""
+        # Si no hay productos físicos, no hay envío
+        if not self.has_physical_products():
+            return Decimal('0.00')
+        
+        subtotal = self.total_carrito()
+        threshold = Decimal(str(getattr(settings, 'SHIPPING_FREE_THRESHOLD', 40.00)))
+        cost = Decimal(str(getattr(settings, 'SHIPPING_COST', 4.95)))
+        
+        # Envío gratis si supera el umbral
+        if subtotal >= threshold:
+            return Decimal('0.00')
+        return cost
+    
+    def total_con_envio(self):
+        """Total incluyendo envío"""
+        return self.total_carrito() + self.shipping_cost()
     
     def __str__(self):
         return f"Carrito de {self.usuario.username}"

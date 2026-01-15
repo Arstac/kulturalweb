@@ -118,10 +118,12 @@ def checkout(request):
         if not items.exists():
             messages.warning(request, "Tu carrito está vacío.")
             return redirect('carrito:carrito')
-            
-        total = carrito_obj.total_carrito()
         
-        if total <= 0:
+        subtotal = carrito_obj.total_carrito()
+        shipping_cost = carrito_obj.shipping_cost()
+        total = carrito_obj.total_con_envio()
+        
+        if subtotal <= 0:
             messages.error(request, "Error en el cálculo del total.")
             return redirect('carrito:carrito')
             
@@ -160,6 +162,8 @@ def checkout(request):
             context = {
                 'shipping_form': shipping_form,
                 'requires_shipping': requires_shipping,
+                'subtotal': subtotal,
+                'shipping_cost': shipping_cost,
                 'total': total,
                 'items': items,
                 'step': 'shipping',
