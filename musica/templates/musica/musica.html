@@ -11,49 +11,55 @@
 <div class="container my-4">
     <div class="list-group list-group-flush">
         {% for cancion in canciones %}
-        <div class="row list-group-item align-items-center py-3 g-2">
-            <!-- Audio Player Hidden -->
-            <audio id="audio-{{ cancion.id }}" src="{{ cancion.archivo_audio.url }}"></audio>
-            
-            <div class="col-3 col-md-2 col-lg-1">
-                {% if cancion.album and cancion.album.portada %}
-                <img src="{{ cancion.album.portada.url }}" 
-                     class="img-fluid rounded-2 shadow-sm" 
-                     alt="Portada de {{ cancion.album.titulo }}">
-                {% else %}
-                <img src="{% static 'assets/img/default_album.png' %}" 
-                     class="img-fluid rounded-2 opacity-75" 
-                     alt="Álbum no disponible">
-                {% endif %}
-            </div>
+        <!-- Entire row is now clickable via CSS stretched link or wrapping anchor -->
+        <div class="list-group-item bg-transparent border-0 py-3 px-0">
+            <div class="row align-items-center g-3 item-musica rounded-3 p-2 position-relative"
+                style="transition: background-color 0.2s;">
 
-            <div class="col-7 col-md-8 col-lg-9">
-                <a href="{% url 'musica:cancion_detalle' cancion.id %}" class="text-decoration-none text-dark">
-                    <div class="fw-bold fs-5 titulo-cancion">{{ cancion.titulo }}</div>
-                    <div class="text-muted">{{ cancion.artista.nombre }}</div>
-                </a>
-            </div>
+                <!-- Audio Player Hidden -->
+                <audio id="audio-{{ cancion.id }}" src="{{ cancion.archivo_audio.url }}"></audio>
 
-            <div class="col-2 col-md-2 col-lg-2 text-end">
-                <button class="btn btn-link text-dark play-button" 
-                        data-cancion-id="{{ cancion.id }}"
-                        aria-label="Reproducir/Pausar">
-                    <i class="fas fa-play fa-lg"></i>
-                </button>
-            </div>
-            
-            <div class="col-12 col-md-12">
-                <div class="d-flex justify-content-between mt-2">
-                    <span class="badge bg-secondary">{{ cancion.categoria }}</span>
-                    <small class="text-muted">
+                <!-- Link completo (stretched-link hace que todo el contenedor 'position-relative' sea clicable) -->
+                <a href="{% url 'musica:cancion_detalle' cancion.id %}" class="stretched-link"></a>
+
+                <!-- Columna Portada -->
+                <div class="col-3 col-md-2 col-lg-1">
+                    {% if cancion.album and cancion.album.portada %}
+                    <img src="{{ cancion.album.portada.url }}" class="img-fluid rounded-2 shadow-sm"
+                        alt="Portada de {{ cancion.album.titulo }}" style="aspect-ratio: 1/1; object-fit: cover;">
+                    {% else %}
+                    <img src="{% static 'assets/img/default_album.png' %}" class="img-fluid rounded-2 opacity-75"
+                        alt="Álbum no disponible" style="aspect-ratio: 1/1; object-fit: cover;">
+                    {% endif %}
+                </div>
+
+                <!-- Columna Info Central -->
+                <div class="col-7 col-md-8 col-lg-9 d-flex flex-column justify-content-center">
+                    <div class="fw-bold fs-5 titulo-cancion text-white mb-1">{{ cancion.titulo }}</div>
+                    <div class="text-white-50 mb-1">{{ cancion.artista.nombre }}</div>
+
+                    <!-- Info Album e Iconos en la misma linea o justo debajo, sin irse al fondo -->
+                    <div class="d-flex align-items-center text-muted small">
+                        <span class="badge bg-secondary me-2">{{ cancion.categoria }}</span>
                         {% if cancion.album %}
-                        <i class="fas fa-compact-disc me-2"></i>{{ cancion.album.titulo }}
-                        {% else %}
-                        Sin álbum asociado
+                        <span><i class="fas fa-compact-disc me-1"></i> {{ cancion.album.titulo }}</span>
                         {% endif %}
-                    </small>
+                    </div>
+                </div>
+
+                <!-- Columna Botón Play (encima del link stretched para que funcione) -->
+                <div class="col-2 col-md-2 col-lg-2 text-end position-relative" style="z-index: 2;">
+                    <button class="btn btn-link text-white play-button p-0" data-cancion-id="{{ cancion.id }}"
+                        aria-label="Reproducir/Pausar"
+                        onclick="event.preventDefault(); togglePlay('{{ cancion.id }}');">
+                        <!-- preventDefault importante para no activar el link -->
+                        <i class="fas fa-play fa-2x hover-scale"></i>
+                    </button>
                 </div>
             </div>
+
+            <!-- Separator line -->
+            <hr class="border-secondary opacity-25 my-0">
         </div>
         {% empty %}
         <div class="text-center py-5 bg-dark rounded-3">
