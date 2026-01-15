@@ -35,7 +35,14 @@ class Order(models.Model):
     payment_status = models.CharField(max_length=20, default='Pendiente')
     created_at = models.DateTimeField(auto_now_add=True)
     paypal_transaction_id = models.CharField(max_length=255, blank=True)
-    shipping_address = models.TextField(blank=True, null=True, help_text="Dirección de envío proporcionada por PayPal")
+    shipping_address = models.TextField(blank=True, null=True, help_text="Dirección de envío")
+    
+    # Campo para saber si la orden requiere envío físico
+    requires_shipping = models.BooleanField(
+        default=True,
+        verbose_name="Requiere envío",
+        help_text="Se calcula automáticamente según los productos del carrito"
+    )
     
     PAYMENT_METHOD_CHOICES = [
         ('PAYPAL', 'PayPal'),
@@ -50,7 +57,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True)
-    nombre_producto = models.CharField(max_length=150) # Guardamos el nombre por si se borra el producto
+    nombre_producto = models.CharField(max_length=150)  # Guardamos el nombre por si se borra el producto
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     cantidad = models.PositiveIntegerField(default=1)
     
@@ -58,9 +65,39 @@ class OrderItem(models.Model):
     modelo = models.ForeignKey(Modelo, null=True, blank=True, on_delete=models.SET_NULL)
     nombre_talla = models.CharField(max_length=50, blank=True, null=True)
     nombre_modelo = models.CharField(max_length=100, blank=True, null=True)
+    
+    # Campos para rastrear descargas digitales
+    download_token = models.CharField(
+        max_length=64, 
+        blank=True, 
+        null=True,
+        verbose_name="Token de descarga",
+        help_text="Token único para descarga segura"
+    )
+    download_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Descargas realizadas"
+    )
+    max_downloads = models.PositiveIntegerField(
+        default=5,
+        verbose_name="Máximo de descargas"
+    )
 
     def subtotal(self):
         return self.precio * self.cantidad
+    
+    def is_digital(self):
+        """Retorna True si este item es un producto digital"""
+        return self.producto and not self.producto.requires_shipping
+    
+    def can_download(self):
+        """Retorna True si se puede descargar"""
+        return (
+            self.is_digital() and 
+            self.download_token and 
+            self.download_count < self.max_downloads and
+            self.order.payment_status == 'Completado'
+        )
 
     def __str__(self):
         return f"{self.cantidad} x {self.nombre_producto}"

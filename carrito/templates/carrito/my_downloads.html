@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="downloads-section py-5" style="background-color: #111; min-height: 70vh;">
+    <div class="container">
+        <h1 class="display-4 text-success mb-4 text-center">🎵 Mis Descargas</h1>
+
+        {% if digital_items %}
+        <div class="row g-4">
+            {% for item in digital_items %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100" style="background-color: #1c1c1c; border: 1px solid #333;">
+                    <div class="card-body">
+                        <h5 class="card-title text-white">{{ item.nombre_producto }}</h5>
+                        <p class="text-muted mb-2">
+                            Pedido #{{ item.order.id }} - {{ item.order.created_at|date:"d/m/Y" }}
+                        </p>
+
+                        {% if item.can_download %}
+                        <a href="{% url 'carrito:download' item.id item.download_token %}" class="btn btn-success w-100"
+                            style="background-color: #48F783; color: #000; border: none;">
+                            ⬇️ Descargar
+                        </a>
+                        <p class="text-muted small mt-2 text-center mb-0">
+                            Descargas: {{ item.download_count }}/{{ item.max_downloads }}
+                        </p>
+                        {% else %}
+                        <button class="btn btn-secondary w-100" disabled>
+                            {% if item.download_count >= item.max_downloads %}
+                            Límite alcanzado
+                            {% else %}
+                            No disponible
+                            {% endif %}
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <p class="text-muted lead">No tienes descargas digitales disponibles.</p>
+            <a href="{% url 'tienda:tienda' %}" class="btn btn-success"
+                style="background-color: #48F783; color: #000; border: none;">
+                🛒 Ir a la Tienda
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from . import download_views
 
 app_name = 'carrito' 
 
@@ -12,4 +13,9 @@ urlpatterns = [
     path('create-checkout-session/<int:order_id>/', views.create_checkout_session, name='create_checkout_session'),
     path('payment/success/', views.payment_success, name='payment_success'),
     path('payment/cancel/', views.payment_cancel, name='payment_cancel'),
+    path('webhook/stripe/', views.stripe_webhook, name='stripe_webhook'),
+    
+    # Descargas digitales
+    path('download/<int:order_item_id>/<str:token>/', download_views.download_digital_product, name='download'),
+    path('mis-descargas/', download_views.my_downloads, name='my_downloads'),
 ]

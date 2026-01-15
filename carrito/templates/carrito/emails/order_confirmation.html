@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pedido #{{ order.id }} - LaKultural</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .email-container {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #48F783;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #ccc;
+            margin: 10px 0 0;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .order-summary {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .order-summary h3 {
+            margin-top: 0;
+            color: #111;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .total-row {
+            font-weight: bold;
+            font-size: 18px;
+            padding-top: 15px;
+            border-top: 2px solid #111;
+        }
+
+        .shipping-box,
+        .download-box {
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .shipping-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #2196F3;
+        }
+
+        .download-box {
+            background-color: #f0fff0;
+            border-left: 4px solid #48F783;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: #48F783;
+            color: #111;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .download-btn:hover {
+            background-color: #3dd670;
+        }
+
+        .footer {
+            background-color: #111;
+            color: #888;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .footer a {
+            color: #48F783;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎉 ¡Gracias por tu compra!</h1>
+            <p>Pedido #{{ order.id }} confirmado</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <p>Hola <strong>{{ order.user.first_name|default:order.user.username }}</strong>,</p>
+            <p>Tu pedido ha sido procesado correctamente. A continuación encontrarás los detalles:</p>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3>📋 Resumen del Pedido</h3>
+                {% for item in order.items.all %}
+                <div class="item-row">
+                    <span>{{ item.cantidad }}x {{ item.nombre_producto }}
+                        {% if item.nombre_talla %}<small>({{ item.nombre_talla }})</small>{% endif %}
+                        {% if item.nombre_modelo %}<small>- {{ item.nombre_modelo }}</small>{% endif %}
+                    </span>
+                    <span>{{ item.subtotal }}€</span>
+                </div>
+                {% endfor %}
+                <div class="item-row total-row">
+                    <span>Total</span>
+                    <span>{{ order.total }}€</span>
+                </div>
+            </div>
+
+            <!-- Shipping Address (only if physical products) -->
+            {% if order.requires_shipping and order.shipping_address %}
+            <div class="shipping-box">
+                <h3>📦 Dirección de Envío</h3>
+                <p>{{ order.shipping_address }}</p>
+                <p><small>Recibirás un email con el número de seguimiento cuando tu pedido sea enviado.</small></p>
+            </div>
+            {% endif %}
+
+            <!-- Digital Downloads -->
+            {% if digital_items %}
+            <div class="download-box">
+                <h3>🎵 Tus Descargas Digitales</h3>
+                <p>Haz clic en los botones para descargar tus productos:</p>
+                {% for item in digital_items %}
+                <div style="margin: 15px 0;">
+                    <strong>{{ item.nombre_producto }}</strong><br>
+                    <a href="{{ base_url }}{% url 'carrito:download' item.id item.download_token %}"
+                        class="download-btn">
+                        ⬇️ Descargar
+                    </a>
+                    <small style="display: block; color: #666; margin-top: 5px;">
+                        Descargas restantes: {{
+                        item.max_downloads|add:"-"|add:item.download_count|default:item.max_downloads }}
+                    </small>
+                </div>
+                {% endfor %}
+                <p><small>También puedes acceder a tus descargas desde tu cuenta en <a
+                            href="{{ base_url }}{% url 'carrito:my_downloads' %}">Mis Descargas</a>.</small></p>
+            </div>
+            {% endif %}
+
+            <!-- Only digital products message -->
+            {% if not order.requires_shipping %}
+            <div class="download-box">
+                <p>✅ Tu pedido contiene solo productos digitales. No requiere envío.</p>
+            </div>
+            {% endif %}
+
+            <p>Si tienes alguna pregunta sobre tu pedido, no dudes en contactarnos.</p>
+            <p>¡Gracias por confiar en LaKultural!</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                &copy; {{ current_year }} LaKultural<br>
+                <a href="{{ base_url }}">www.lakultural.eu</a>
+            </p>
+            <p>Este email fue enviado porque realizaste una compra en nuestra web.</p>
+        </div>
+    </div>
+</body>
+
+</html>

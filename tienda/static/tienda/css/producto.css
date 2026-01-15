@@ -1,16 +1,21 @@
 .adjust-height {
     display: flex;
-    align-items: stretch !important; /* Esto asegura que los hijos del contenedor tengan la misma altura */
+    align-items: stretch !important;
+    /* Esto asegura que los hijos del contenedor tengan la misma altura */
 }
 
 .event-card-producto {
     display: flex;
-    flex-direction: column; /* Hace que los hijos del .event-card se apilen verticalmente */
+    flex-direction: column;
+    /* Hace que los hijos del .event-card se apilen verticalmente */
 }
 
-.carousel-producto, .img-thumbnail-producto {
-    height: 100%; /* Hace que el carrusel y las miniaturas ocupen todo el alto del contenedor */
-    object-fit: cover; /* Asegura que las imágenes cubran el espacio sin distorsionarse */
+.carousel-producto,
+.img-thumbnail-producto {
+    height: 100%;
+    /* Hace que el carrusel y las miniaturas ocupen todo el alto del contenedor */
+    object-fit: cover;
+    /* Asegura que las imágenes cubran el espacio sin distorsionarse */
 }
 
 .label-product {
@@ -20,6 +25,7 @@
 .col-product {
     padding: 1rem;
 }
+
 select {
     width: 100%;
     padding: 0.5rem;
@@ -28,23 +34,57 @@ select {
     border-radius: 5px;
     margin-top: 0.5rem;
     margin-bottom: 1rem;
-  }
+}
 
 
-  .tarjeta-info-producto {
+.tarjeta-info-producto {
     background-color: rgba(120, 120, 120, 0.1);
     border-radius: 1rem;
     padding: 2rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
 @media (max-width: 768px) {
-.carousel, .img-thumbnail {
-    width: 100%;
-    height: auto;
+
+    .carousel,
+    .img-thumbnail {
+        width: 100%;
+        height: auto;
     }
 
     .row.mb-5 {
         flex-direction: column;
+    }
+}
+
+/* Tarjetas compactas para vista de tienda en móvil */
+@media (max-width: 767.98px) {
+    .tienda-grid .card {
+        font-size: 0.85rem;
+    }
+
+    .tienda-grid .card-body {
+        padding: 0.5rem;
+    }
+
+    .tienda-grid .card-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+        /* Limitar a 2 líneas con ellipsis */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .tienda-grid .card-text {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .tienda-grid .card-footer {
+        padding: 0.5rem;
+        font-size: 0.85rem;
     }
 }

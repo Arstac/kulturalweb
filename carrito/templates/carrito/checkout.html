@@ -2,15 +2,82 @@
 {% load static %}
 
 {% block content %}
-<!-- Cargar librería de Stripe -->
+<!-- Cargar librería de Stripe solo en el paso de pago -->
+{% if step == 'payment' %}
 <script src="https://js.stripe.com/v3/"></script>
+{% endif %}
 
 <section class="checkout-section py-5" style="background-color: #111; color: #48F783;">
-  <div class="container text-center">
-    <h1 class="display-4 text-success mb-4">Finalizar Compra</h1>
+  <div class="container">
+    <h1 class="display-4 text-success mb-4 text-center">Finalizar Compra</h1>
+
+    <!-- Indicador de pasos -->
+    <div class="d-flex justify-content-center mb-4">
+      <div class="d-flex align-items-center">
+        <span
+          class="badge {% if step == 'shipping' %}bg-success{% else %}bg-secondary{% endif %} rounded-pill px-3 py-2">
+          1. Envío
+        </span>
+        <div style="width: 50px; height: 2px; background-color: #444;"></div>
+        <span
+          class="badge {% if step == 'payment' %}bg-success{% else %}bg-secondary{% endif %} rounded-pill px-3 py-2">
+          2. Pago
+        </span>
+      </div>
+    </div>
 
     <div class="card mx-auto shadow-lg p-4" style="max-width: 600px; background-color: #1c1c1c;">
+
+      <!-- PASO 1: DIRECCIÓN DE ENVÍO -->
+      {% if step == 'shipping' %}
+      <h2 class="text-white mb-3">📦 Dirección de Envío</h2>
+      <p class="text-muted mb-4">Tu pedido incluye productos físicos que requieren envío.</p>
+
+      <form method="post" action="{% url 'carrito:checkout' %}">
+        {% csrf_token %}
+
+        {% for field in shipping_form %}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label text-white">
+            {{ field.label }}{% if field.field.required %} *{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-between mt-4">
+          <a href="{% url 'carrito:carrito' %}" class="btn btn-outline-light">
+            ← Volver al carrito
+          </a>
+          <button type="submit" name="shipping_submit" class="btn btn-success btn-lg"
+            style="background-color: #48F783; color: #000; border: none;">
+            Continuar al pago →
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-4 text-center">
+        <p class="text-white mb-2"><strong>Total a pagar: {{ total }}€</strong></p>
+      </div>
+
+      <!-- PASO 2: PAGO -->
+      {% elif step == 'payment' %}
       <h2 class="text-white mb-4">Total a pagar: <strong>{{ total }}€</strong></h2>
+
+      {% if requires_shipping and shipping_address %}
+      <div class="alert alert-secondary mb-4" style="background-color: #2a2a2a; border: 1px solid #444;">
+        <h6 class="text-success mb-2">📦 Dirección de envío:</h6>
+        <p class="text-white mb-0 small">{{ shipping_address }}</p>
+      </div>
+      {% elif not requires_shipping %}
+      <div class="alert alert-info mb-4" style="background-color: #1a3a4a; border: 1px solid #2a5a7a;">
+        <p class="mb-0 small">🎵 Tu pedido contiene solo productos digitales. Recibirás los enlaces de descarga por
+          email.</p>
+      </div>
+      {% endif %}
 
       <p class="text-white mb-3">Selecciona un método de pago:</p>
 
@@ -33,10 +100,13 @@
         {{ paypal_form.render }}
       </div>
 
+      {% endif %}
+
     </div>
   </div>
 </section>
 
+{% if step == 'payment' %}
 <script type="text/javascript">
   // Inicializar Stripe
   var stripe = Stripe('{{ stripe_public_key }}');
@@ -82,4 +152,5 @@
       });
   });
 </script>
+{% endif %}
 {% endblock %}

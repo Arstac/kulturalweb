@@ -32,9 +32,31 @@ class Producto(models.Model):
     stock = models.IntegerField(default=0)
     activo = models.BooleanField(default=True)
     cancion = models.OneToOneField(Cancion, null=True, blank=True, on_delete=models.SET_NULL)
+    
+    # Campos para diferenciar productos físicos vs digitales
+    requires_shipping = models.BooleanField(
+        default=True,
+        verbose_name="Requiere envío",
+        help_text="Desmarcar para productos digitales que no necesitan envío físico"
+    )
+    archivo_digital = models.FileField(
+        upload_to='productos/digitales/',
+        blank=True,
+        null=True,
+        verbose_name="Archivo descargable",
+        help_text="Archivo para productos digitales (música, PDF, etc.)"
+    )
 
     def __str__(self):
         return self.nombre
+    
+    def get_archivo_descarga(self):
+        """Retorna el archivo descargable, ya sea archivo_digital o cancion.archivo_audio"""
+        if self.archivo_digital:
+            return self.archivo_digital
+        elif self.cancion and self.cancion.archivo_audio:
+            return self.cancion.archivo_audio
+        return None
 
 class Ropa(Producto):
     modelos = models.ManyToManyField(Modelo, blank=True, related_name='prenda_ropa')

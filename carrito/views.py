@@ -106,15 +106,20 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
 def checkout(request):
+    """
+    Checkout en dos pasos:
+    1. Si hay productos físicos, recoger dirección de envío
+    2. Mostrar opciones de pago
+    """
     try:
-        carrito = Carrito.objects.get(usuario=request.user)
-        items = carrito.items.all()
+        carrito_obj = Carrito.objects.get(usuario=request.user)
+        items = carrito_obj.items.select_related('producto').all()
         
         if not items.exists():
             messages.warning(request, "Tu carrito está vacío.")
             return redirect('carrito:carrito')
             
-        total = carrito.total_carrito()
+        total = carrito_obj.total_carrito()
         
         if total <= 0:
             messages.error(request, "Error en el cálculo del total.")
@@ -124,14 +129,56 @@ def checkout(request):
         messages.warning(request, "No tienes un carrito activo.")
         return redirect('carrito:carrito')
     
-    # Crear orden (o recuperar si ya existe pendiente? Por simplicidad creamos una nueva por ahora)
+    # Determinar si el carrito contiene productos que requieren envío
+    requires_shipping = any(item.producto.requires_shipping for item in items)
+    
+    # Si requiere envío y es POST, procesar formulario de dirección
+    from .forms import ShippingAddressForm
+    
+    if requires_shipping:
+        if request.method == 'POST' and 'shipping_submit' in request.POST:
+            # Procesar formulario de dirección
+            shipping_form = ShippingAddressForm(request.POST)
+            if shipping_form.is_valid():
+                # Guardar dirección en sesión para usarla al crear la orden
+                request.session['shipping_address'] = shipping_form.get_formatted_address()
+                request.session['shipping_data'] = shipping_form.cleaned_data
+            else:
+                # Formulario inválido, mostrar errores
+                context = {
+                    'shipping_form': shipping_form,
+                    'requires_shipping': requires_shipping,
+                    'total': total,
+                    'items': items,
+                    'step': 'shipping',
+                }
+                return render(request, 'carrito/checkout.html', context)
+        
+        # Si no hay dirección guardada en sesión, mostrar formulario
+        if 'shipping_address' not in request.session:
+            shipping_form = ShippingAddressForm()
+            context = {
+                'shipping_form': shipping_form,
+                'requires_shipping': requires_shipping,
+                'total': total,
+                'items': items,
+                'step': 'shipping',
+            }
+            return render(request, 'carrito/checkout.html', context)
+    
+    # Paso 2: Crear orden y mostrar opciones de pago
+    shipping_address = request.session.pop('shipping_address', None)
+    request.session.pop('shipping_data', None)  # Limpiar datos de sesión
+    
     order = Order.objects.create(
         user=request.user,
         total=total,
-        payment_status='Pendiente'
+        payment_status='Pendiente',
+        requires_shipping=requires_shipping,
+        shipping_address=shipping_address or ''
     )
     
-    # 1. Configurar PayPal (Legacy)
+    # Configurar PayPal
     paypal_dict = {
         "business": settings.PAYPAL_RECEIVER_EMAIL,
         "amount": total,
@@ -144,12 +191,14 @@ def checkout(request):
     }
     paypal_form = PayPalPaymentsForm(initial=paypal_dict)
     
-    # 2. Contexto para Stripe
     context = {
         'order': order,
         'paypal_form': paypal_form,
         'total': total,
-        'stripe_public_key': settings.STRIPE_PUBLIC_KEY, 
+        'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+        'requires_shipping': requires_shipping,
+        'shipping_address': shipping_address,
+        'step': 'payment',
     }
     
     return render(request, 'carrito/checkout.html', context)
@@ -207,9 +256,105 @@ def create_checkout_session(request, order_id):
 
 
 def payment_success(request):
-    # Aquí podríamos verificar el session_id con Stripe si queremos feedback inmediato
-    # session_id = request.GET.get('session_id')
+    """
+    Página de éxito tras el pago. 
+    Para Stripe, verifica la sesión y procesa la orden.
+    """
+    session_id = request.GET.get('session_id')
+    
+    if session_id:
+        # Pago con Stripe - verificar y procesar
+        try:
+            session = stripe.checkout.Session.retrieve(session_id)
+            
+            if session.payment_status == 'paid':
+                order_id = int(session.client_reference_id)
+                order = Order.objects.get(id=order_id)
+                
+                # Solo procesar si no está ya completado
+                if order.payment_status != 'Completado':
+                    order.payment_status = 'Completado'
+                    order.stripe_payment_intent = session.payment_intent
+                    order.save()
+                    
+                    # Procesar items del carrito
+                    from .signals import process_order_items, send_order_confirmation_email
+                    
+                    try:
+                        carrito = Carrito.objects.get(usuario=order.user)
+                        digital_items = process_order_items(order, carrito)
+                        carrito.items.all().delete()
+                        
+                        # Enviar email de confirmación
+                        send_order_confirmation_email(order, digital_items)
+                        
+                    except Carrito.DoesNotExist:
+                        pass  # El carrito ya fue procesado
+                        
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error procesando pago Stripe: {e}")
+    
     return render(request, 'carrito/payment_success.html')
 
+
 def payment_cancel(request):
+    """Página cuando el usuario cancela el pago."""
     return render(request, 'carrito/payment_cancel.html')
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    """
+    Webhook de Stripe para procesar pagos de forma asíncrona.
+    Esto es un backup por si payment_success falla.
+    """
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    
+    webhook_secret = getattr(settings, 'STRIPE_WEBHOOK_SECRET', None)
+    
+    if not webhook_secret:
+        # Sin webhook secret, no podemos verificar la firma
+        return HttpResponse(status=400)
+    
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, webhook_secret
+        )
+    except ValueError:
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError:
+        return HttpResponse(status=400)
+    
+    # Procesar evento de pago completado
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        
+        if session.get('payment_status') == 'paid':
+            try:
+                order_id = int(session.get('client_reference_id'))
+                order = Order.objects.get(id=order_id)
+                
+                if order.payment_status != 'Completado':
+                    order.payment_status = 'Completado'
+                    order.stripe_payment_intent = session.get('payment_intent')
+                    order.save()
+                    
+                    from .signals import process_order_items, send_order_confirmation_email
+                    
+                    try:
+                        carrito = Carrito.objects.get(usuario=order.user)
+                        digital_items = process_order_items(order, carrito)
+                        carrito.items.all().delete()
+                        send_order_confirmation_email(order, digital_items)
+                    except Carrito.DoesNotExist:
+                        pass
+                        
+            except (ValueError, Order.DoesNotExist) as e:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Error en webhook Stripe: {e}")
+    
+    return HttpResponse(status=200)

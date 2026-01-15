@@ -370,6 +370,9 @@ STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 
+# URL base del sitio (para enlaces en emails)
+SITE_URL = os.getenv('SITE_URL', 'https://lakultural.eu')
+
 
 # Django CMS Settings
 CMS_CONFIRM_VERSION4 = True
